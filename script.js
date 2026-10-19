@@ -1,24 +1,21 @@
 import * as THREE from "three";
 
-/* ===================== WELCOME (Auto 5s) ===================== */
+/* ===== WELCOME AUTO 5s ===== */
 const welcome = document.getElementById("welcome");
-const countdownEl = document.getElementById("countdown");
-let timeLeft = 5;
-
+const countEl = document.getElementById("count");
+let t = 5;
 const timer = setInterval(() => {
-  timeLeft--;
-  if (countdownEl) countdownEl.textContent = timeLeft;
-  if (timeLeft <= 0) {
+  t--;
+  if (countEl) countEl.textContent = t;
+  if (t <= 0) {
     clearInterval(timer);
     welcome.classList.add("hide");
-    setTimeout(() => {
-      welcome.style.display = "none";
-    }, 1100);
+    setTimeout(() => welcome.style.display = "none", 1000);
   }
 }, 1000);
 
-/* ===================== THEME TOGGLE ===================== */
-const themeBtn = document.getElementById("themeToggle");
+/* ===== THEME ===== */
+const themeBtn = document.getElementById("themeBtn");
 const body = document.body;
 
 function setTheme(mode) {
@@ -31,217 +28,166 @@ function setTheme(mode) {
     body.classList.remove("light");
     themeBtn.textContent = "☾";
   }
-  localStorage.setItem("wazir-theme", mode);
-  updateThreeTheme(mode);
+  localStorage.setItem("theme", mode);
+  updateBG(mode);
 }
 
 themeBtn?.addEventListener("click", () => {
-  const next = body.classList.contains("light") ? "dark" : "light";
-  setTheme(next);
+  setTheme(body.classList.contains("light") ? "dark" : "light");
 });
 
-// Load saved theme
-const saved = localStorage.getItem("wazir-theme") || "dark";
-setTheme(saved);
+setTheme(localStorage.getItem("theme") || "dark");
 
-/* ===================== MOBILE MENU ===================== */
+/* ===== MOBILE MENU ===== */
 const menuBtn = document.getElementById("menuBtn");
 const nav = document.getElementById("nav");
-
-menuBtn?.addEventListener("click", () => {
-  nav.classList.toggle("open");
+menuBtn?.addEventListener("click", () => nav.classList.toggle("open"));
+document.querySelectorAll("#nav a").forEach(a => {
+  a.addEventListener("click", () => nav.classList.remove("open"));
 });
 
-document.querySelectorAll(".nav a").forEach(link => {
-  link.addEventListener("click", () => nav.classList.remove("open"));
+/* ===== TOOL SWITCHER ===== */
+document.querySelectorAll(".tool-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tool-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tool).classList.add("active");
+  });
 });
 
-/* ===================== THREE.JS ===================== */
+/* ===== WORD COUNTER ===== */
+const wcInput = document.getElementById("wc-input");
+wcInput?.addEventListener("input", () => {
+  const text = wcInput.value;
+  const words = text.trim() === "" ? 0 : text.trim().split(/\s+/).length;
+  const chars = text.length;
+  const sentences = text.split(/[.!?]+/).filter(s => s.trim().length > 0).length;
+  const paras = text.split(/\n+/).filter(p => p.trim().length > 0).length;
+  document.getElementById("wc-words").textContent = words;
+  document.getElementById("wc-chars").textContent = chars;
+  document.getElementById("wc-sentences").textContent = sentences;
+  document.getElementById("wc-paras").textContent = paras;
+});
+
+/* ===== CASE CONVERTER ===== */
+window.toUpper = () => {
+  document.getElementById("case-output").value = document.getElementById("case-input").value.toUpperCase();
+};
+window.toLower = () => {
+  document.getElementById("case-output").value = document.getElementById("case-input").value.toLowerCase();
+};
+window.toTitle = () => {
+  const t = document.getElementById("case-input").value.toLowerCase();
+  document.getElementById("case-output").value = t.replace(/\b\w/g, c => c.toUpperCase());
+};
+window.toCapitalize = () => {
+  const t = document.getElementById("case-input").value;
+  document.getElementById("case-output").value = t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
+};
+
+/* ===== LOREM ===== */
+window.genLorem = (n) => {
+  const para = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
+  document.getElementById("lorem-output").value = Array(n).fill(para).join("\n\n");
+};
+
+/* ===== BASE64 ===== */
+window.encodeB64 = () => {
+  try {
+    document.getElementById("b64-output").value = btoa(document.getElementById("b64-input").value);
+  } catch {
+    document.getElementById("b64-output").value = "Error encoding";
+  }
+};
+window.decodeB64 = () => {
+  try {
+    document.getElementById("b64-output").value = atob(document.getElementById("b64-input").value);
+  } catch {
+    document.getElementById("b64-output").value = "Invalid Base64";
+  }
+};
+
+/* ===== JSON ===== */
+window.formatJSON = () => {
+  try {
+    const obj = JSON.parse(document.getElementById("json-input").value);
+    document.getElementById("json-output").value = JSON.stringify(obj, null, 2);
+  } catch {
+    document.getElementById("json-output").value = "Invalid JSON";
+  }
+};
+window.minifyJSON = () => {
+  try {
+    const obj = JSON.parse(document.getElementById("json-input").value);
+    document.getElementById("json-output").value = JSON.stringify(obj);
+  } catch {
+    document.getElementById("json-output").value = "Invalid JSON";
+  }
+};
+
+/* ===== PASSWORD ===== */
+window.genPass = (len) => {
+  const chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
+  let pass = "";
+  for (let i = 0; i < len; i++) {
+    pass += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  document.getElementById("pass-output").value = pass;
+};
+window.copyPass = () => {
+  const el = document.getElementById("pass-output");
+  el.select();
+  document.execCommand("copy");
+  alert("Password copied!");
+};
+
+/* ===== THREE.JS BACKGROUND ===== */
 const canvas = document.getElementById("webgl");
-let renderer, scene, camera;
-let stars, starMaterial;
-let flowers = [];
-let mountains = [];
-let isLight = false;
-let animationId;
+let renderer, scene, camera, stars;
 
 function initThree() {
-  renderer = new THREE.WebGLRenderer({
-    canvas,
-    alpha: true,
-    antialias: true,
-    powerPreference: "low-power"
-  });
+  renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.6));
-  renderer.setClearColor(0x000000, 0);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
 
   scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.z = 16;
 
-  camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
-  camera.position.set(0, 2, 18);
+  const count = 1600;
+  const pos = new Float32Array(count * 3);
+  for (let i = 0; i < count * 3; i++) pos[i] = (Math.random() - 0.5) * 80;
 
-  // Lights
-  scene.add(new THREE.AmbientLight(0xffffff, 0.4));
-
-  const p1 = new THREE.PointLight(0x8b5cf6, 18, 50);
-  p1.position.set(8, 10, 8);
-  scene.add(p1);
-
-  const p2 = new THREE.PointLight(0x22d3ee, 12, 40);
-  p2.position.set(-10, 4, 6);
-  scene.add(p2);
-
-  createStars();
-  createMeadow();
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+  const mat = new THREE.PointsMaterial({ color: 0xc4b5fd, size: 0.06, transparent: true, opacity: 0.8 });
+  stars = new THREE.Points(geo, mat);
+  scene.add(stars);
 
   animate();
 }
 
-function createStars() {
-  const count = 1800;
-  const pos = new Float32Array(count * 3);
-  for (let i = 0; i < count * 3; i++) {
-    pos[i] = (Math.random() - 0.5) * 120;
-  }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-
-  starMaterial = new THREE.PointsMaterial({
-    color: 0xc4b5fd,
-    size: 0.07,
-    transparent: true,
-    opacity: 0.85,
-    sizeAttenuation: true
-  });
-
-  stars = new THREE.Points(geo, starMaterial);
-  scene.add(stars);
-}
-
-function createMeadow() {
-  // Ground
-  const groundGeo = new THREE.PlaneGeometry(80, 80);
-  const groundMat = new THREE.MeshStandardMaterial({
-    color: 0x3d6b4f,
-    roughness: 0.9
-  });
-  const ground = new THREE.Mesh(groundGeo, groundMat);
-  ground.rotation.x = -Math.PI / 2;
-  ground.position.y = -3;
-  ground.visible = false;
-  scene.add(ground);
-  mountains.push(ground);
-
-  // Simple distant mountains
-  for (let i = 0; i < 8; i++) {
-    const h = 4 + Math.random() * 6;
-    const mGeo = new THREE.ConeGeometry(3 + Math.random() * 4, h, 5);
-    const mMat = new THREE.MeshStandardMaterial({
-      color: 0x4a5d4e,
-      roughness: 0.85
-    });
-    const m = new THREE.Mesh(mGeo, mMat);
-    m.position.set((i - 4) * 9, -3 + h / 2 - 1, -25 - Math.random() * 8);
-    m.visible = false;
-    scene.add(m);
-    mountains.push(m);
-  }
-
-  // Flowers
-  const colors = [0xf9a8d4, 0xf472b6, 0xc084fc, 0x67e8f9, 0xfde68a, 0x86efac];
-  for (let i = 0; i < 70; i++) {
-    const group = new THREE.Group();
-
-    // Stem
-    const stem = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.025, 0.035, 0.9, 6),
-      new THREE.MeshStandardMaterial({ color: 0x2f6b45 })
-    );
-    stem.position.y = 0.45;
-    group.add(stem);
-
-    // Petals
-    const petalColor = colors[i % colors.length];
-    const petalMat = new THREE.MeshStandardMaterial({
-      color: petalColor,
-      emissive: petalColor,
-      emissiveIntensity: 0.15,
-      roughness: 0.6
-    });
-
-    for (let p = 0; p < 6; p++) {
-      const petal = new THREE.Mesh(
-        new THREE.SphereGeometry(0.16, 8, 8),
-        petalMat
-      );
-      const angle = (p / 6) * Math.PI * 2;
-      petal.position.set(Math.cos(angle) * 0.2, 0.95, Math.sin(angle) * 0.2);
-      petal.scale.set(1, 0.5, 0.8);
-      group.add(petal);
-    }
-
-    // Center
-    const center = new THREE.Mesh(
-      new THREE.SphereGeometry(0.1, 8, 8),
-      new THREE.MeshStandardMaterial({ color: 0xfef3c7 })
-    );
-    center.position.y = 0.95;
-    group.add(center);
-
-    group.position.set(
-      (Math.random() - 0.5) * 50,
-      -3,
-      (Math.random() - 0.5) * 40 - 5
-    );
-    group.rotation.y = Math.random() * Math.PI;
-    group.userData.phase = Math.random() * Math.PI * 2;
-    group.visible = false;
-    scene.add(group);
-    flowers.push(group);
-  }
-}
-
-function updateThreeTheme(mode) {
-  isLight = mode === "light";
-
-  if (stars) stars.visible = !isLight;
-  flowers.forEach(f => f.visible = isLight);
-  mountains.forEach(m => m.visible = isLight);
-
-  if (starMaterial) {
-    starMaterial.color.set(isLight ? 0x86efac : 0xc4b5fd);
-  }
-
-  if (renderer) {
-    renderer.setClearColor(isLight ? 0xe8f0e9 : 0x05050f, isLight ? 0.3 : 0);
-  }
+function updateBG(mode) {
+  if (!stars) return;
+  stars.material.color.set(mode === "light" ? 0x86efac : 0xc4b5fd);
+  stars.material.opacity = mode === "light" ? 0.35 : 0.8;
 }
 
 function animate() {
-  animationId = requestAnimationFrame(animate);
-  const t = performance.now() * 0.001;
-
-  if (stars && !isLight) {
-    stars.rotation.y = t * 0.02;
-    stars.rotation.x = Math.sin(t * 0.1) * 0.03;
+  requestAnimationFrame(animate);
+  if (stars) {
+    stars.rotation.y += 0.0005;
+    stars.rotation.x += 0.0002;
   }
-
-  if (isLight) {
-    flowers.forEach(f => {
-      f.rotation.z = Math.sin(t * 1.8 + f.userData.phase) * 0.12;
-    });
-  }
-
   renderer.render(scene, camera);
 }
 
-function onResize() {
+window.addEventListener("resize", () => {
   if (!camera || !renderer) return;
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-}
+});
 
-window.addEventListener("resize", onResize);
 initThree();
