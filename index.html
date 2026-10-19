@@ -3,16 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#05050f" />
-  <meta name="description" content="Wazir Lab — Free Online Tools, AI Tools & Professional Digital Services" />
   <title>Wazir Lab — Free Tools • AI • Business</title>
-
+  <meta name="description" content="Wazir Lab - Free Online Tools, AI Tools and Professional Digital Services by Murad Wazir" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="./style.css" />
-
   <script type="importmap">
   {
     "imports": {
@@ -24,263 +20,226 @@
 <body class="dark">
   <canvas id="webgl"></canvas>
 
-  <!-- CINEMATIC WELCOME -->
+  <!-- WELCOME -->
   <div id="welcome" class="welcome">
-    <div class="welcome-inner">
-      <div class="welcome-logo">WL</div>
-      <p class="welcome-label">WAZIR LAB</p>
-      <h1 class="welcome-title">The Future of<br><span>Free Tools</span></h1>
-      <p class="welcome-sub">AI Powered • Professional • Built for Business</p>
-      <div class="welcome-bar"><div class="welcome-progress"></div></div>
-      <p class="welcome-timer">Entering in <span id="countdown">5</span>s</p>
+    <div class="welcome-box">
+      <div class="wl-logo">WL</div>
+      <p class="wl-label">WAZIR LAB</p>
+      <h1>Free Tools + AI<br><span>Built for Business</span></h1>
+      <p class="wl-sub">Entering in <span id="count">5</span> seconds</p>
+      <div class="progress"><div class="bar"></div></div>
     </div>
   </div>
 
   <!-- HEADER -->
   <header class="header">
     <a href="#home" class="logo">
-      <div class="logo-mark">WL</div>
+      <span class="mark">WL</span>
       <span>WAZIR LAB</span>
     </a>
-
-    <nav class="nav" id="nav">
+    <nav id="nav">
       <a href="#tools">Tools</a>
-      <a href="#ai">AI Tools</a>
+      <a href="#ai">AI</a>
       <a href="#services">Services</a>
       <a href="#pricing">Pricing</a>
-      <a href="#business">Business</a>
       <a href="#contact">Contact</a>
-      <button id="themeToggle" class="theme-btn" title="Toggle Theme">☾</button>
+      <button id="themeBtn" class="theme-btn">☾</button>
     </nav>
-
-    <button class="menu-btn" id="menuBtn" aria-label="Menu">☰</button>
+    <button id="menuBtn" class="menu-btn">☰</button>
   </header>
 
   <main>
     <!-- HERO -->
     <section id="home" class="hero">
-      <div class="container">
-        <p class="eyebrow">FREE TOOLS + AI + AGENCY</p>
-        <h1>Professional tools<br><span>for everyone & business</span></h1>
-        <p class="hero-text">
-          Powerful free tools, advanced AI features, and professional digital services — built to scale from individual users to large companies.
-        </p>
-        <div class="hero-actions">
-          <a href="#tools" class="btn btn-primary">Explore Free Tools</a>
-          <a href="#pricing" class="btn btn-secondary">View Pricing</a>
+      <div class="wrap">
+        <p class="label">FREE TOOLS • AI • AGENCY</p>
+        <h1>Real tools for<br><span>real work</span></h1>
+        <p class="desc">Powerful free tools and AI features designed for freelancers, teams and businesses.</p>
+        <div class="actions">
+          <a href="#tools" class="btn primary">Open Tools</a>
+          <a href="#pricing" class="btn secondary">See Pricing</a>
         </div>
       </div>
     </section>
 
     <!-- TOOLS -->
     <section id="tools" class="section">
-      <div class="container">
-        <div class="section-header">
-          <p class="eyebrow">01 — FREE TOOLS</p>
-          <h2>All essential tools<br><span>in one place</span></h2>
-        </div>
+      <div class="wrap">
+        <p class="label">01 — TOOLS</p>
+        <h2>Working tools<br><span>you can use now</span></h2>
 
-        <div class="grid-3">
-          <div class="card">
-            <div class="card-icon">📄</div>
-            <h3>PDF Tools</h3>
-            <p>Merge, Split, Compress, Convert, Protect, Unlock and more.</p>
-            <span class="tag">12 Tools</span>
+        <div class="tools-layout">
+          <!-- Tool List -->
+          <div class="tool-list">
+            <button class="tool-btn active" data-tool="wordcounter">Word Counter</button>
+            <button class="tool-btn" data-tool="case">Case Converter</button>
+            <button class="tool-btn" data-tool="lorem">Lorem Ipsum</button>
+            <button class="tool-btn" data-tool="base64">Base64 Encode/Decode</button>
+            <button class="tool-btn" data-tool="json">JSON Formatter</button>
+            <button class="tool-btn" data-tool="password">Password Generator</button>
           </div>
-          <div class="card">
-            <div class="card-icon">🖼️</div>
-            <h3>Image Tools</h3>
-            <p>Compress, Resize, Convert, Crop, Background Remove.</p>
-            <span class="tag">15 Tools</span>
-          </div>
-          <div class="card">
-            <div class="card-icon">✍️</div>
-            <h3>Text Tools</h3>
-            <p>Word Counter, Case Converter, Lorem Ipsum, Diff Checker.</p>
-            <span class="tag">18 Tools</span>
-          </div>
-          <div class="card">
-            <div class="card-icon">🔄</div>
-            <h3>Converters</h3>
-            <p>Unit, Currency, Color, Base64, JSON, Timestamp converters.</p>
-            <span class="tag">20+ Tools</span>
-          </div>
-          <div class="card">
-            <div class="card-icon">🛠️</div>
-            <h3>Developer Tools</h3>
-            <p>Code formatter, Hash generator, Regex tester, JWT decoder.</p>
-            <span class="tag">14 Tools</span>
-          </div>
-          <div class="card">
-            <div class="card-icon">📊</div>
-            <h3>Data Tools</h3>
-            <p>CSV / Excel helpers, JSON tools, data cleaners.</p>
-            <span class="tag">10 Tools</span>
+
+          <!-- Tool Panels -->
+          <div class="tool-panels">
+            <!-- Word Counter -->
+            <div class="panel active" id="wordcounter">
+              <h3>Word Counter</h3>
+              <textarea id="wc-input" placeholder="Type or paste your text here..."></textarea>
+              <div class="stats">
+                <div><strong id="wc-words">0</strong> Words</div>
+                <div><strong id="wc-chars">0</strong> Characters</div>
+                <div><strong id="wc-sentences">0</strong> Sentences</div>
+                <div><strong id="wc-paras">0</strong> Paragraphs</div>
+              </div>
+            </div>
+
+            <!-- Case Converter -->
+            <div class="panel" id="case">
+              <h3>Case Converter</h3>
+              <textarea id="case-input" placeholder="Enter text..."></textarea>
+              <div class="btn-row">
+                <button onclick="toUpper()">UPPERCASE</button>
+                <button onclick="toLower()">lowercase</button>
+                <button onclick="toTitle()">Title Case</button>
+                <button onclick="toCapitalize()">Capitalize</button>
+              </div>
+              <textarea id="case-output" readonly placeholder="Result..."></textarea>
+            </div>
+
+            <!-- Lorem -->
+            <div class="panel" id="lorem">
+              <h3>Lorem Ipsum Generator</h3>
+              <div class="btn-row">
+                <button onclick="genLorem(1)">1 Paragraph</button>
+                <button onclick="genLorem(3)">3 Paragraphs</button>
+                <button onclick="genLorem(5)">5 Paragraphs</button>
+              </div>
+              <textarea id="lorem-output" readonly></textarea>
+            </div>
+
+            <!-- Base64 -->
+            <div class="panel" id="base64">
+              <h3>Base64 Encode / Decode</h3>
+              <textarea id="b64-input" placeholder="Enter text..."></textarea>
+              <div class="btn-row">
+                <button onclick="encodeB64()">Encode</button>
+                <button onclick="decodeB64()">Decode</button>
+              </div>
+              <textarea id="b64-output" readonly></textarea>
+            </div>
+
+            <!-- JSON -->
+            <div class="panel" id="json">
+              <h3>JSON Formatter</h3>
+              <textarea id="json-input" placeholder='{"key": "value"}'></textarea>
+              <div class="btn-row">
+                <button onclick="formatJSON()">Format</button>
+                <button onclick="minifyJSON()">Minify</button>
+              </div>
+              <textarea id="json-output" readonly></textarea>
+            </div>
+
+            <!-- Password -->
+            <div class="panel" id="password">
+              <h3>Password Generator</h3>
+              <div class="btn-row">
+                <button onclick="genPass(12)">12 Chars</button>
+                <button onclick="genPass(16)">16 Chars</button>
+                <button onclick="genPass(24)">24 Chars</button>
+              </div>
+              <input type="text" id="pass-output" readonly />
+              <button onclick="copyPass()" class="copy-btn">Copy</button>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- AI TOOLS -->
-    <section id="ai" class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <p class="eyebrow">02 — AI TOOLS</p>
-          <h2>AI that actually<br><span>helps you work</span></h2>
-        </div>
-        <div class="grid-2">
-          <div class="card">
-            <h3>AI Text Generator</h3>
-            <p>Generate high-quality content, emails, product descriptions and captions.</p>
-          </div>
-          <div class="card">
-            <h3>AI Summarizer</h3>
-            <p>Summarize long articles, documents and reports in seconds.</p>
-          </div>
-          <div class="card">
-            <h3>AI Image Tools</h3>
-            <p>Background removal, enhancement and smart editing powered by AI.</p>
-          </div>
-          <div class="card">
-            <h3>AI Code Assistant</h3>
-            <p>Explain, debug and improve code with intelligent suggestions.</p>
-          </div>
+    <!-- AI -->
+    <section id="ai" class="section alt">
+      <div class="wrap">
+        <p class="label">02 — AI TOOLS</p>
+        <h2>AI features<br><span>coming with backend</span></h2>
+        <div class="grid2">
+          <div class="card"><h3>AI Text Generator</h3><p>Content, emails, captions</p></div>
+          <div class="card"><h3>AI Summarizer</h3><p>Long text to short summary</p></div>
+          <div class="card"><h3>AI Image Tools</h3><p>Background remove & enhance</p></div>
+          <div class="card"><h3>AI Code Assistant</h3><p>Explain & improve code</p></div>
         </div>
       </div>
     </section>
 
     <!-- SERVICES -->
     <section id="services" class="section">
-      <div class="container">
-        <div class="section-header">
-          <p class="eyebrow">03 — AGENCY SERVICES</p>
-          <h2>Professional work<br><span>when you need it</span></h2>
-        </div>
+      <div class="wrap">
+        <p class="label">03 — SERVICES</p>
+        <h2>Professional services</h2>
         <div class="services">
-          <div class="service-row">
-            <span class="num">01</span>
-            <div>
-              <h3>Frontend & Web Development</h3>
-              <p>Modern, fast and responsive websites & web applications.</p>
-            </div>
-          </div>
-          <div class="service-row">
-            <span class="num">02</span>
-            <div>
-              <h3>Web Research & Lead Generation</h3>
-              <p>Accurate research and clean, organized lead lists.</p>
-            </div>
-          </div>
-          <div class="service-row">
-            <span class="num">03</span>
-            <div>
-              <h3>Data Entry & Formatting</h3>
-              <p>Reliable data handling and professional formatting.</p>
-            </div>
-          </div>
-          <div class="service-row">
-            <span class="num">04</span>
-            <div>
-              <h3>Social Media Banner Design</h3>
-              <p>High-converting graphics for ads and social platforms.</p>
-            </div>
-          </div>
-          <div class="service-row">
-            <span class="num">05</span>
-            <div>
-              <h3>2D Game Development</h3>
-              <p>Interactive 2D games and small game concepts.</p>
-            </div>
-          </div>
+          <div class="service"><span>01</span><div><h3>Web Development</h3><p>Modern responsive websites</p></div></div>
+          <div class="service"><span>02</span><div><h3>Web Research & Leads</h3><p>Accurate research & lists</p></div></div>
+          <div class="service"><span>03</span><div><h3>Data Entry</h3><p>Clean structured data work</p></div></div>
+          <div class="service"><span>04</span><div><h3>Banner Design</h3><p>Social media graphics</p></div></div>
+          <div class="service"><span>05</span><div><h3>2D Games</h3><p>Interactive game projects</p></div></div>
         </div>
       </div>
     </section>
 
     <!-- PRICING -->
-    <section id="pricing" class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <p class="eyebrow">04 — PRICING</p>
-          <h2>Simple & transparent<br><span>pricing</span></h2>
-        </div>
+    <section id="pricing" class="section alt">
+      <div class="wrap">
+        <p class="label">04 — PRICING</p>
+        <h2>Simple pricing</h2>
         <div class="pricing">
           <div class="price-card">
             <h3>Free</h3>
-            <div class="price">$0</div>
+            <div class="amount">$0</div>
             <ul>
-              <li>Limited daily usage</li>
-              <li>Basic tools access</li>
+              <li>Limited daily use</li>
+              <li>Basic tools</li>
               <li>Ads supported</li>
-              <li>Community support</li>
             </ul>
-            <button class="btn btn-secondary">Current Plan</button>
+            <button class="btn secondary">Current</button>
           </div>
-          <div class="price-card featured">
-            <div class="badge">Most Popular</div>
+          <div class="price-card popular">
+            <div class="pop">Popular</div>
             <h3>Premium</h3>
-            <div class="price">$9<span>/mo</span></div>
+            <div class="amount">$9<span>/mo</span></div>
             <ul>
-              <li>Unlimited usage</li>
+              <li>Unlimited use</li>
               <li>All tools + AI</li>
-              <li>No advertisements</li>
-              <li>Faster processing</li>
-              <li>Priority support</li>
+              <li>No ads</li>
+              <li>Faster speed</li>
             </ul>
-            <button class="btn btn-primary">Upgrade Now</button>
+            <button class="btn primary">Upgrade</button>
           </div>
           <div class="price-card">
             <h3>Business</h3>
-            <div class="price">$29<span>/mo</span></div>
+            <div class="amount">$29<span>/mo</span></div>
             <ul>
               <li>Everything in Premium</li>
-              <li>Full API Access</li>
-              <li>Team members</li>
-              <li>Usage analytics</li>
-              <li>Priority feature requests</li>
+              <li>API Access</li>
+              <li>Team seats</li>
             </ul>
-            <button class="btn btn-secondary">Contact Sales</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- BUSINESS -->
-    <section id="business" class="section">
-      <div class="container">
-        <div class="section-header">
-          <p class="eyebrow">05 — FOR COMPANIES</p>
-          <h2>API & White-Label<br><span>solutions</span></h2>
-          <p class="section-desc">Integrate our tools into your product or offer them under your own brand.</p>
-        </div>
-        <div class="grid-2">
-          <div class="card">
-            <h3>API Access</h3>
-            <p>Robust REST API for all major tools. Perfect for automation, SaaS products and internal tools.</p>
-          </div>
-          <div class="card">
-            <h3>White-Label</h3>
-            <p>Offer the complete tool suite under your own branding, domain and design.</p>
+            <button class="btn secondary">Contact</button>
           </div>
         </div>
       </div>
     </section>
 
     <!-- CONTACT -->
-    <section id="contact" class="section section-alt">
-      <div class="container">
-        <div class="section-header">
-          <p class="eyebrow">06 — CONTACT</p>
-          <h2>Let’s work<br><span>together</span></h2>
-        </div>
-        <div class="contact-box">
-          <p>For projects, partnerships, API access or custom development.</p>
-          <a href="mailto:zuhaibwazir558@gmail.com" class="btn btn-primary">Email Me</a>
+    <section id="contact" class="section">
+      <div class="wrap">
+        <p class="label">05 — CONTACT</p>
+        <h2>Let’s work together</h2>
+        <div class="contact">
+          <p>Projects, API, partnership or custom work.</p>
+          <a href="mailto:zuhaibwazir558@gmail.com" class="btn primary">Email Me</a>
           <div class="socials">
-            <a href="https://www.fiverr.com/s/X00PlkP" target="_blank" rel="noopener">Fiverr</a>
-            <a href="https://www.linkedin.com/in/murad-wazir-bbb0b541a" target="_blank" rel="noopener">LinkedIn</a>
-            <a href="https://x.com/waziraura553" target="_blank" rel="noopener">X (Twitter)</a>
-            <a href="https://www.instagram.com/waziraura553/" target="_blank" rel="noopener">Instagram</a>
-            <a href="https://www.facebook.com/profile.php?id=61578311048454" target="_blank" rel="noopener">Facebook</a>
+            <a href="https://www.fiverr.com/s/X00PlkP" target="_blank">Fiverr</a>
+            <a href="https://www.linkedin.com/in/murad-wazir-bbb0b541a" target="_blank">LinkedIn</a>
+            <a href="https://x.com/waziraura553" target="_blank">X</a>
+            <a href="https://www.instagram.com/waziraura553/" target="_blank">Instagram</a>
+            <a href="https://www.facebook.com/profile.php?id=61578311048454" target="_blank">Facebook</a>
           </div>
         </div>
       </div>
@@ -288,19 +247,18 @@
   </main>
 
   <footer class="footer">
-    <div class="container footer-inner">
+    <div class="wrap foot">
       <div>
         <strong>Wazir Lab</strong>
-        <p>Free Tools • AI • Professional Services</p>
+        <p>Free Tools • AI • Services by Murad Wazir</p>
       </div>
-      <div class="footer-links">
+      <div class="flinks">
         <a href="#tools">Tools</a>
         <a href="#pricing">Pricing</a>
-        <a href="#business">Business</a>
         <a href="#contact">Contact</a>
       </div>
     </div>
-    <p class="copy">© 2026 Wazir Lab by Murad Wazir. All rights reserved.</p>
+    <p class="copy">© 2026 Wazir Lab. All rights reserved.</p>
   </footer>
 
   <script type="module" src="./script.js"></script>
