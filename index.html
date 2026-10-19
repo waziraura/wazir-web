@@ -2,36 +2,17 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#080912">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#05050f">
+  <meta name="description" content="Wazir Lab — Free Online Tools, AI Tools & Digital Agency Platform by Murad Wazir">
+  <title>Wazir Lab — Free Tools • AI • Agency</title>
 
-  <meta
-    name="description"
-    content="Wazir Aura by Murad Wazir — creative frontend development and immersive digital experiences."
-  >
-
-  <title>Wazir Aura — Digital Experiences</title>
-
-  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
 
-  <link
-    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
-    rel="stylesheet"
-  >
-
-  <!-- Main CSS -->
   <link rel="stylesheet" href="./style.css">
 
-  <!-- Cloudflare Turnstile: explicit rendering -->
-  <script
-    src="https://challenges.cloudflare.com/turnstile/v0/api.js?onload=onTurnstileLoad&render=explicit"
-    async
-    defer>
-  </script>
-
-  <!-- Three.js Import Map -->
   <script type="importmap">
     {
       "imports": {
@@ -39,566 +20,275 @@
       }
     }
   </script>
-
-  <!-- Main JavaScript -->
   <script type="module" src="./script.js"></script>
 </head>
+<body>
+  <canvas id="webgl-bg"></canvas>
 
-<body class="theme-space">
-  <a class="skip-link" href="#main">Skip to content</a>
-
-  <canvas id="webgl-scene" aria-hidden="true"></canvas>
-  <div class="ambient ambient-one" aria-hidden="true"></div>
-  <div class="ambient ambient-two" aria-hidden="true"></div>
-  <div class="grain" aria-hidden="true"></div>
-
-  <!-- CINEMATIC WELCOME -->
-  <section
-    id="welcomeScreen"
-    class="welcome-screen"
-    aria-label="Welcome to Wazir Aura"
-  >
-    <div class="welcome-orbit orbit-one" aria-hidden="true"></div>
-    <div class="welcome-orbit orbit-two" aria-hidden="true"></div>
-    <div class="welcome-stars" aria-hidden="true"></div>
-
+  <!-- WELCOME SCREEN -->
+  <div id="welcome" class="welcome">
     <div class="welcome-content">
-      <p class="welcome-overline">AN IMMERSIVE DIGITAL EXPERIENCE</p>
-
-      <div class="welcome-monogram" aria-hidden="true">
-        <span>W</span>
-        <span class="monogram-m">M</span>
-      </div>
-
-      <p class="welcome-small">WELCOME TO</p>
-      <h1 class="welcome-title">WAZIR <span>AURA</span></h1>
-      <p class="welcome-tagline">Ideas beyond the ordinary.</p>
-
-      <div class="welcome-progress" aria-hidden="true">
-        <span></span>
-      </div>
-
-      <button id="welcomeEnter" class="welcome-enter" type="button">
-        <span>ENTER EXPERIENCE</span>
-        <span aria-hidden="true">↗</span>
-      </button>
-
-      <button id="welcomeSkip" class="welcome-skip" type="button">
-        Skip intro
-      </button>
-
-      <p class="welcome-footer">
-        DESIGNED WITH PURPOSE · BUILT WITH CURIOSITY
-      </p>
+      <div class="welcome-logo">WL</div>
+      <p class="welcome-over">WELCOME TO</p>
+      <h1>WAZIR <span>LAB</span></h1>
+      <p class="welcome-tag">Free Tools • AI Power • Agency Services</p>
+      <button id="enterBtn" class="enter-btn">Enter Lab →</button>
+      <button id="skipBtn" class="skip-btn">Skip Intro</button>
     </div>
-  </section>
+  </div>
 
   <!-- HEADER -->
-  <header class="site-header">
-    <a class="brand" href="#home" aria-label="Wazir Aura home">
-      <span class="brand-mark">W<span>A</span></span>
-
-      <span class="brand-copy">
-        <strong>WAZIR AURA</strong>
-        <small>DIGITAL EXPERIENCES</small>
-      </span>
+  <header class="header">
+    <a href="#home" class="logo">
+      <span class="logo-mark">WL</span>
+      <span class="logo-text">WAZIR LAB</span>
     </a>
-
-    <button
-      id="menuToggle"
-      class="menu-toggle"
-      type="button"
-      aria-label="Open navigation"
-      aria-expanded="false"
-      aria-controls="mainNav"
-    >
-      <span></span>
-      <span></span>
-    </button>
-
-    <nav id="mainNav" class="main-nav" aria-label="Main navigation">
-      <a href="#home">Home</a>
-      <a href="#about">About</a>
-      <a href="#services">Services</a>
-      <a href="#work">Work</a>
-      <a href="#contact">Contact</a>
-
-      <button
-        id="themeToggle"
-        class="theme-toggle"
-        type="button"
-        aria-label="Switch visual theme"
-      >
-        <span aria-hidden="true">✳</span>
-        <span id="themeLabel">Space mode</span>
-      </button>
+    <nav class="nav">
+      <a href="#tools">Tools</a>
+      <a href="#ai">AI Tools</a>
+      <a href="#services">Agency</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#business">Business</a>
+      <a href="#contact" class="nav-cta">Contact</a>
     </nav>
+    <button class="menu-btn" id="menuBtn">☰</button>
   </header>
 
-  <main id="main">
-
+  <main>
     <!-- HERO -->
-    <section id="home" class="hero section-shell">
-      <div class="hero-copy">
-        <p class="eyebrow">
-          <span class="status-dot"></span>
-          FREELANCE DIGITAL SERVICES
+    <section id="home" class="hero">
+      <div class="hero-content">
+        <p class="eyebrow">FREE TOOLS + AI + AGENCY</p>
+        <h1>Powerful tools.<br><span>Built for everyone.</span></h1>
+        <p class="hero-desc">
+          Free online tools, AI-powered features, and professional digital services — all in one modern platform.
         </p>
-
-        <h1>
-          Smart digital work.
-          <span class="gradient-text">Made with purpose.</span>
-        </h1>
-
-        <p class="hero-description">
-          I'm Murad Wazir. I turn ideas into thoughtful digital experiences
-          through frontend development, research, data services and creative work.
-        </p>
-
-        <div class="hero-actions">
-          <a class="button button-primary" href="#work">
-            Explore the work <span aria-hidden="true">↗</span>
-          </a>
-
-          <a class="button button-secondary" href="#contact">
-            Start a conversation
-          </a>
+        <div class="hero-btns">
+          <a href="#tools" class="btn primary">Explore Free Tools</a>
+          <a href="#pricing" class="btn secondary">Go Premium</a>
         </div>
-
-        <div class="hero-note">
-          <span class="note-line"></span>
-          <p>Independent freelancer · Edwardes College Peshawar</p>
-        </div>
-      </div>
-
-      <div class="hero-visual" aria-label="Abstract 3D digital artwork">
-        <div class="visual-halo"></div>
-        <div class="visual-ring ring-a"></div>
-        <div class="visual-ring ring-b"></div>
-
-        <div class="visual-core">
-          <span>MW</span>
-          <small>IDEAS INTO DIGITAL WORK</small>
-        </div>
-
-        <div class="floating-label label-top">CREATIVE / 01</div>
-        <div class="floating-label label-bottom">PRECISE · PROFESSIONAL</div>
-
-        <div class="visual-chip chip-one">Frontend</div>
-        <div class="visual-chip chip-two">Digital craft</div>
-      </div>
-
-      <a class="scroll-cue" href="#about">
-        <span></span>
-        SCROLL TO EXPLORE
-      </a>
-    </section>
-
-    <!-- TICKER -->
-    <div class="ticker" aria-label="Services">
-      <div class="ticker-track" aria-hidden="true">
-        <span>WEB DEVELOPMENT</span><i>✳</i>
-        <span>WEB RESEARCH</span><i>✳</i>
-        <span>DATA SERVICES</span><i>✳</i>
-        <span>BANNER DESIGN</span><i>✳</i>
-        <span>2D GAME DEVELOPMENT</span><i>✳</i>
-        <span>WEB DEVELOPMENT</span><i>✳</i>
-        <span>WEB RESEARCH</span><i>✳</i>
-        <span>DATA SERVICES</span><i>✳</i>
-        <span>BANNER DESIGN</span><i>✳</i>
-      </div>
-    </div>
-
-    <!-- ABOUT -->
-    <section id="about" class="section section-shell">
-      <div class="section-heading reveal">
-        <p class="eyebrow">01 — THE PERSON BEHIND THE PIXELS</p>
-
-        <h2>
-          Good work starts with
-          <span class="gradient-text">good thinking.</span>
-        </h2>
-      </div>
-
-      <div class="about-grid">
-        <article class="about-card glass-card reveal">
-          <span class="card-index">A / APPROACH</span>
-
-          <h3>Understand first.<br>Build with purpose.</h3>
-
-          <p>
-            Wazir Aura is my digital services space. I focus on understanding
-            the brief, communicating clearly and creating work around real
-            requirements—not unnecessary complexity.
-          </p>
-
-          <button class="text-link" type="button" data-modal="about">
-            More about my approach <span>↗</span>
-          </button>
-        </article>
-
-        <article class="about-card about-card-accent glass-card reveal">
-          <span class="card-index">B / PRINCIPLES</span>
-
-          <ul class="principle-list">
-            <li>
-              <span>01</span>
-              <div>
-                <strong>Clear communication</strong>
-                <p>Understand the brief and expectations.</p>
-              </div>
-            </li>
-
-            <li>
-              <span>02</span>
-              <div>
-                <strong>Attention to detail</strong>
-                <p>Follow requirements and check the work.</p>
-              </div>
-            </li>
-
-            <li>
-              <span>03</span>
-              <div>
-                <strong>Transparent scope</strong>
-                <p>Agree on deliverables and timelines.</p>
-              </div>
-            </li>
-          </ul>
-        </article>
       </div>
     </section>
 
-    <!-- SERVICES -->
-    <section id="services" class="section section-shell">
-      <div class="section-heading reveal">
-        <p class="eyebrow">02 — WHAT I CAN HELP WITH</p>
-
-        <h2>
-          Different skills.<br>
-          <span class="gradient-text">One thoughtful process.</span>
-        </h2>
-
-        <p class="section-intro">
-          Each project is different. Scope, delivery time and pricing are
-          discussed before work begins.
-        </p>
+    <!-- TOOLS HUB -->
+    <section id="tools" class="section">
+      <div class="section-head">
+        <p class="eyebrow">01 — FREE TOOLS</p>
+        <h2>Everything you need.<br><span>Zero cost to start.</span></h2>
       </div>
 
-      <div class="service-list">
-        <article class="service-row reveal">
-          <span class="service-number">01</span>
-          <div class="service-main">
-            <h3>Frontend &amp; Web Development</h3>
-            <p>Responsive interfaces, website layouts and interactive web experiences.</p>
-          </div>
-          <button class="round-link" type="button" data-modal="frontend" aria-label="Learn about frontend development">↗</button>
-        </article>
+      <div class="tools-grid">
+        <div class="tool-card">
+          <div class="tool-icon">📄</div>
+          <h3>PDF Tools</h3>
+          <p>Merge, Split, Compress, Convert, Unlock & more</p>
+          <span class="badge">12 Tools</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon">🖼️</div>
+          <h3>Image Tools</h3>
+          <p>Compress, Resize, Convert, Background Remove</p>
+          <span class="badge">15 Tools</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon">✍️</div>
+          <h3>Text Tools</h3>
+          <p>Word Counter, Case Converter, Lorem Ipsum & more</p>
+          <span class="badge">18 Tools</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon">🔄</div>
+          <h3>Converters</h3>
+          <p>Unit, Currency, Color, Base64, JSON & more</p>
+          <span class="badge">20+ Tools</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon">🛠️</div>
+          <h3>Developer Tools</h3>
+          <p>Code formatters, Hash generators, Regex testers</p>
+          <span class="badge">14 Tools</span>
+        </div>
+        <div class="tool-card">
+          <div class="tool-icon">📊</div>
+          <h3>Data Tools</h3>
+          <p>CSV, Excel helpers, JSON tools & organizers</p>
+          <span class="badge">10 Tools</span>
+        </div>
+      </div>
+    </section>
 
-        <article class="service-row reveal">
-          <span class="service-number">02</span>
-          <div class="service-main">
-            <h3>Web Research &amp; Lead Generation</h3>
-            <p>Online research, information gathering and organised lead lists.</p>
-          </div>
-          <button class="round-link" type="button" data-modal="research" aria-label="Learn about research services">↗</button>
-        </article>
+    <!-- AI TOOLS -->
+    <section id="ai" class="section ai-section">
+      <div class="section-head">
+        <p class="eyebrow">02 — AI POWERED</p>
+        <h2>Smart tools that<br><span>think with you.</span></h2>
+      </div>
+      <div class="ai-grid">
+        <div class="ai-card">
+          <h3>AI Text Generator</h3>
+          <p>Write content, emails, captions & more with AI</p>
+        </div>
+        <div class="ai-card">
+          <h3>AI Image Helper</h3>
+          <p>Background removal, enhancement & generation</p>
+        </div>
+        <div class="ai-card">
+          <h3>AI Summarizer</h3>
+          <p>Summarize long text, articles & documents instantly</p>
+        </div>
+        <div class="ai-card">
+          <h3>AI Code Assistant</h3>
+          <p>Explain, debug and improve your code</p>
+        </div>
+      </div>
+    </section>
 
-        <article class="service-row reveal">
-          <span class="service-number">03</span>
-          <div class="service-main">
-            <h3>Data Entry &amp; Formatting</h3>
-            <p>Structured data handling, spreadsheet updates and accurate formatting.</p>
+    <!-- AGENCY SERVICES -->
+    <section id="services" class="section">
+      <div class="section-head">
+        <p class="eyebrow">03 — AGENCY SERVICES</p>
+        <h2>Need professional work?<br><span>I deliver it.</span></h2>
+      </div>
+      <div class="services-list">
+        <div class="service-item">
+          <span>01</span>
+          <div>
+            <h3>Frontend & Web Development</h3>
+            <p>Modern, responsive websites and web apps</p>
           </div>
-          <button class="round-link" type="button" data-modal="data" aria-label="Learn about data services">↗</button>
-        </article>
-
-        <article class="service-row reveal">
-          <span class="service-number">04</span>
-          <div class="service-main">
+        </div>
+        <div class="service-item">
+          <span>02</span>
+          <div>
+            <h3>Web Research & Lead Generation</h3>
+            <p>Accurate research and organized lead lists</p>
+          </div>
+        </div>
+        <div class="service-item">
+          <span>03</span>
+          <div>
+            <h3>Data Entry & Formatting</h3>
+            <p>Clean, structured and reliable data work</p>
+          </div>
+        </div>
+        <div class="service-item">
+          <span>04</span>
+          <div>
             <h3>Social Media Banner Design</h3>
-            <p>Promotional banners and social graphics based on your brief.</p>
+            <p>Eye-catching graphics for your brand</p>
           </div>
-          <button class="round-link" type="button" data-modal="design" aria-label="Learn about design services">↗</button>
-        </article>
-
-        <article class="service-row reveal">
-          <span class="service-number">05</span>
-          <div class="service-main">
-            <h3>Office Documents</h3>
-            <p>Typing, Word documents, Excel formatting and PowerPoint presentations.</p>
-          </div>
-          <button class="round-link" type="button" data-modal="office" aria-label="Learn about office services">↗</button>
-        </article>
-
-        <article class="service-row reveal">
-          <span class="service-number">06</span>
-          <div class="service-main">
+        </div>
+        <div class="service-item">
+          <span>05</span>
+          <div>
             <h3>2D Game Development</h3>
-            <p>Small interactive concepts and learning-focused game projects.</p>
+            <p>Small interactive games and concepts</p>
           </div>
-          <button class="round-link" type="button" data-modal="games" aria-label="Learn about game development">↗</button>
-        </article>
+        </div>
       </div>
     </section>
 
-    <!-- WORK -->
-    <section id="work" class="section section-shell">
-      <div class="section-heading reveal">
-        <p class="eyebrow">03 — EXPERIMENTS &amp; IDEAS</p>
-
-        <h2>
-          Digital concepts with
-          <span class="gradient-text">room to explore.</span>
-        </h2>
-
-        <p class="section-intro">
-          A glimpse into the kind of visual directions and interactive
-          concepts I enjoy exploring.
-        </p>
+    <!-- PRICING -->
+    <section id="pricing" class="section">
+      <div class="section-head">
+        <p class="eyebrow">04 — PRICING</p>
+        <h2>Simple plans.<br><span>Clear value.</span></h2>
       </div>
-
-      <div class="project-grid">
-        <button class="project-card project-space reveal" type="button" data-modal="project-space">
-          <span class="project-art" aria-hidden="true">
-            <span class="project-planet"></span>
-            <span class="project-orbit"></span>
-          </span>
-          <span class="project-meta">CONCEPT / 01</span>
-          <span class="project-title">Beyond the Orbit</span>
-          <span class="project-description">A cinematic space-inspired web concept.</span>
-          <span class="project-open">Explore concept ↗</span>
-        </button>
-
-        <button class="project-card project-garden reveal" type="button" data-modal="project-garden">
-          <span class="garden-art" aria-hidden="true">
-            <span class="garden-sun"></span>
-            <span class="garden-hill hill-one"></span>
-            <span class="garden-hill hill-two"></span>
-          </span>
-          <span class="project-meta">CONCEPT / 02</span>
-          <span class="project-title">Quiet Digital Garden</span>
-          <span class="project-description">A softer, nature-inspired visual experience.</span>
-          <span class="project-open">Explore concept ↗</span>
-        </button>
+      <div class="pricing-grid">
+        <div class="price-card">
+          <h3>Free</h3>
+          <div class="price">$0</div>
+          <ul>
+            <li>Limited daily uses</li>
+            <li>Basic tools</li>
+            <li>Ads supported</li>
+            <li>Community support</li>
+          </ul>
+          <button class="btn secondary">Current Plan</button>
+        </div>
+        <div class="price-card popular">
+          <div class="popular-tag">Most Popular</div>
+          <h3>Premium</h3>
+          <div class="price">$9<span>/mo</span></div>
+          <ul>
+            <li>Unlimited uses</li>
+            <li>All tools + AI</li>
+            <li>No ads</li>
+            <li>Faster processing</li>
+            <li>Priority support</li>
+          </ul>
+          <button class="btn primary">Upgrade Now</button>
+        </div>
+        <div class="price-card">
+          <h3>Business</h3>
+          <div class="price">$29<span>/mo</span></div>
+          <ul>
+            <li>Everything in Premium</li>
+            <li>API Access</li>
+            <li>Team seats</li>
+            <li>Usage analytics</li>
+          </ul>
+          <button class="btn secondary">Contact Sales</button>
+        </div>
       </div>
     </section>
 
-    <!-- DIGITAL LAB -->
-    <section class="section section-shell lab-section">
-      <div class="lab-card glass-card reveal">
-        <div class="lab-orb" aria-hidden="true"><span></span></div>
-
-        <div>
-          <p class="eyebrow">04 — THE DIGITAL LAB</p>
-
-          <h2>
-            Curiosity keeps<br>
-            <span class="gradient-text">the work evolving.</span>
-          </h2>
-
-          <p>
-            I enjoy exploring interface ideas, animation, frontend techniques
-            and small game-development experiments. New tools are useful when
-            they help turn an idea into a better result.
-          </p>
-
-          <button class="button button-secondary" type="button" data-modal="lab">
-            Inside the lab ↗
-          </button>
+    <!-- BUSINESS / API -->
+    <section id="business" class="section business-section">
+      <div class="section-head">
+        <p class="eyebrow">05 — FOR COMPANIES</p>
+        <h2>API & White-Label<br><span>for serious teams.</span></h2>
+        <p class="section-desc">Integrate Wazir Lab tools into your product or offer them under your own brand.</p>
+      </div>
+      <div class="business-cards">
+        <div class="biz-card">
+          <h3>API Access</h3>
+          <p>Powerful REST API for all major tools. Perfect for automation and products.</p>
+        </div>
+        <div class="biz-card">
+          <h3>White-Label</h3>
+          <p>Offer the entire tool suite under your own branding and domain.</p>
         </div>
       </div>
     </section>
 
     <!-- CONTACT -->
-    <section id="contact" class="section section-shell contact-section">
-      <div class="section-heading reveal">
-        <p class="eyebrow">05 — LET'S TALK</p>
-
-        <h2>
-          Have an idea?<br>
-          <span class="gradient-text">Let's give it direction.</span>
-        </h2>
-
-        <p class="section-intro">
-          Share a few details about your project. I'll review the brief and
-          get back to you.
-        </p>
+    <section id="contact" class="section">
+      <div class="section-head">
+        <p class="eyebrow">06 — CONTACT</p>
+        <h2>Let’s build something<br><span>useful together.</span></h2>
       </div>
-
-      <div class="contact-grid">
-        <aside class="contact-aside reveal">
-          <div class="contact-aside-mark">MW<span>.</span></div>
-          <h3>Wazir Aura</h3>
-          <p>Independent digital services by Murad Wazir.</p>
-
-          <div class="contact-detail">
-            <span>EMAIL</span>
-            <a href="mailto:zuhaibwazir558@gmail.com">zuhaibwazir558@gmail.com</a>
-          </div>
-
-          <div class="contact-detail">
-            <span>WORK WITH ME</span>
-            <a href="https://www.fiverr.com/s/RVVGDbN" target="_blank" rel="noopener noreferrer">Visit my Fiverr ↗</a>
-          </div>
-
-          <p class="contact-small">
-            Project scope, price and timeline are confirmed before work starts.
-          </p>
-        </aside>
-
-        <form id="contactForm" class="contact-form glass-card reveal">
-          <div class="form-row">
-            <label for="name">
-              Your name
-              <input
-                id="name"
-                name="name"
-                type="text"
-                autocomplete="name"
-                minlength="2"
-                maxlength="100"
-                required
-                placeholder="Full name"
-              >
-            </label>
-
-            <label for="email">
-              Email address
-              <input
-                id="email"
-                name="email"
-                type="email"
-                autocomplete="email"
-                maxlength="254"
-                required
-                placeholder="you@example.com"
-              >
-            </label>
-          </div>
-
-          <label for="subject">
-            What is this about?
-            <input
-              id="subject"
-              name="subject"
-              type="text"
-              maxlength="160"
-              required
-              placeholder="Project or service"
-            >
-          </label>
-
-          <label for="message">
-            Tell me about your project
-            <textarea
-              id="message"
-              name="message"
-              minlength="10"
-              maxlength="5000"
-              required
-              rows="5"
-              placeholder="A few details about your idea, requirements and timeline..."
-            ></textarea>
-          </label>
-
-          <!-- CLOUDFLARE TURNSTILE -->
-          <div class="turnstile-wrap">
-            <p class="turnstile-label">SECURITY VERIFICATION</p>
-
-            <!--
-              Public Site Key.
-              The widget is rendered explicitly by script.js.
-              Do not add class="cf-turnstile" here.
-            -->
-            <div
-              id="turnstileWidget"
-              data-sitekey="0x4AAAAAAFZJ224xUgfpye_d"
-              data-theme="dark">
-            </div>
-
-            <p class="form-hint">
-              Please complete the verification before sending.
-            </p>
-          </div>
-
-          <button
-            id="submitButton"
-            class="button button-primary submit-button"
-            type="submit"
-          >
-            <span>Send your message</span>
-            <span aria-hidden="true">↗</span>
-          </button>
-
-          <p id="formStatus" class="form-status" role="status" aria-live="polite"></p>
-
-          <p class="form-privacy">
-            Your details are used to respond to your enquiry.
-          </p>
-        </form>
+      <div class="contact-box">
+        <p>Have a project, partnership, or custom tool request?</p>
+        <a href="mailto:zuhaibwazir558@gmail.com" class="btn primary">Email Me</a>
+        <div class="social-links">
+          <a href="https://www.fiverr.com/s/X00PlkP" target="_blank">Fiverr</a>
+          <a href="https://www.linkedin.com/in/murad-wazir-bbb0b541a" target="_blank">LinkedIn</a>
+          <a href="https://x.com/waziraura553" target="_blank">X</a>
+          <a href="https://www.instagram.com/waziraura553/" target="_blank">Instagram</a>
+          <a href="https://www.facebook.com/profile.php?id=61578311048454" target="_blank">Facebook</a>
+        </div>
       </div>
     </section>
   </main>
 
   <!-- FOOTER -->
-  <footer class="site-footer section-shell">
-    <a class="brand footer-brand" href="#home">
-      <span class="brand-mark">W<span>A</span></span>
-
-      <span class="brand-copy">
-        <strong>WAZIR AURA</strong>
-        <small>DIGITAL EXPERIENCES</small>
-      </span>
-    </a>
-
-    <p>Independent work. Intentional experiences.</p>
-
-    <div class="footer-links">
-      <a
-        href="https://www.linkedin.com/in/murad-wazir-bbb0b541a/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >LinkedIn ↗</a>
-
-      <a
-        href="https://www.instagram.com/waziraura553/"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Instagram ↗</a>
-
-      <a
-        href="https://www.fiverr.com/s/RVVGDbN"
-        target="_blank"
-        rel="noopener noreferrer"
-      >Fiverr ↗</a>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <strong>Wazir Lab</strong>
+        <p>Free Tools • AI • Agency by Murad Wazir</p>
+      </div>
+      <div class="footer-links">
+        <a href="#tools">Tools</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#business">Business</a>
+        <a href="#contact">Contact</a>
+      </div>
     </div>
-
-    <small>© <span id="year"></span> Wazir Aura</small>
+    <p class="copyright">© 2026 Wazir Lab. All rights reserved.</p>
   </footer>
 
-  <!-- DETAILS DIALOG -->
-  <dialog id="detailDialog" class="detail-dialog">
-    <div class="dialog-top">
-      <span class="eyebrow">WAZIR AURA / DETAILS</span>
-
-      <button
-        id="dialogClose"
-        class="dialog-close"
-        type="button"
-        aria-label="Close dialog"
-      >✕</button>
-    </div>
-
-    <h2 id="dialogTitle">Explore</h2>
-    <div id="dialogBody" class="dialog-body"></div>
-
-    <a id="dialogContact" class="button button-primary" href="#contact">
-      Discuss a project ↗
-    </a>
-  </dialog>
-
-  <!-- TOAST -->
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  <script type="module" src="./script.js"></script>
 </body>
 </html>
