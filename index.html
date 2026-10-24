@@ -1,493 +1,325 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#070816">
-  <meta name="description" content="Wazir Aura — AI tools for creativity, coding, study, design and productivity.">
-  <title>Wazir Aura — Create Beyond Limits</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <meta name="theme-color" content="#080817">
+  <meta name="description" content="Wazir Aura — a creative AI tools workspace for writing, design, coding and productivity.">
+  <title>Wazir Aura — Creative AI Workspace</title>
   <link rel="stylesheet" href="style.css">
-  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="script.js" defer></script>
 </head>
-
 <body>
-  <div id="welcome-screen" class="welcome-screen">
-    <div class="welcome-stars"></div>
-    <div class="welcome-orb">
-      <svg viewBox="0 0 200 200" role="img" aria-label="MW logo">
-        <defs>
-          <linearGradient id="mwGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#fff2b0"/>
-            <stop offset="35%" stop-color="#ff9d54"/>
-            <stop offset="70%" stop-color="#b56cff"/>
-            <stop offset="100%" stop-color="#55e8ff"/>
-          </linearGradient>
-          <filter id="mwGlow">
-            <feGaussianBlur stdDeviation="3.5" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
-          </filter>
-        </defs>
-        <path class="logo-ring" d="M 32 104 A 68 68 0 1 1 151 153" fill="none" stroke="url(#mwGradient)" stroke-width="4" stroke-linecap="round"/>
-        <path d="M 42 66 L 42 130 L 58 91 L 75 122 L 92 91 L 109 130 L 109 66"
-              fill="none" stroke="url(#mwGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#mwGlow)"/>
-        <path d="M 91 68 L 112 129 L 132 82 L 149 129 L 170 68"
-              fill="none" stroke="url(#mwGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" filter="url(#mwGlow)"/>
-        <path d="M 139 30 L 145 43 L 159 47 L 145 52 L 139 66 L 134 52 L 121 47 L 134 43 Z"
-              fill="#fff2b0" filter="url(#mwGlow)"/>
-      </svg>
-    </div>
-    <div class="welcome-smoke smoke-one"></div>
-    <div class="welcome-smoke smoke-two"></div>
-    <p class="welcome-kicker">WELCOME TO</p>
-    <h1>WAZIR <span>AURA</span></h1>
-    <p class="welcome-tagline">Imagine it. Create it. Make it real.</p>
-    <div class="welcome-loader"><span></span></div>
-  </div>
-
-  <canvas id="space-canvas" aria-hidden="true"></canvas>
-  <div class="ambient ambient-one"></div>
-  <div class="ambient ambient-two"></div>
+  <div class="ambient ambient-purple"></div>
+  <div class="ambient ambient-cyan"></div>
 
   <header class="topbar">
-    <a class="brand" href="#home" aria-label="Wazir Aura home">
-      <span class="brand-mark">
-        <svg viewBox="0 0 200 200" aria-hidden="true">
-          <defs>
-            <linearGradient id="brandGradient" x1="0" y1="0" x2="1" y2="1">
-              <stop offset="0%" stop-color="#ffe5a1"/>
-              <stop offset="50%" stop-color="#ff8c64"/>
-              <stop offset="100%" stop-color="#a78bfa"/>
-            </linearGradient>
-          </defs>
-          <path d="M 30 105 A 70 70 0 1 1 153 154" fill="none" stroke="url(#brandGradient)" stroke-width="7" stroke-linecap="round"/>
-          <path d="M 43 65 L 43 132 L 60 91 L 76 123 L 93 91 L 110 132 L 110 65 M 96 68 L 117 132 L 137 83 L 154 132 L 175 68"
-                fill="none" stroke="url(#brandGradient)" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
-          <path d="M 143 27 L 149 40 L 163 45 L 149 51 L 143 64 L 138 51 L 124 45 L 138 40 Z" fill="#fff0b8"/>
-        </svg>
-      </span>
-      <span class="brand-text">WAZIR <b>AURA</b><small>CREATIVE INTELLIGENCE</small></span>
-    </a>
+    <div class="topbar-inner">
+      <a class="brand" href="#home" aria-label="Wazir Aura home">
+        <span class="brand-mark">W</span>
+        <span>
+          <span class="brand-text">Wazir Aura</span>
+          <span class="brand-subtitle">Creative workspace</span>
+        </span>
+      </a>
 
-    <nav class="desktop-nav" aria-label="Main navigation">
-      <a href="#home" class="nav-link active">Home</a>
-      <a href="#tools" class="nav-link">AI Tools</a>
-      <a href="#about" class="nav-link">About</a>
-      <a href="#contact" class="nav-link">Contact</a>
-      <a href="#pricing" class="nav-link">Pricing</a>
-    </nav>
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a class="nav-link" href="#home">Home</a>
+        <a class="nav-link" href="#tools">Tools</a>
+        <a class="nav-link" href="#about">About</a>
+        <a class="nav-link" href="#pricing">Plans</a>
+        <a class="nav-link" href="#contact">Contact</a>
+      </nav>
 
-    <div class="top-actions">
-      <button id="theme-toggle" class="icon-button" aria-label="Toggle theme" title="Toggle theme">
-        <i data-lucide="sun-moon"></i>
-      </button>
-      <a href="#tools" class="button button-small button-primary">Explore tools <i data-lucide="arrow-up-right"></i></a>
-      <button id="mobile-menu-toggle" class="icon-button mobile-only" aria-label="Open menu">
-        <i data-lucide="menu"></i>
-      </button>
+      <div class="top-actions">
+        <button class="icon-button" id="theme-toggle" type="button" aria-label="Toggle color theme" title="Toggle theme">☼</button>
+        <a class="button button-primary button-small" href="#tools">Explore tools <span aria-hidden="true">↗</span></a>
+        <button class="mobile-menu-button" id="mobile-menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false">☰</button>
+      </div>
     </div>
+
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+      <a href="#home">Home</a>
+      <a href="#tools">Tools</a>
+      <a href="#about">About</a>
+      <a href="#pricing">Plans</a>
+      <a href="#contact">Contact</a>
+    </nav>
   </header>
 
-  <nav id="mobile-nav" class="mobile-nav" aria-label="Mobile navigation">
-    <a href="#home">Home</a>
-    <a href="#tools">AI Tools</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-    <a href="#pricing">Pricing</a>
-  </nav>
-
   <main>
-    <section id="home" class="hero section-wrap">
+    <section class="hero" id="home">
       <div class="hero-copy">
-        <div class="eyebrow"><span class="status-dot"></span> YOUR CREATIVE AI WORKSPACE</div>
-        <h1>One idea.<br>Infinite <span class="gradient-text">possibilities.</span></h1>
-        <p class="hero-description">
-          Write, learn, design, code and build. Discover a growing collection of creative
-          tools made to turn your ideas into something real.
+        <div class="eyebrow"><span class="status-dot"></span> YOUR CREATIVE SPACE</div>
+        <h1>Make ideas <span class="gradient-text">happen.</span></h1>
+        <p>
+          One workspace for your creative workflow. Explore writing,
+          design, coding and productivity tools built to help you work smarter.
         </p>
         <div class="hero-actions">
-          <a href="#tools" class="button button-primary">Explore AI tools <i data-lucide="arrow-up-right"></i></a>
-          <a href="#about" class="button button-ghost"><i data-lucide="sparkles"></i> Meet the creator</a>
+          <a class="button button-primary" href="#tools">Explore all tools <span aria-hidden="true">→</span></a>
+          <a class="button button-ghost" href="#about">Discover Wazir Aura</a>
         </div>
-        <div class="hero-proof">
-          <div class="proof-icon"><i data-lucide="zap"></i></div>
-          <div><strong>Built for ideas</strong><span>Creation · Learning · Productivity</span></div>
+        <div class="hero-note">
+          <span>✦ One organized workspace</span>
+          <span>✦ Built for creators</span>
         </div>
       </div>
 
-      <div class="hero-visual" aria-label="Wazir Aura creative intelligence emblem">
+      <div class="hero-visual" aria-hidden="true">
         <div class="visual-grid"></div>
-        <div class="orbit orbit-outer"></div>
-        <div class="orbit orbit-middle"></div>
-        <div class="orbit orbit-inner"></div>
-        <div class="hero-core">
-          <svg viewBox="0 0 200 200" aria-hidden="true">
-            <defs>
-              <linearGradient id="heroLogoGradient" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#fff0b0"/>
-                <stop offset="48%" stop-color="#ff906b"/>
-                <stop offset="100%" stop-color="#a78bfa"/>
-              </linearGradient>
-            </defs>
-            <path d="M 30 105 A 70 70 0 1 1 153 154" fill="none" stroke="url(#heroLogoGradient)" stroke-width="6" stroke-linecap="round"/>
-            <path d="M 43 65 L 43 132 L 60 91 L 76 123 L 93 91 L 110 132 L 110 65 M 96 68 L 117 132 L 137 83 L 154 132 L 175 68"
-                  fill="none" stroke="url(#heroLogoGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M 143 27 L 149 40 L 163 45 L 149 51 L 143 64 L 138 51 L 124 45 L 138 40 Z" fill="#fff0b8"/>
-          </svg>
-        </div>
-        <div class="floating-chip chip-one"><i data-lucide="image"></i> AI Creativity</div>
-        <div class="floating-chip chip-two"><i data-lucide="code-2"></i> Smart Coding</div>
-        <div class="floating-chip chip-three"><i data-lucide="graduation-cap"></i> Study Mode</div>
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="orbit orbit-three"></div>
+        <div class="hero-core">✦</div>
+        <div class="floating-chip floating-chip-one">✧ Creative tools</div>
+        <div class="floating-chip floating-chip-two">⌘ Smart workflow</div>
+        <div class="floating-chip floating-chip-three">◈ Wazir Aura</div>
       </div>
     </section>
 
-    <section class="stats-strip section-wrap">
-      <div><strong>AI</strong><span>Creative workspace</span></div>
-      <div><strong>100K+</strong><span>Text input design target</span></div>
-      <div><strong>Free</strong><span>Useful everyday tools</span></div>
-      <div><strong>∞</strong><span>Room for new ideas</span></div>
-    </section>
+    <div class="stats-strip">
+      <div class="stat-item">
+        <span class="stat-value" id="tool-count">0</span>
+        <span class="stat-label">Available tools</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">One</span>
+        <span class="stat-label">Creative workspace</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-value">Your</span>
+        <span class="stat-label">Ideas, your workflow</span>
+      </div>
+    </div>
 
-    <section id="tools" class="section-wrap section-block">
+    <section class="section-block" id="tools">
       <div class="section-heading">
         <div>
           <div class="eyebrow">THE TOOLBOX</div>
-          <h2>Your next idea starts <span class="gradient-text">here.</span></h2>
-          <p>Find a tool, write a prompt or use a practical utility right in your browser.</p>
+          <h2>What will you <span class="gradient-text">create?</span></h2>
+          <p>Choose a tool and start working in your own creative workspace.</p>
         </div>
-        <div class="tool-count"><i data-lucide="layers"></i> Creative workspace</div>
+        <span class="tool-count"><span id="visible-tool-count">0</span> shown</span>
       </div>
 
-      <div class="tool-search">
-        <i data-lucide="search"></i>
-        <input id="tool-search" type="search" placeholder="Search tools — writing, code, study, voice..." aria-label="Search tools">
-        <kbd>SEARCH</kbd>
+      <div class="tool-discovery">
+        <input
+          class="tool-search"
+          id="tool-search"
+          type="search"
+          placeholder="Search tools by name or purpose..."
+          aria-label="Search tools"
+          autocomplete="off"
+        >
+
+        <div class="category-tabs" id="category-tabs" aria-label="Filter tools by category">
+          <button class="category-tab active" type="button" data-category="All">All tools</button>
+          <button class="category-tab" type="button" data-category="AI">AI & Writing</button>
+          <button class="category-tab" type="button" data-category="Image">Image & Design</button>
+          <button class="category-tab" type="button" data-category="Video">Video & Audio</button>
+          <button class="category-tab" type="button" data-category="Code">Code & Games</button>
+          <button class="category-tab" type="button" data-category="Productivity">Productivity</button>
+        </div>
       </div>
 
-      <div class="category-tabs" id="category-tabs">
-        <button class="category-tab selected" data-category="all">All tools</button>
-        <button class="category-tab" data-category="ai">AI Studio</button>
-        <button class="category-tab" data-category="coding">Coding</button>
-        <button class="category-tab" data-category="design">Design</button>
-        <button class="category-tab" data-category="study">Study</button>
-        <button class="category-tab" data-category="text">Text tools</button>
-        <button class="category-tab" data-category="voice">Voice</button>
+      <p class="workspace-status" id="tools-loading-status" role="status">Loading available tools...</p>
+
+      <div class="tools-grid" id="tools-grid" aria-live="polite"></div>
+
+      <div class="no-tools-message is-hidden" id="no-tools-message">
+        <h3>No tools found</h3>
+        <p>Try another search or choose a different category.</p>
       </div>
-
-      <div id="tools-grid" class="tools-grid">
-        <article class="tool-card featured-tool" data-category="ai" data-tool="assistant">
-          <div class="tool-card-top"><span class="tool-icon icon-purple"><i data-lucide="brain-circuit"></i></span><span class="tool-label">AI STUDIO</span></div>
-          <h3>AI Prompt Assistant</h3>
-          <p>Prepare prompts for general questions, brainstorming, explanations and creative work.</p>
-          <button class="tool-open" data-open-tool="assistant">Open assistant <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="ai" data-tool="image">
-          <div class="tool-card-top"><span class="tool-icon icon-pink"><i data-lucide="image"></i></span><span class="tool-label">CREATIVE</span></div>
-          <h3>Image Generator</h3>
-          <p>Build detailed prompts for artwork, thumbnails, illustrations and visual concepts.</p>
-          <button class="tool-open" data-open-tool="image">Create a prompt <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="ai" data-tool="video">
-          <div class="tool-card-top"><span class="tool-icon icon-orange"><i data-lucide="clapperboard"></i></span><span class="tool-label">VIDEO</span></div>
-          <h3>Short Video Studio</h3>
-          <p>Plan short videos with a hook, scenes, captions and a generation-ready prompt.</p>
-          <button class="tool-open" data-open-tool="video">Plan a video <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="design" data-tool="logo">
-          <div class="tool-card-top"><span class="tool-icon icon-yellow"><i data-lucide="shapes"></i></span><span class="tool-label">BRANDING</span></div>
-          <h3>Logo & Banner Lab</h3>
-          <p>Develop brand directions, social banners, logo concepts and visual identity prompts.</p>
-          <button class="tool-open" data-open-tool="logo">Build a concept <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="coding" data-tool="website">
-          <div class="tool-card-top"><span class="tool-icon icon-blue"><i data-lucide="panels-top-left"></i></span><span class="tool-label">WEB DEV</span></div>
-          <h3>Website Builder</h3>
-          <p>Describe a website and prepare an HTML, CSS and JavaScript project prompt.</p>
-          <button class="tool-open" data-open-tool="website">Build a website <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="coding" data-tool="game">
-          <div class="tool-card-top"><span class="tool-icon icon-green"><i data-lucide="gamepad-2"></i></span><span class="tool-label">GAME DEV</span></div>
-          <h3>2D Game Creator</h3>
-          <p>Plan a 2D game, mechanics, levels, controls and code structure from your idea.</p>
-          <button class="tool-open" data-open-tool="game">Design a game <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="coding" data-tool="code">
-          <div class="tool-card-top"><span class="tool-icon icon-cyan"><i data-lucide="code-2"></i></span><span class="tool-label">DEVELOPER</span></div>
-          <h3>Code Workbench</h3>
-          <p>Write or paste code, keep a project note and download your code as a local file.</p>
-          <button class="tool-open" data-open-tool="code">Open workbench <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="study" data-tool="study">
-          <div class="tool-card-top"><span class="tool-icon icon-purple"><i data-lucide="graduation-cap"></i></span><span class="tool-label">LEARNING</span></div>
-          <h3>Study Companion</h3>
-          <p>Prepare study prompts for summaries, revision, quizzes and step-by-step explanations.</p>
-          <button class="tool-open" data-open-tool="study">Start studying <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="text" data-tool="notepad">
-          <div class="tool-card-top"><span class="tool-icon icon-yellow"><i data-lucide="notebook-pen"></i></span><span class="tool-label">WORKSPACE</span></div>
-          <h3>Cloud-style Notepad</h3>
-          <p>Write long notes in your browser, save them locally and export text files.</p>
-          <button class="tool-open" data-open-tool="notepad">Open notepad <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="voice" data-tool="tts">
-          <div class="tool-card-top"><span class="tool-icon icon-pink"><i data-lucide="audio-lines"></i></span><span class="tool-label">TEXT TO SPEECH</span></div>
-          <h3>Voice Studio</h3>
-          <p>Preview voices available in your browser and turn text into spoken audio.</p>
-          <button class="tool-open" data-open-tool="tts">Open voice studio <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="text" data-tool="wordcount">
-          <div class="tool-card-top"><span class="tool-icon icon-blue"><i data-lucide="file-text"></i></span><span class="tool-label">UTILITY</span></div>
-          <h3>Word Counter</h3>
-          <p>Count words, characters, sentences and estimated reading time.</p>
-          <button class="tool-open" data-open-tool="wordcount">Count text <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="text" data-tool="json">
-          <div class="tool-card-top"><span class="tool-icon icon-green"><i data-lucide="braces"></i></span><span class="tool-label">DEVELOPER</span></div>
-          <h3>JSON Formatter</h3>
-          <p>Format, validate and copy JSON data in your browser.</p>
-          <button class="tool-open" data-open-tool="json">Format JSON <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="text" data-tool="base64">
-          <div class="tool-card-top"><span class="tool-icon icon-orange"><i data-lucide="binary"></i></span><span class="tool-label">ENCODING</span></div>
-          <h3>Base64 Converter</h3>
-          <p>Encode and decode text locally without sending it to a server.</p>
-          <button class="tool-open" data-open-tool="base64">Open converter <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="text" data-tool="markdown">
-          <div class="tool-card-top"><span class="tool-icon icon-purple"><i data-lucide="file-code"></i></span><span class="tool-label">WRITING</span></div>
-          <h3>Markdown Helper</h3>
-          <p>Draft Markdown notes and preview the basic formatting.</p>
-          <button class="tool-open" data-open-tool="markdown">Open editor <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="text" data-tool="password">
-          <div class="tool-card-top"><span class="tool-icon icon-cyan"><i data-lucide="shield-check"></i></span><span class="tool-label">SECURITY</span></div>
-          <h3>Password Generator</h3>
-          <p>Generate random passwords in your browser with configurable length.</p>
-          <button class="tool-open" data-open-tool="password">Generate password <i data-lucide="arrow-up-right"></i></button>
-        </article>
-
-        <article class="tool-card" data-category="text" data-tool="case">
-          <div class="tool-card-top"><span class="tool-icon icon-pink"><i data-lucide="case-sensitive"></i></span><span class="tool-label">TEXT</span></div>
-          <h3>Case Converter</h3>
-          <p>Convert text to uppercase, lowercase, title case and sentence case.</p>
-          <button class="tool-open" data-open-tool="case">Convert text <i data-lucide="arrow-up-right"></i></button>
-        </article>
-      </div>
-      <p id="no-tools-message" class="empty-state hidden">No tools match your search. Try another keyword.</p>
     </section>
 
-    <section id="workspace" class="section-wrap section-block workspace-section">
-      <div class="section-heading">
+    <section class="workspace-section is-hidden" id="workspace" aria-labelledby="workspace-title">
+      <div class="workspace-header">
         <div>
           <div class="eyebrow">YOUR WORKSPACE</div>
-          <h2 id="workspace-title">Make something <span class="gradient-text">amazing.</span></h2>
-          <p id="workspace-description">Choose a tool above to get started.</p>
+          <h2 id="workspace-title">Select a tool</h2>
+          <p id="workspace-description">Your selected tool will appear here.</p>
         </div>
-        <button id="close-workspace" class="button button-ghost"><i data-lucide="x"></i> Close tool</button>
+        <button class="icon-button" id="close-workspace" type="button" aria-label="Close workspace" title="Close workspace">✕</button>
       </div>
 
-      <div class="workspace-panel">
-        <div id="workspace-placeholder" class="workspace-placeholder">
-          <div class="placeholder-orb"><i data-lucide="sparkles"></i></div>
-          <h3>Your creative space is ready</h3>
-          <p>Select any tool to open its workspace here.</p>
-        </div>
+      <div class="workspace-placeholder" id="workspace-placeholder">
+        <div class="workspace-placeholder-icon">✦</div>
+        <h3>Ready when you are</h3>
+        <p>Choose a tool to begin.</p>
+      </div>
 
-        <div id="workspace-content" class="hidden">
-          <div id="workspace-controls"></div>
-          <div id="workspace-result-wrap" class="result-wrap hidden">
-            <div class="result-header">
-              <strong><i data-lucide="check-circle-2"></i> Output</strong>
-              <div class="result-actions">
-                <button id="copy-result" class="button button-small button-ghost"><i data-lucide="copy"></i> Copy</button>
-                <button id="download-result" class="button button-small button-ghost"><i data-lucide="download"></i> Download</button>
-              </div>
-            </div>
-            <textarea id="workspace-result" class="large-textarea" maxlength="200000" placeholder="Your output will appear here..." spellcheck="false"></textarea>
+      <div class="workspace-content" id="workspace-content"></div>
+      <p class="workspace-status" id="workspace-status" role="status" aria-live="polite"></p>
+
+      <div class="workspace-toolbar">
+        <button class="button button-ghost button-small" id="copy-result" type="button">Copy result</button>
+        <button class="button button-ghost button-small" id="download-result" type="button">Download result</button>
+      </div>
+    </section>
+
+    <section class="section-block" id="about">
+      <div class="about-section">
+        <div class="about-visual" aria-hidden="true">
+          <div class="about-visual-icon">✧</div>
+        </div>
+        <div class="about-copy">
+          <div class="eyebrow">ABOUT WAZIR AURA</div>
+          <h2>Tools for curious <span class="gradient-text">minds.</span></h2>
+          <p>
+            Wazir Aura is a growing digital workspace focused on making
+            creative and technical tasks easier to organize in one place.
+          </p>
+          <p>
+            The goal is to bring writing, design, development and productivity
+            workflows together through a clean, approachable interface.
+          </p>
+          <div class="skill-chips">
+            <span>Web research</span>
+            <span>Design</span>
+            <span>Web development</span>
+            <span>2D games</span>
+            <span>Productivity</span>
           </div>
-          <p id="workspace-status" class="workspace-status" role="status" aria-live="polite"></p>
         </div>
       </div>
     </section>
 
-    <section id="about" class="section-wrap section-block about-section">
-      <div class="about-visual">
-        <div class="about-orbit"></div>
-        <div class="about-logo">
-          <svg viewBox="0 0 200 200" aria-hidden="true">
-            <defs>
-              <linearGradient id="aboutGradient" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#ffe8a6"/>
-                <stop offset="50%" stop-color="#ff916e"/>
-                <stop offset="100%" stop-color="#a78bfa"/>
-              </linearGradient>
-            </defs>
-            <path d="M 30 105 A 70 70 0 1 1 153 154" fill="none" stroke="url(#aboutGradient)" stroke-width="6" stroke-linecap="round"/>
-            <path d="M 43 65 L 43 132 L 60 91 L 76 123 L 93 91 L 110 132 L 110 65 M 96 68 L 117 132 L 137 83 L 154 132 L 175 68"
-                  fill="none" stroke="url(#aboutGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M 143 27 L 149 40 L 163 45 L 149 51 L 143 64 L 138 51 L 124 45 L 138 40 Z" fill="#fff0b8"/>
-          </svg>
+    <section class="section-block">
+      <div class="feature-band">
+        <div class="feature-item">
+          <div class="feature-icon">✧</div>
+          <div>
+            <h3>One organized space</h3>
+            <p>Keep different creative workflows together in a single interface.</p>
+          </div>
         </div>
-        <div class="about-caption"><span class="status-dot"></span> BUILT WITH CURIOSITY</div>
-      </div>
-
-      <div class="about-copy">
-        <div class="eyebrow">THE PERSON BEHIND THE BRAND</div>
-        <h2>It's me, <span class="gradient-text">Murad Wazir.</span></h2>
-        <p class="about-lead">A student, freelancer and technology enthusiast who enjoys turning ideas into useful digital experiences.</p>
-
-        <p>
-          I'm Murad Wazir, a Computer Science student at Edwardes College Peshawar, Pakistan.
-          My journey combines learning, freelancing, creative design and experimenting with
-          technology. I believe that useful digital tools should make work easier, learning
-          more accessible and creativity less intimidating.
-        </p>
-        <p>
-          Through freelance work, I focus on web research, data collection, data entry,
-          lead generation, data formatting and Microsoft Office tasks. I also create social
-          media banner concepts and keep developing my skills in web design, frontend
-          development and 2D game development.
-        </p>
-        <p>
-          I'm especially interested in how AI can help people transform a simple prompt into
-          a website idea, a game concept, a visual design, a useful piece of code or a better
-          understanding of a difficult topic. Wazir Aura is my vision for a creative digital
-          workspace that brings these possibilities together.
-        </p>
-        <p>
-          I'm still learning, building and improving. My goal is to keep expanding my skills,
-          create practical tools, serve clients professionally and build projects that reflect
-          curiosity, consistency and creativity.
-        </p>
-
-        <div class="skill-chips">
-          <span>Web Research</span><span>Data Entry</span><span>Frontend Development</span>
-          <span>2D Game Development</span><span>AI Workflows</span><span>Banner Design</span>
+        <div class="feature-item">
+          <div class="feature-icon">◈</div>
+          <div>
+            <h3>Designed to adapt</h3>
+            <p>A responsive experience for phones, laptops and desktop screens.</p>
+          </div>
         </div>
-        <a href="#contact" class="button button-primary">Let's connect <i data-lucide="arrow-up-right"></i></a>
+        <div class="feature-item">
+          <div class="feature-icon">⌘</div>
+          <div>
+            <h3>Expandable tools</h3>
+            <p>The planned tool system lets each tool live in its own file.</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <section class="section-wrap section-block feature-band">
-      <div class="feature-band-copy">
-        <div class="eyebrow">MADE FOR CREATORS</div>
-        <h2>From the first prompt<br>to the <span class="gradient-text">final project.</span></h2>
-        <p>Use practical browser tools now, and connect advanced AI providers when your backend is ready.</p>
-      </div>
-      <div class="feature-points">
-        <div><i data-lucide="check-circle-2"></i><span>Long-form text and code workspace</span></div>
-        <div><i data-lucide="check-circle-2"></i><span>Useful free browser utilities</span></div>
-        <div><i data-lucide="check-circle-2"></i><span>Creative prompts for image and video tools</span></div>
-        <div><i data-lucide="check-circle-2"></i><span>Ready to connect to a real AI backend</span></div>
-      </div>
-    </section>
-
-    <section id="pricing" class="section-wrap section-block">
-      <div class="section-heading centered-heading">
-        <div class="eyebrow">SIMPLE PLANS</div>
-        <h2>Start free. <span class="gradient-text">Grow when you're ready.</span></h2>
-        <p>Example pricing for your product. Configure real payment processing before accepting money.</p>
+    <section class="section-block" id="pricing">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">SIMPLE PLANS</div>
+          <h2>Choose your <span class="gradient-text">journey.</span></h2>
+          <p>Plan options are a preview. Paid access and billing require backend setup.</p>
+        </div>
       </div>
 
       <div class="pricing-grid">
         <article class="pricing-card">
-          <div class="pricing-name">Free Explorer</div>
-          <div class="price">Rs 0 <small>/ forever</small></div>
-          <p>For everyday tasks and trying out the workspace.</p>
+          <h3>Free</h3>
+          <p>Explore the workspace and available free features.</p>
+          <div class="price">$0 <small>/ forever</small></div>
           <ul>
-            <li><i data-lucide="check"></i> Browser-based text utilities</li>
-            <li><i data-lucide="check"></i> Local notepad and exports</li>
-            <li><i data-lucide="check"></i> Available browser speech voices</li>
-            <li><i data-lucide="check"></i> Prompt builder tools</li>
+            <li>Access available free tools</li>
+            <li>Explore the workspace</li>
+            <li>Basic productivity features</li>
           </ul>
-          <a href="#tools" class="button button-ghost button-full">Start for free</a>
+          <a class="button button-ghost" href="#tools">Explore tools</a>
         </article>
 
         <article class="pricing-card pricing-featured">
-          <div class="popular-badge">POPULAR CONCEPT</div>
-          <div class="pricing-name">Creator Pro</div>
-          <div class="price">Rs 999 <small>/ month</small></div>
-          <p>Proposed plan for creators who need more capability.</p>
+          <span class="popular-badge">COMING LATER</span>
+          <h3>Pro</h3>
+          <p>For creators who need more advanced capabilities.</p>
+          <div class="price">Pro <small>/ planned</small></div>
           <ul>
-            <li><i data-lucide="check"></i> Planned AI integrations</li>
-            <li><i data-lucide="check"></i> Larger project workflows</li>
-            <li><i data-lucide="check"></i> Advanced creator tools</li>
-            <li><i data-lucide="check"></i> Priority usage limits (when implemented)</li>
+            <li>Potential higher usage limits</li>
+            <li>Advanced tool integrations</li>
+            <li>Premium features when available</li>
           </ul>
-          <button class="button button-primary button-full" data-plan="Creator Pro">Pro plan details</button>
+          <a class="button button-primary" href="#contact">Ask about plans</a>
         </article>
 
         <article class="pricing-card">
-          <div class="pricing-name">Studio</div>
-          <div class="price">Rs 2,499 <small>/ month</small></div>
-          <p>Proposed plan for heavier creative and development workflows.</p>
+          <h3>Creator</h3>
+          <p>A future plan for larger creative workflows.</p>
+          <div class="price">Custom <small>/ planned</small></div>
           <ul>
-            <li><i data-lucide="check"></i> Planned image/video provider access</li>
-            <li><i data-lucide="check"></i> Advanced coding workflows</li>
-            <li><i data-lucide="check"></i> Extended voice features</li>
-            <li><i data-lucide="check"></i> Usage and billing dashboard (planned)</li>
+            <li>Future creator features</li>
+            <li>Expanded workflow options</li>
+            <li>Availability to be announced</li>
           </ul>
-          <button class="button button-ghost button-full" data-plan="Studio">Studio plan details</button>
+          <a class="button button-ghost" href="#contact">Contact us</a>
         </article>
       </div>
-      <p class="pricing-disclaimer">Prices are illustrative only. No payment is collected by this page. Add a secure backend, payment provider, subscription verification and refund policy before selling plans.</p>
+      <p class="pricing-disclaimer">
+        Pricing shown here is informational only. Payments, subscriptions and premium entitlements are not active.
+      </p>
     </section>
 
-    <section id="contact" class="section-wrap section-block contact-section">
-      <div class="contact-copy">
-        <div class="eyebrow">LET'S TALK</div>
-        <h2>Have an idea?<br><span class="gradient-text">Let's build it.</span></h2>
-        <p>For freelance projects, collaborations, questions or feedback, reach out through email or social profiles.</p>
-        <a class="email-link" href="mailto:wazirlab@proton.me"><i data-lucide="mail"></i> wazirlab@proton.me <i data-lucide="arrow-up-right"></i></a>
-        <div class="social-links" aria-label="Social links">
-          <a href="https://www.linkedin.com/in/murad-wazir-bbb0b541a/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><i data-lucide="linkedin"></i></a>
-          <a href="https://www.fiverr.com/s/p33qGQp" target="_blank" rel="noopener noreferrer" aria-label="Fiverr" title="Fiverr"><span class="fiverr-icon">fi</span></a>
-          <a href="https://www.instagram.com/waziraura553/?hl=en" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><i data-lucide="instagram"></i></a>
-          <a href="mailto:wazirlab@proton.me" aria-label="Email" title="Proton Mail"><i data-lucide="mail"></i></a>
+    <section class="section-block" id="contact">
+      <div class="contact-section">
+        <div class="contact-copy">
+          <div class="eyebrow">GET IN TOUCH</div>
+          <h2>Let's build something <span class="gradient-text">useful.</span></h2>
+          <p>
+            Have a suggestion, a tool idea or a question about Wazir Aura?
+            Reach out using the contact details below.
+          </p>
+          <p>Email: <a class="email-link" href="mailto:wazirlab@proton.me">wazirlab@proton.me</a></p>
+          <div class="social-links">
+            <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
+            <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram ↗</a>
+            <a href="https://www.fiverr.com/" target="_blank" rel="noopener noreferrer">Fiverr ↗</a>
+          </div>
         </div>
-      </div>
 
-      <form id="contact-form" class="contact-form">
-        <label for="contact-name">Your name</label>
-        <input id="contact-name" name="name" maxlength="150" required placeholder="Enter your name">
-        <label for="contact-email">Your email</label>
-        <input id="contact-email" name="email" type="email" maxlength="250" required placeholder="you@example.com">
-        <label for="contact-subject">Subject</label>
-        <input id="contact-subject" name="subject" maxlength="200" required placeholder="What would you like to discuss?">
-        <label for="contact-message">Message</label>
-        <textarea id="contact-message" name="message" maxlength="100000" required placeholder="Write your message..."></textarea>
-        <button class="button button-primary button-full" type="submit">Prepare email <i data-lucide="send"></i></button>
-        <p class="form-note">This form opens your email app. A server-side form service can be connected later.</p>
-      </form>
+        <form class="contact-form" id="contact-form">
+          <label>
+            Your name
+            <input name="name" type="text" placeholder="Enter your name" required>
+          </label>
+          <label>
+            Your email
+            <input name="email" type="email" placeholder="you@example.com" required>
+          </label>
+          <label>
+            Message
+            <textarea name="message" placeholder="Tell us what you have in mind..." required></textarea>
+          </label>
+          <button class="button button-primary" type="submit">Prepare email <span aria-hidden="true">→</span></button>
+          <p class="field-help">This opens your email application. The form does not send messages to a server.</p>
+        </form>
+      </div>
     </section>
   </main>
 
   <footer class="footer">
-    <a class="footer-brand" href="#home">WAZIR <span>AURA</span></a>
-    <p>Made with curiosity by Murad Wazir.</p>
-    <div class="footer-links"><a href="#tools">Tools</a><a href="#about">About</a><a href="#contact">Contact</a><a href="#pricing">Pricing</a></div>
-    <small>© <span id="current-year"></span> Wazir Aura. All rights reserved.</small>
+    <div class="footer-inner">
+      <div>
+        <a class="brand" href="#home">
+          <span class="brand-mark">W</span>
+          <span class="brand-text">Wazir Aura</span>
+        </a>
+        <p>Creative tools. Clearer workflows. More room for ideas.</p>
+      </div>
+      <div class="footer-links">
+        <a href="#home">Home</a>
+        <a href="#tools">Tools</a>
+        <a href="#about">About</a>
+        <a href="#contact">Contact</a>
+      </div>
+      <small>© <span id="current-year"></span> Wazir Aura</small>
+    </div>
   </footer>
 
-  <div id="toast" class="toast" role="status" aria-live="polite"></div>
-
-  <script src="script.js"></script>
+  <div class="toast is-hidden" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
