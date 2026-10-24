@@ -2,227 +2,189 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#090817">
-  <meta name="description" content="Wazir Aura — an AI creative workspace for writing, design, coding and productivity.">
-  <meta property="og:title" content="Wazir Aura — AI Creative Workspace">
-  <meta property="og:description" content="Create, explore, write, design and build in one workspace.">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#090914">
+  <meta name="description" content="Wazir Aura — AI Creative Workspace">
   <title>Wazir Aura — AI Creative Workspace</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%23090817'/%3E%3Ctext x='50' y='63' font-size='38' text-anchor='middle' font-family='Arial' font-weight='bold' fill='%239c8cff'%3EMW%3C/text%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
-  <script src="script.js" defer></script>
 </head>
 <body>
-  <div class="intro" id="intro" aria-label="Welcome to Wazir Aura">
-    <div class="intro-orbit"><div class="intro-monogram">MW</div></div>
+  <canvas id="spaceCanvas" aria-hidden="true"></canvas>
+  <div class="nebula nebula-one"></div>
+  <div class="nebula nebula-two"></div>
+
+  <div class="intro" id="intro">
+    <div class="mw-logo intro-logo"><span>MW</span><i></i></div>
     <h1>WAZIR <span>AURA</span></h1>
-    <p>Your ideas. Your universe.</p>
+    <p>Your creative universe</p>
+    <div class="loading-line"><span></span></div>
   </div>
 
-  <div class="app-shell">
+  <div class="app-shell" id="appShell">
     <aside class="sidebar" id="sidebar">
-      <a class="brand" href="#home" aria-label="Wazir Aura home">
-        <span class="brand-mark">MW</span>
-        <span><strong>WAZIR AURA</strong><small>CREATIVE UNIVERSE</small></span>
+      <a class="brand" href="#" data-page="overview">
+        <span class="mw-logo small-logo"><span>MW</span><i></i></span>
+        <span class="brand-copy">WAZIR <b>AURA</b><small>AI CREATIVE WORKSPACE</small></span>
       </a>
 
-      <button class="new-project" id="newProject">＋ New workspace</button>
-
-      <p class="nav-label">WORKSPACE</p>
-      <nav class="main-nav" aria-label="Main navigation">
-        <a href="#home" class="nav-link active" data-page="home"><span>⌂</span> Overview</a>
-        <a href="#tools" class="nav-link" data-page="tools"><span>✧</span> All tools <b>40</b></a>
-        <a href="#projects" class="nav-link" data-page="projects"><span>▧</span> Projects</a>
-        <a href="#notepad" class="nav-link" data-page="notepad"><span>▤</span> Notepad</a>
-        <a href="#codelab" class="nav-link" data-page="codelab"><span>⌘</span> Code Lab</a>
-      </nav>
-
-      <p class="nav-label">ACCOUNT</p>
-      <nav class="main-nav" aria-label="Account navigation">
-        <a href="#pricing" class="nav-link" data-page="pricing"><span>◇</span> Plans & pricing</a>
-        <a href="#about" class="nav-link" data-page="about"><span>ⓘ</span> About</a>
+      <div class="sidebar-label">WORKSPACE</div>
+      <nav class="main-nav">
+        <button class="nav-link active" data-page="overview"><span>⌂</span> Overview</button>
+        <button class="nav-link" data-page="tools"><span>✧</span> AI Tools</button>
+        <button class="nav-link" data-page="projects"><span>▦</span> Projects</button>
+        <button class="nav-link" data-page="analytics"><span>◷</span> Analytics</button>
+        <button class="nav-link" data-page="notepad"><span>▤</span> Notepad</button>
+        <button class="nav-link" data-page="codelab"><span>⌘</span> Code Lab</button>
+        <button class="nav-link" data-page="pricing"><span>◇</span> Pricing</button>
+        <button class="nav-link" data-page="about"><span>ⓘ</span> About</button>
       </nav>
 
       <div class="sidebar-bottom">
-        <div class="status-card">
+        <button class="nav-link" id="themeToggle"><span>◐</span> Toggle appearance</button>
+        <div class="profile">
+          <div class="avatar">W</div>
+          <div><strong>Wazir Aura</strong><small>Local workspace</small></div>
           <span class="status-dot"></span>
-          <div><strong>Guest workspace</strong><small>AI provider not connected</small></div>
         </div>
-        <button class="theme-button" id="themeToggle">☼ <span>Toggle appearance</span></button>
-        <p class="copyright">© <span id="year"></span> Wazir Aura</p>
       </div>
     </aside>
 
     <main class="main-area">
       <header class="topbar">
-        <button class="icon-button mobile-menu" id="menuToggle" aria-label="Open navigation">☰</button>
-        <div class="breadcrumb"><span>Wazir Aura</span><span class="crumb-divider">/</span><strong id="pageTitle">Overview</strong></div>
-        <div class="topbar-actions">
-          <span class="guest-pill">● Guest mode</span>
-          <a class="avatar" href="#about" aria-label="About Wazir Aura">MW</a>
+        <button class="mobile-menu" id="menuToggle" aria-label="Toggle menu">☰</button>
+        <div><span class="eyebrow">YOUR DIGITAL UNIVERSE</span><h2 id="pageTitle">Overview</h2></div>
+        <div class="top-actions">
+          <span class="local-badge"><i></i> Frontend mode</span>
+          <button class="icon-button" id="quickTheme" title="Toggle theme">◐</button>
         </div>
       </header>
 
-      <section class="page active-page" id="page-home">
-        <div class="hero">
+      <section class="page active" id="page-overview">
+        <div class="hero panel">
           <div class="hero-copy">
-            <div class="eyebrow"><span class="sparkle">✦</span> YOUR CREATIVE UNIVERSE</div>
-            <h1>Imagine more.<br><span>Create beyond.</span></h1>
-            <p>One workspace for your ideas, writing, designs, code and creative projects.</p>
+            <span class="eyebrow">✦ CREATE WITHOUT LIMITS</span>
+            <h1>Welcome to your<br><span class="gradient-text">creative universe.</span></h1>
+            <p>Explore your ideas, build projects, experiment with tools, and keep everything organized in one workspace.</p>
             <div class="hero-actions">
-              <button class="primary-button" id="exploreTools">Explore tools <span>↗</span></button>
-              <button class="secondary-button" id="heroNewProject">Start a project</button>
+              <button class="btn primary" data-page="tools">Explore tools <span>↗</span></button>
+              <button class="btn secondary" data-page="projects">View projects</button>
             </div>
+            <div class="hero-note"><span class="pulse-dot"></span> Your workspace is ready</div>
           </div>
-          <div class="hero-art" aria-hidden="true">
-            <div class="planet-ring ring-one"></div>
-            <div class="planet-ring ring-two"></div>
-            <div class="planet"><span>MW</span></div>
-            <span class="orbit-dot dot-one"></span><span class="orbit-dot dot-two"></span>
-            <span class="orbit-dot dot-three"></span>
-            <div class="art-caption">IDEAS INTO REALITY</div>
+          <div class="hero-art">
+            <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
+            <div class="planet"><div class="mw-logo planet-logo"><span>MW</span><i></i></div></div>
+            <span class="floating-star star-a">✦</span><span class="floating-star star-b">✧</span>
+            <span class="floating-star star-c">·</span>
           </div>
         </div>
 
-        <div class="section-heading">
-          <div><p class="eyebrow">START CREATING</p><h2>What will you make today?</h2></div>
-          <a href="#tools" data-go="tools" class="text-link">View all 40 tools ↗</a>
+        <div class="section-heading"><div><span class="eyebrow">AT A GLANCE</span><h2>Your workspace</h2></div></div>
+        <div class="stats-grid">
+          <article class="stat-card panel"><span class="stat-icon purple">◷</span><span class="stat-label">Workspace visits</span><strong id="overviewViews">0</strong><small>On this browser</small></article>
+          <article class="stat-card panel"><span class="stat-icon cyan">▦</span><span class="stat-label">Projects saved</span><strong id="overviewProjects">0</strong><small>Your local projects</small></article>
+          <article class="stat-card panel"><span class="stat-icon pink">✧</span><span class="stat-label">Tools explored</span><strong id="overviewTools">0</strong><small>Unique tools opened</small></article>
+          <article class="stat-card panel"><span class="stat-icon gold">♡</span><span class="stat-label">Total likes</span><strong id="overviewLikes">0</strong><small>Local interactions</small></article>
         </div>
 
+        <div class="section-heading"><div><span class="eyebrow">JUMP RIGHT IN</span><h2>Quick access</h2></div><button class="text-button" data-page="tools">All tools ↗</button></div>
         <div class="quick-grid">
-          <button class="quick-card" data-tool="1">
-            <span class="tool-icon purple">✧</span><strong>AI Chat</strong><small>Explore ideas and questions</small><span class="card-arrow">↗</span>
-          </button>
-          <button class="quick-card" data-tool="14">
-            <span class="tool-icon pink">◈</span><strong>Logo Studio</strong><small>Plan your visual identity</small><span class="card-arrow">↗</span>
-          </button>
-          <button class="quick-card" data-tool="27">
-            <span class="tool-icon cyan">⌘</span><strong>Website Builder</strong><small>Draft a web experience</small><span class="card-arrow">↗</span>
-          </button>
-          <button class="quick-card" data-tool="35">
-            <span class="tool-icon orange">▣</span><strong>2D Game Builder</strong><small>Plan your next game</small><span class="card-arrow">↗</span>
-          </button>
+          <button class="quick-card panel" data-tool="ai-chat"><span class="quick-icon purple">✧</span><strong>AI Chat</strong><small>Prepare prompts and ideas</small><span class="card-arrow">↗</span></button>
+          <button class="quick-card panel" data-tool="logo-studio"><span class="quick-icon pink">◈</span><strong>Logo Studio</strong><small>Plan your brand identity</small><span class="card-arrow">↗</span></button>
+          <button class="quick-card panel" data-tool="website-builder"><span class="quick-icon cyan">⌘</span><strong>Website Builder</strong><small>Write a website brief</small><span class="card-arrow">↗</span></button>
+          <button class="quick-card panel" data-tool="json-formatter"><span class="quick-icon gold">{ }</span><strong>JSON Formatter</strong><small>Format and validate JSON</small><span class="card-arrow">↗</span></button>
         </div>
 
-        <div class="section-heading tools-heading">
-          <div><p class="eyebrow">EXPLORE THE UNIVERSE</p><h2>Discover your tools</h2></div>
-          <span class="muted">40 creative workflows</span>
-        </div>
-        <div class="category-grid">
-          <button class="category-card" data-category="AI & Chat"><span>✧</span><div><strong>AI & Chat</strong><small>Writing, learning and research</small></div><b>08 tools ↗</b></button>
-          <button class="category-card" data-category="Image & Design"><span>◈</span><div><strong>Image & Design</strong><small>Branding and visual concepts</small></div><b>10 tools ↗</b></button>
-          <button class="category-card" data-category="Video & Audio"><span>♫</span><div><strong>Video & Audio</strong><small>Stories, speech and sound</small></div><b>08 tools ↗</b></button>
-          <button class="category-card" data-category="Web & Code"><span>⌘</span><div><strong>Web & Code</strong><small>Build, debug and experiment</small></div><b>08 tools ↗</b></button>
-          <button class="category-card" data-category="Game Development"><span>▣</span><div><strong>Game Development</strong><small>Characters, levels and games</small></div><b>04 tools ↗</b></button>
-          <button class="category-card" data-category="Productivity"><span>▤</span><div><strong>Productivity</strong><small>Notes, business and content</small></div><b>02 tools ↗</b></button>
-        </div>
+        <div class="section-heading"><div><span class="eyebrow">RECENT ACTIVITY</span><h2>Recently opened</h2></div></div>
+        <div class="panel activity-panel" id="recentActivity"><p class="muted">Your recent activity will appear here.</p></div>
       </section>
 
       <section class="page" id="page-tools">
-        <div class="page-heading">
-          <div><p class="eyebrow">THE TOOLBOX</p><h1>All creative tools</h1><p>Choose a workflow and open its workspace.</p></div>
+        <div class="page-intro"><span class="eyebrow">YOUR CREATIVE TOOLKIT</span><h1>Tools for <span class="gradient-text">every idea.</span></h1><p>Explore tools for creating, organizing, designing, and developing.</p></div>
+        <div class="toolbar panel">
+          <input type="search" id="toolSearch" placeholder="Search tools..." aria-label="Search tools">
+          <select id="toolCategory" aria-label="Filter tools"><option value="all">All categories</option><option value="creative">Creative</option><option value="development">Development</option><option value="productivity">Productivity</option><option value="data">Data & Utilities</option></select>
         </div>
-        <div class="tool-filters">
-          <label class="search-box"><span>⌕</span><input id="toolSearch" type="search" placeholder="Search tools..." aria-label="Search tools"></label>
-          <select id="categoryFilter" aria-label="Filter by category">
-            <option value="all">All categories</option>
-            <option>AI & Chat</option><option>Image & Design</option><option>Video & Audio</option>
-            <option>Web & Code</option><option>Game Development</option><option>Productivity</option>
-          </select>
-        </div>
-        <p class="results-count" id="resultsCount">40 tools</p>
         <div class="tools-grid" id="toolsGrid"></div>
-        <div class="empty-state hidden" id="noTools">No tools match your search. Try another term.</div>
       </section>
 
       <section class="page" id="page-workspace">
-        <button class="back-link" id="backToTools">← Back to tools</button>
-        <div class="workspace-header">
-          <span class="tool-icon purple" id="workspaceIcon">✧</span>
-          <div><p class="eyebrow" id="workspaceCategory">WORKSPACE</p><h1 id="workspaceTitle">AI Chat</h1><p id="workspaceDescription">A focused space for your next idea.</p></div>
-        </div>
+        <div class="page-intro"><span class="eyebrow">CREATIVE WORKSPACE</span><h1 id="workspaceTitle">AI Chat</h1><p id="workspaceDescription">Turn your idea into a clear brief.</p></div>
         <div class="workspace-layout">
-          <div class="panel workspace-input-panel">
-            <label for="workspacePrompt" id="promptLabel">Describe what you want to work on</label>
-            <textarea id="workspacePrompt" rows="7" placeholder="Write your idea or instructions here..."></textarea>
-            <div class="field-row">
-              <label for="outputFormat">Output format</label>
-              <select id="outputFormat"><option value="text">Text</option><option value="markdown">Markdown</option><option value="html">HTML</option><option value="json">JSON</option></select>
-            </div>
-            <div class="workspace-buttons">
-              <button class="primary-button" id="runWorkspace">Process request <span>↗</span></button>
-              <button class="secondary-button" id="clearWorkspace">Clear</button>
-            </div>
-            <p class="notice"><span>ⓘ</span> AI services are not connected. This workspace will not pretend that AI content has been generated.</p>
+          <div class="panel workspace-form">
+            <label for="workspacePrompt">Describe your idea</label>
+            <textarea id="workspacePrompt" rows="8" placeholder="Write your idea, requirements, or content here..."></textarea>
+            <div class="form-row"><label for="outputFormat">Output format</label><select id="outputFormat"><option value="text">Plain text</option><option value="json">JSON</option><option value="html">HTML starter</option><option value="markdown">Markdown</option></select></div>
+            <div class="button-row"><button class="btn primary" id="runWorkspace">Process locally ✦</button><button class="btn secondary" id="clearWorkspace">Clear</button></div>
+            <p class="hint">This frontend demo processes supported tasks locally. AI generation requires an AI backend.</p>
           </div>
-          <div class="panel output-panel">
-            <div class="output-top"><div><p class="eyebrow">YOUR OUTPUT</p><h3 id="outputTitle">Ready when you are</h3></div><span class="output-indicator"></span></div>
-            <div id="workspaceOutput" class="output-content"><div class="output-placeholder"><span>✧</span><strong>Your workspace output appears here</strong><p>Use the available local tools, or connect a secure AI backend to enable generation.</p></div></div>
-            <div class="output-actions">
-              <button class="secondary-button small-button" id="copyOutput">Copy</button>
-              <button class="secondary-button small-button" id="downloadOutput">Download</button>
-              <button class="secondary-button small-button" id="saveOutput">Save to projects</button>
-            </div>
-          </div>
+          <div class="panel output-panel"><div class="output-header"><h3>Output</h3><div><button class="mini-button" id="copyOutput">Copy</button><button class="mini-button" id="downloadOutput">Download</button></div></div><pre id="workspaceOutput">Your result will appear here.</pre><button class="btn secondary full-width" id="saveOutput">Save as project</button></div>
         </div>
+        <div class="panel feedback-panel"><div><strong>Was this tool useful?</strong><small>Your rating is stored in this browser.</small></div><div class="rating-buttons" id="workspaceRating"><button data-rating="1">★</button><button data-rating="2">★</button><button data-rating="3">★</button><button data-rating="4">★</button><button data-rating="5">★</button></div><button class="mini-button" id="workspaceLike">♡ Like</button></div>
       </section>
 
       <section class="page" id="page-projects">
-        <div class="page-heading"><div><p class="eyebrow">YOUR WORK</p><h1>Projects</h1><p>Saved locally in this browser on this device.</p></div><button class="primary-button" id="projectCreateButton">＋ New project</button></div>
+        <div class="page-intro"><span class="eyebrow">YOUR WORK, YOUR WAY</span><h1>Project <span class="gradient-text">library.</span></h1><p>Save ideas and outputs in your browser.</p></div>
+        <div class="section-heading"><div><h2>Saved projects</h2><span class="muted" id="projectCount">0 projects</span></div><button class="btn primary" id="newProject">＋ New project</button></div>
         <div class="projects-grid" id="projectsGrid"></div>
-        <div class="empty-state" id="projectsEmpty"><span>▧</span><h3>Your universe starts here</h3><p>Save an output or create a project to see it here.</p><button class="secondary-button" id="emptyCreateProject">Create a project</button></div>
+      </section>
+
+      <section class="page" id="page-analytics">
+        <div class="page-intro"><span class="eyebrow">MEASURE YOUR ACTIVITY</span><h1>Analytics <span class="gradient-text">dashboard.</span></h1><p>Statistics recorded locally by this browser. They are not global website analytics.</p></div>
+        <div class="stats-grid analytics-stats">
+          <article class="stat-card panel"><span class="stat-label">Page views</span><strong id="statViews">0</strong><small>Recorded visits</small></article>
+          <article class="stat-card panel"><span class="stat-label">Tool opens</span><strong id="statToolOpens">0</strong><small>Total tool interactions</small></article>
+          <article class="stat-card panel"><span class="stat-label">Project saves</span><strong id="statSaves">0</strong><small>Saved locally</small></article>
+          <article class="stat-card panel"><span class="stat-label">Likes</span><strong id="statLikes">0</strong><small>Recorded locally</small></article>
+          <article class="stat-card panel"><span class="stat-label">Ratings</span><strong id="statRatings">0</strong><small>Submitted ratings</small></article>
+          <article class="stat-card panel"><span class="stat-label">Comments</span><strong id="statComments">0</strong><small>Local feedback</small></article>
+        </div>
+        <div class="analytics-layout">
+          <div class="panel analytics-panel"><div class="section-heading"><div><h2>Tool performance</h2><p class="muted">Views, likes and ratings for individual tools</p></div></div><div id="toolAnalytics"></div></div>
+          <div class="panel analytics-panel"><h2>Leave feedback</h2><p class="muted">Feedback stays in this browser.</p><textarea id="feedbackInput" rows="4" placeholder="Share your feedback..."></textarea><button class="btn primary full-width" id="submitFeedback">Save feedback</button><div id="feedbackList"></div></div>
+        </div>
+        <div class="panel analytics-panel"><div class="section-heading"><div><h2>Recent events</h2><p class="muted">Latest activity tracked on this device</p></div><button class="mini-button" id="exportAnalytics">Export JSON</button></div><div id="analyticsEvents"></div></div>
+        <div class="panel analytics-panel"><h2>Privacy & data</h2><p class="muted">Local browser storage is not a server database. Different visitors do not share these counters. Real global impressions, subscribers, and centralized analytics need a backend.</p><button class="btn danger" id="resetAnalytics">Reset local analytics</button></div>
       </section>
 
       <section class="page" id="page-notepad">
-        <div class="page-heading"><div><p class="eyebrow">THINK. WRITE. ORGANIZE.</p><h1>Notepad</h1><p>Your notes are saved in this browser, not synced to an account.</p></div><span class="save-status" id="noteStatus">All changes saved locally</span></div>
-        <div class="panel note-panel">
-          <input class="note-title" id="noteTitle" maxlength="160" placeholder="Untitled note" aria-label="Note title">
-          <textarea class="note-editor" id="noteBody" placeholder="Start writing your ideas here..." aria-label="Note content"></textarea>
-          <div class="note-footer"><span id="noteWordCount">0 words</span><div><button class="secondary-button" id="downloadNote">Download note</button><button class="secondary-button danger-button" id="clearNote">Clear note</button></div></div>
-        </div>
+        <div class="page-intro"><span class="eyebrow">CAPTURE YOUR THOUGHTS</span><h1>Idea <span class="gradient-text">notepad.</span></h1><p>Your notes are automatically saved in this browser.</p></div>
+        <div class="panel notepad-panel"><input id="noteTitle" placeholder="Note title..." aria-label="Note title"><textarea id="noteContent" rows="15" placeholder="Start writing your thoughts..."></textarea><div class="note-footer"><span id="noteStatus" class="muted">Ready</span><button class="btn primary" id="saveNote">Save note</button></div></div>
       </section>
 
       <section class="page" id="page-codelab">
-        <div class="page-heading"><div><p class="eyebrow">BUILD & EXPERIMENT</p><h1>Code Lab</h1><p>Write HTML, CSS and JavaScript, then preview your work locally.</p></div></div>
-        <div class="codelab">
-          <div class="code-editor-panel panel">
-            <div class="editor-tabs"><button class="editor-tab active" data-editor="html">index.html</button><button class="editor-tab" data-editor="css">style.css</button><button class="editor-tab" data-editor="js">script.js</button></div>
-            <textarea id="codeEditor" spellcheck="false" aria-label="Code editor"></textarea>
-            <div class="code-actions"><button class="primary-button" id="runCode">▶ Run preview</button><button class="secondary-button" id="resetCode">Reset example</button><button class="secondary-button" id="downloadCode">Download file</button></div>
-            <p class="notice">Preview runs in a sandboxed frame. Do not paste code you do not trust.</p>
-          </div>
-          <div class="preview-panel panel"><div class="preview-heading"><strong>Live preview</strong><span class="muted">Sandboxed</span></div><iframe id="codePreview" title="Code preview" sandbox="allow-scripts" referrerpolicy="no-referrer"></iframe></div>
+        <div class="page-intro"><span class="eyebrow">BUILD AND EXPERIMENT</span><h1>Code <span class="gradient-text">Lab.</span></h1><p>Write HTML, CSS and JavaScript and preview it in a sandbox.</p></div>
+        <div class="panel code-panel">
+          <div class="code-toolbar"><div class="code-tabs"><button class="active" data-code-tab="html">HTML</button><button data-code-tab="css">CSS</button><button data-code-tab="js">JS</button></div><div class="button-row"><button class="mini-button" id="runCode">▶ Run</button><button class="mini-button" id="resetCode">Reset</button><button class="mini-button" id="downloadCode">Download HTML</button></div></div>
+          <textarea id="codeEditor" class="code-editor" spellcheck="false" aria-label="Code editor"></textarea>
+          <div class="preview-heading">LIVE PREVIEW <span class="muted">Sandboxed iframe</span></div><iframe id="codePreview" title="Code preview" sandbox="allow-scripts"></iframe>
         </div>
       </section>
 
       <section class="page" id="page-pricing">
-        <div class="page-heading centered-heading"><div><p class="eyebrow">SIMPLE & TRANSPARENT</p><h1>Plans & pricing</h1><p>This demo has no checkout or billing backend connected.</p></div></div>
+        <div class="page-intro centered"><span class="eyebrow">SIMPLE AND TRANSPARENT</span><h1>Choose your <span class="gradient-text">journey.</span></h1><p>Plans are displayed for demonstration. No payments are processed.</p></div>
         <div class="pricing-grid">
-          <article class="pricing-card"><p class="eyebrow">GET STARTED</p><h2>Free</h2><div class="price">Free</div><p class="muted">Explore the workspace and browser-based utilities.</p><ul><li>✓ Tool directory</li><li>✓ Local notes and projects</li><li>✓ Code playground</li><li>✓ Local JSON formatting</li><li>— No connected AI generation</li></ul><button class="secondary-button full-button" data-go="tools">Explore tools</button></article>
-          <article class="pricing-card featured-plan"><span class="plan-label">FUTURE PLAN</span><p class="eyebrow">MORE CREATIVE POWER</p><h2>Premium</h2><div class="price">Not configured</div><p class="muted">Pricing and benefits must be configured before launch.</p><ul><li>◇ AI provider integration</li><li>◇ Server-side usage limits</li><li>◇ Secure account features</li><li>◇ Payment verification</li><li>◇ Usage analytics</li></ul><button class="secondary-button full-button" id="premiumInfo">View setup requirements</button></article>
+          <article class="panel pricing-card"><span class="plan-label">STARTER</span><h2>Free</h2><div class="price">$0 <small>/ forever</small></div><p>Explore your creative workspace.</p><ul><li>✓ Local projects</li><li>✓ Browser notepad</li><li>✓ Code Lab</li><li>✓ Local analytics</li></ul><button class="btn secondary full-width" data-page="tools">Get started</button></article>
+          <article class="panel pricing-card featured"><span class="plan-label">FOR CREATORS</span><h2>Premium</h2><div class="price">Coming <small>soon</small></div><p>Premium services need backend setup.</p><ul><li>✓ Future AI integrations</li><li>✓ Cloud project sync</li><li>✓ Shared analytics</li><li>✓ Secure payments</li></ul><button class="btn primary full-width" id="premiumInfo">Premium setup details</button></article>
         </div>
       </section>
 
       <section class="page" id="page-about">
-        <div class="about-card panel"><div class="about-mark">MW</div><p class="eyebrow">THE PERSON BEHIND THE PLATFORM</p><h1>About Wazir Aura</h1><p class="about-lead">A creative workspace for turning ideas into practical digital work.</p><p>Hi, I'm Murad Wazir, the creator behind Wazir Aura. I'm a computer science student and freelance digital services provider based in Pakistan. My work and interests include web research, data collection, data entry, data formatting, Microsoft Office, social media banner design, web development, frontend design, and 2D game development.</p><p>I enjoy exploring practical ways to use modern AI and software tools to make creative and technical work easier. Wazir Aura is my vision for bringing useful AI workflows, design tools, coding utilities, and creative projects together in one accessible workspace.</p><div class="social-links"><a href="https://github.com/waziraura/wazir-web" target="_blank" rel="noopener noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a><a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer">Instagram ↗</a></div><p class="notice">Replace social links with your exact profile URLs before publishing.</p></div>
+        <div class="page-intro"><span class="eyebrow">THE IDEA BEHIND THE SPACE</span><h1>About Wazir <span class="gradient-text">Aura.</span></h1><p>A creative workspace for exploring ideas, building digital projects and organizing your work.</p></div>
+        <div class="panel about-panel"><div class="about-logo mw-logo"><span>MW</span><i></i></div><div><h2>One workspace. Many possibilities.</h2><p>Wazir Aura brings creative tools, projects, notes, code experiments and activity tracking into a single interface. This version uses frontend functionality and browser storage; connected AI services, accounts, payments and shared analytics can be added with a backend later.</p><a class="text-button" href="https://github.com/waziraura/wazir-web" target="_blank" rel="noopener noreferrer">View GitHub repository ↗</a></div></div>
       </section>
 
-      <footer class="app-footer"><span>WAZIR AURA <span class="footer-star">✦</span></span><span>Build ideas. Explore possibilities.</span><span>Made with purpose · Pakistan</span></footer>
+      <footer class="footer"><span>© <span id="currentYear"></span> Wazir Aura</span><span>Made for curious minds ✦</span></footer>
     </main>
   </div>
 
-  <div class="modal-backdrop hidden" id="modalBackdrop" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
-    <div class="modal panel">
-      <button class="modal-close icon-button" id="closeModal" aria-label="Close dialog">×</button>
-      <p class="eyebrow">WAZIR AURA</p><h2 id="modalTitle">Create a project</h2>
-      <form id="projectForm">
-        <label for="projectName">Project name</label><input id="projectName" maxlength="100" required placeholder="e.g. My portfolio website">
-        <label for="projectDescription">Description (optional)</label><textarea id="projectDescription" rows="3" maxlength="1000" placeholder="What are you planning to create?"></textarea>
-        <div class="modal-actions"><button type="button" class="secondary-button" id="cancelModal">Cancel</button><button type="submit" class="primary-button">Create project</button></div>
-      </form>
-    </div>
+  <div class="modal-backdrop" id="projectModal" aria-hidden="true">
+    <div class="modal panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button class="modal-close" id="closeModal" aria-label="Close">×</button><span class="eyebrow">ADD TO YOUR LIBRARY</span><h2 id="modalTitle">Create project</h2><label for="projectName">Project name</label><input id="projectName" maxlength="100" placeholder="My new project"><label for="projectDescription">Description or content</label><textarea id="projectDescription" rows="5" placeholder="Describe your project..."></textarea><div class="button-row"><button class="btn primary" id="createProject">Save project</button><button class="btn secondary" id="cancelProject">Cancel</button></div></div>
   </div>
-
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <script src="script.js"></script>
 </body>
 </html>
