@@ -1,266 +1,279 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wazir Lab — Free Tools • AI • Business</title>
-  <meta name="description" content="Wazir Lab - Free Online Tools, AI Tools and Professional Digital Services by Murad Wazir" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./style.css" />
-  <script type="importmap">
-  {
-    "imports": {
-      "three": "https://cdn.jsdelivr.net/npm/three@0.166.1/build/three.module.js"
-    }
-  }
-  </script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080b18">
+  <meta name="description" content="Wazir Aura — a futuristic digital workspace with smart productivity tools, creative utilities and a 3D-inspired cosmic experience.">
+  <title>Wazir Aura — Beyond Ordinary</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" defer></script>
+  <script src="script.js" defer></script>
 </head>
-<body class="dark">
-  <canvas id="webgl"></canvas>
+<body>
+  <canvas id="starfield" aria-hidden="true"></canvas>
+  <div class="ambient ambient-one" aria-hidden="true"></div>
+  <div class="ambient ambient-two" aria-hidden="true"></div>
 
-  <!-- WELCOME -->
-  <div id="welcome" class="welcome">
-    <div class="welcome-box">
-      <div class="wl-logo">WL</div>
-      <p class="wl-label">WAZIR LAB</p>
-      <h1>Free Tools + AI<br><span>Built for Business</span></h1>
-      <p class="wl-sub">Entering in <span id="count">5</span> seconds</p>
-      <div class="progress"><div class="bar"></div></div>
+  <div id="welcome-screen" class="welcome-screen" aria-label="Welcome to Wazir Aura">
+    <div class="welcome-orbit">
+      <svg class="brand-symbol welcome-symbol" viewBox="0 0 100 100" role="img" aria-label="Wazir Aura logo">
+        <defs>
+          <linearGradient id="logoGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#80f7ff"/>
+            <stop offset="50%" stop-color="#9a8cff"/>
+            <stop offset="100%" stop-color="#ff8ee8"/>
+          </linearGradient>
+        </defs>
+        <path d="M12 24 L28 76 L43 43 L57 76 L74 24" fill="none" stroke="url(#logoGradient)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M65 64 A20 20 0 1 0 66 34" fill="none" stroke="url(#logoGradient)" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="76" cy="27" r="4" fill="#80f7ff"/>
+      </svg>
     </div>
+    <div class="welcome-wordmark">WAZIR <span>AURA</span></div>
+    <p class="welcome-tagline">Your universe. Your tools. Your rules.</p>
+    <div class="welcome-loader"><span></span></div>
+    <span class="welcome-caption">INITIALIZING YOUR EXPERIENCE</span>
   </div>
 
-  <!-- HEADER -->
-  <header class="header">
-    <a href="#home" class="logo">
-      <span class="mark">WL</span>
-      <span>WAZIR LAB</span>
+  <header class="site-header" id="top">
+    <a href="#home" class="brand" aria-label="Wazir Aura home">
+      <svg class="brand-symbol" viewBox="0 0 100 100" aria-hidden="true">
+        <path d="M12 24 L28 76 L43 43 L57 76 L74 24" fill="none" stroke="url(#brandGradient)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M65 64 A20 20 0 1 0 66 34" fill="none" stroke="url(#brandGradient)" stroke-width="5" stroke-linecap="round"/>
+        <circle cx="76" cy="27" r="4" fill="#80f7ff"/>
+        <defs>
+          <linearGradient id="brandGradient" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#80f7ff"/>
+            <stop offset="50%" stop-color="#9a8cff"/>
+            <stop offset="100%" stop-color="#ff8ee8"/>
+          </linearGradient>
+        </defs>
+      </svg>
+      <span class="brand-text">Wazir <strong>Aura</strong><small>DIGITAL UNIVERSE</small></span>
     </a>
-    <nav id="nav">
-      <a href="#tools">Tools</a>
-      <a href="#ai">AI</a>
-      <a href="#services">Services</a>
-      <a href="#pricing">Pricing</a>
-      <a href="#contact">Contact</a>
-      <button id="themeBtn" class="theme-btn">☾</button>
+
+    <button class="icon-button menu-toggle" id="menu-toggle" aria-label="Open navigation" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="main-nav" id="main-nav">
+      <a href="#home" class="nav-link active">Home</a>
+      <a href="#tools" class="nav-link">Explore Tools</a>
+      <a href="#features" class="nav-link">Features</a>
+      <a href="#about" class="nav-link">About</a>
     </nav>
-    <button id="menuBtn" class="menu-btn">☰</button>
+
+    <div class="header-actions">
+      <button class="icon-button" id="theme-toggle" aria-label="Toggle appearance" title="Toggle appearance">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v2m0 14v2M3 12h2m14 0h2M5.64 5.64l1.42 1.42m9.88 9.88 1.42 1.42m0-12.72-1.42 1.42m-9.88 9.88-1.42 1.42M16 12a4 4 0 1 1-8 0 4 4 0 0 1 8 0Z"/></svg>
+      </button>
+      <a class="button button-small button-primary" href="#tools">Launch workspace <span>↗</span></a>
+    </div>
   </header>
 
   <main>
-    <!-- HERO -->
-    <section id="home" class="hero">
-      <div class="wrap">
-        <p class="label">FREE TOOLS • AI • AGENCY</p>
-        <h1>Real tools for<br><span>real work</span></h1>
-        <p class="desc">Powerful free tools and AI features designed for freelancers, teams and businesses.</p>
-        <div class="actions">
-          <a href="#tools" class="btn primary">Open Tools</a>
-          <a href="#pricing" class="btn secondary">See Pricing</a>
+    <section class="hero section-shell" id="home">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="status-dot"></span> YOUR DIGITAL UNIVERSE IS READY</div>
+        <h1>Ideas become<br> <span class="gradient-text">extraordinary.</span></h1>
+        <p class="hero-description">A smarter space for your everyday work. Discover useful tools, simplify repetitive tasks, and create something amazing — all in one place.</p>
+        <div class="hero-actions">
+          <a class="button button-primary button-large" href="#tools">Explore the universe <span>↗</span></a>
+          <a class="button button-ghost button-large" href="#features"><span class="play-icon">▷</span> Discover features</a>
+        </div>
+        <div class="hero-trust">
+          <div class="mini-avatars" aria-hidden="true"><span>W</span><span>A</span><span>✦</span></div>
+          <div><strong>Made for curious minds</strong><small>Simple utilities. Limitless possibilities.</small></div>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-label="Animated 3D-inspired cosmic planet">
+        <div class="visual-label visual-label-top"><span class="live-dot"></span> A NEW PERSPECTIVE</div>
+        <div class="planet-scene">
+          <div class="planet-orbit orbit-one"></div>
+          <div class="planet-orbit orbit-two"></div>
+          <div class="planet">
+            <div class="planet-surface"></div>
+            <div class="planet-highlight"></div>
+          </div>
+          <div class="planet-moon"></div>
+          <div class="planet-spark spark-one">✦</div>
+          <div class="planet-spark spark-two">✧</div>
+          <div class="planet-spark spark-three">·</div>
+        </div>
+        <div class="floating-card floating-card-top">
+          <span class="floating-icon cyan">✧</span>
+          <span><strong>Think bigger</strong><small>Work smarter</small></span>
+        </div>
+        <div class="floating-card floating-card-bottom">
+          <span class="floating-icon purple">⌘</span>
+          <span><strong>All in one place</strong><small>Your creative toolkit</small></span>
+          <span class="card-check">✓</span>
+        </div>
+        <div class="visual-label visual-label-bottom">EXPLORE BEYOND LIMITS <span>↗</span></div>
+      </div>
+      <div class="hero-bottom-line"><span>SCROLL TO EXPLORE</span><span class="scroll-line"></span><span>01 / 04</span></div>
+    </section>
+
+    <section class="stats-strip section-shell" aria-label="Workspace highlights">
+      <div class="stat-item"><span class="stat-icon">✦</span><div><strong>Smart utilities</strong><small>Everyday productivity</small></div></div>
+      <div class="stat-item"><span class="stat-icon">◈</span><div><strong>Instant results</strong><small>Work without friction</small></div></div>
+      <div class="stat-item"><span class="stat-icon">⌘</span><div><strong>One workspace</strong><small>Multiple possibilities</small></div></div>
+      <div class="stat-item"><span class="stat-icon">◎</span><div><strong>Made for everyone</strong><small>Simple and accessible</small></div></div>
+    </section>
+
+    <section class="tools-section section-shell" id="tools">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow"><span class="heading-star">✦</span> THE TOOLBOX</div>
+          <h2>Powerful tools.<br><span class="gradient-text">Zero complexity.</span></h2>
+          <p>Everything you need to get things done, without the unnecessary steps.</p>
+        </div>
+        <div class="tool-count"><span id="tool-count">12</span><small>TOOLS AVAILABLE</small></div>
+      </div>
+
+      <div class="tools-toolbar">
+        <label class="search-box" for="tool-search">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+          <input id="tool-search" type="search" placeholder="Search tools..." autocomplete="off">
+          <kbd>⌕</kbd>
+        </label>
+        <div class="filter-list" id="tool-filters" aria-label="Filter tools">
+          <button class="filter-button active" data-filter="all">All tools</button>
+          <button class="filter-button" data-filter="text">Text</button>
+          <button class="filter-button" data-filter="developer">Developer</button>
+          <button class="filter-button" data-filter="creative">Creative</button>
+          <button class="filter-button" data-filter="utility">Utilities</button>
+          <button class="filter-button" data-filter="favorites">♥ Saved</button>
+        </div>
+      </div>
+
+      <div class="tools-grid" id="tools-grid">
+        <article class="tool-card" data-tool="word-counter" data-category="text" data-name="Word Counter" data-description="Count words characters sentences and paragraphs">
+          <div class="tool-card-top"><span class="tool-icon icon-cyan">Aa</span><button class="favorite-button" aria-label="Save Word Counter" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">TEXT UTILITIES <span>01</span></div><h3>Word Counter</h3><p>Count words, characters, sentences and paragraphs instantly.</p>
+          <button class="tool-open" data-open-tool="word-counter">Open tool <span>↗</span></button>
+        </article>
+        <article class="tool-card" data-tool="case-converter" data-category="text" data-name="Case Converter" data-description="Uppercase lowercase title case sentence case">
+          <div class="tool-card-top"><span class="tool-icon icon-purple">Aa↕</span><button class="favorite-button" aria-label="Save Case Converter" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">TEXT UTILITIES <span>02</span></div><h3>Case Converter</h3><p>Transform text into uppercase, lowercase, title case and more.</p>
+          <button class="tool-open" data-open-tool="case-converter">Open tool <span>↗</span></button>
+        </article>
+        <article class="tool-card" data-tool="json-formatter" data-category="developer" data-name="JSON Formatter" data-description="Format validate and minify JSON code">
+          <div class="tool-card-top"><span class="tool-icon icon-orange">{ }</span><button class="favorite-button" aria-label="Save JSON Formatter" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">DEVELOPER <span>03</span></div><h3>JSON Formatter</h3><p>Format, validate and minify JSON with clear error feedback.</p>
+          <button class="tool-open" data-open-tool="json-formatter">Open tool <span>↗</span></button>
+        </article>
+        <article class="tool-card" data-tool="password-generator" data-category="utility" data-name="Password Generator" data-description="Generate secure random passwords">
+          <div class="tool-card-top"><span class="tool-icon icon-pink">⌘</span><button class="favorite-button" aria-label="Save Password Generator" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">SECURITY <span>04</span></div><h3>Password Generator</h3><p>Create random passwords with your preferred length and options.</p>
+          <button class="tool-open" data-open-tool="password-generator">Open tool <span>↗</span></button>
+        </article>
+        <article class="tool-card" data-tool="base64" data-category="developer" data-name="Base64 Encoder Decoder" data-description="Encode and decode Base64 strings">
+          <div class="tool-card-top"><span class="tool-icon icon-green">⇄</span><button class="favorite-button" aria-label="Save Base64 Converter" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">DEVELOPER <span>05</span></div><h3>Base64 Converter</h3><p>Encode or decode Base64 strings with Unicode support.</p>
+          <button class="tool-open" data-open-tool="base64">Open tool <span>↗</span></button>
+        </article>
+        <article class="tool-card" data-tool="qr-generator" data-category="creative" data-name="QR Code Generator" data-description="Create QR codes from text or links">
+          <div class="tool-card-top"><span class="tool-icon icon-blue">▦</span><button class="favorite-button" aria-label="Save QR Code Generator" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">CREATIVE <span>06</span></div><h3>QR Code Generator</h3><p>Turn a URL or message into a downloadable QR code.</p>
+          <button class="tool-open" data-open-tool="qr-generator">Open tool <span>↗</span></button>
+        </article>
+        <article class="tool-card" data-tool="color-picker" data-category="creative" data-name="Color Studio" data-description="Choose colors and copy HEX RGB HSL">
+          <div class="tool-card-top"><span class="tool-icon icon-pink">◉</span><button class="favorite-button" aria-label="Save Color Studio" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">DESIGN <span>07</span></div><h3>Color Studio</h3><p>Explore colors and copy HEX, RGB or HSL values.</p>
+          <button class="tool-open" data-open-tool="color-picker">Open tool <span>↗</span></button>
+        </article>
+        <article class="tool-card" data-tool="unit-converter" data-category="utility" data-name="Unit Converter" data-description="Convert length weight temperature and volume">
+          <div class="tool-card-top"><span class="tool-icon icon-yellow">⇌</span><button class="favorite-button" aria-label="Save Unit Converter" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">UTILITIES <span>08</span></div><h3>Unit Converter</h3><p>Convert length, weight, temperature and volume units.</p>
+          <button class="tool-open" data-open-tool="unit-converter">Open tool <span>↗</span></button>
+        </article>
+        <article class="tool-card" data-tool="markdown-preview" data-category="developer" data-name="Markdown Preview" data-description="Preview basic Markdown formatting">
+          <div class="tool-card-top"><span class="tool-icon icon-purple">M↓</span><button class="favorite-button" aria-label="Save Markdown Preview" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">DEVELOPER <span>09</span></div><h3>Markdown Preview</h3><p>Write Markdown and preview headings, lists and links.</p>
+          <button class="tool-open" data-open-tool="markdown-preview">Open tool <span>↗</span></button>
+        </article>
+        <article class="tool-card" data-tool="text-diff" data-category="text" data-name="Text Difference Checker" data-description="Compare two text blocks">
+          <div class="tool-card-top"><span class="tool-icon icon-orange">±</span><button class="favorite-button" aria-label="Save Text Difference Checker" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">TEXT UTILITIES <span>10</span></div><h3>Text Diff Checker</h3><p>Compare two text blocks and find added or removed lines.</p>
+          <button class="tool-open" data-open-tool="text-diff">Open tool <span>↗</span></button>
+        </article>
+        <article class="tool-card" data-tool="text-cleaner" data-category="text" data-name="Text Cleaner" data-description="Remove extra spaces and empty lines">
+          <div class="tool-card-top"><span class="tool-icon icon-green">✧</span><button class="favorite-button" aria-label="Save Text Cleaner" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">TEXT UTILITIES <span>11</span></div><h3>Text Cleaner</h3><p>Remove extra spaces, empty lines and unwanted formatting.</p>
+          <button class="tool-open" data-open-tool="text-cleaner">Open tool <span>↗</span></button>
+        </article>
+        <article class="tool-card" data-tool="url-encoder" data-category="developer" data-name="URL Encoder Decoder" data-description="Encode and decode URL components">
+          <div class="tool-card-top"><span class="tool-icon icon-blue">↗</span><button class="favorite-button" aria-label="Save URL Encoder" aria-pressed="false">♡</button></div>
+          <div class="tool-meta">DEVELOPER <span>12</span></div><h3>URL Encoder</h3><p>Safely encode or decode URL components and query text.</p>
+          <button class="tool-open" data-open-tool="url-encoder">Open tool <span>↗</span></button>
+        </article>
+      </div>
+      <div class="empty-state" id="empty-state" hidden><span>⌕</span><h3>No tools found</h3><p>Try another search or choose a different category.</p><button class="button button-ghost" id="clear-search">Clear filters</button></div>
+    </section>
+
+    <section class="features-section section-shell" id="features">
+      <div class="section-heading centered-heading">
+        <div class="eyebrow"><span class="heading-star">✦</span> BUILT DIFFERENT</div>
+        <h2>A better way to <span class="gradient-text">get things done.</span></h2>
+        <p>Designed around the way you think, create and work.</p>
+      </div>
+      <div class="features-grid">
+        <article class="feature-card"><div class="feature-art art-cyan"><span>✧</span><i></i><i></i><i></i></div><h3>Fast by design</h3><p>Get useful results in seconds with straightforward, browser-based tools.</p></article>
+        <article class="feature-card"><div class="feature-art art-purple"><span>◈</span><i></i><i></i><i></i></div><h3>Made to feel different</h3><p>A polished cosmic interface with depth, movement and a clear layout.</p></article>
+        <article class="feature-card"><div class="feature-art art-pink"><span>⌘</span><i></i><i></i><i></i></div><h3>Your workflow, your way</h3><p>Save favorite tools, copy results and customize your workspace.</p></article>
+      </div>
+    </section>
+
+    <section class="about-section section-shell" id="about">
+      <div class="about-card">
+        <div class="about-decoration">WA<span>✦</span></div>
+        <div class="about-copy">
+          <div class="eyebrow"><span class="heading-star">✦</span> ABOUT WAZIR AURA</div>
+          <h2>Curiosity has<br>no <span class="gradient-text">limits.</span></h2>
+          <p>Wazir Aura is a growing digital workspace focused on useful tools, creative experiments and a better web experience. Explore what is here and keep discovering what comes next.</p>
+          <a class="button button-primary" href="#tools">Explore all tools <span>↗</span></a>
         </div>
       </div>
     </section>
 
-    <!-- TOOLS -->
-    <section id="tools" class="section">
-      <div class="wrap">
-        <p class="label">01 — TOOLS</p>
-        <h2>Working tools<br><span>you can use now</span></h2>
-
-        <div class="tools-layout">
-          <!-- Tool List -->
-          <div class="tool-list">
-            <button class="tool-btn active" data-tool="wordcounter">Word Counter</button>
-            <button class="tool-btn" data-tool="case">Case Converter</button>
-            <button class="tool-btn" data-tool="lorem">Lorem Ipsum</button>
-            <button class="tool-btn" data-tool="base64">Base64 Encode/Decode</button>
-            <button class="tool-btn" data-tool="json">JSON Formatter</button>
-            <button class="tool-btn" data-tool="password">Password Generator</button>
-          </div>
-
-          <!-- Tool Panels -->
-          <div class="tool-panels">
-            <!-- Word Counter -->
-            <div class="panel active" id="wordcounter">
-              <h3>Word Counter</h3>
-              <textarea id="wc-input" placeholder="Type or paste your text here..."></textarea>
-              <div class="stats">
-                <div><strong id="wc-words">0</strong> Words</div>
-                <div><strong id="wc-chars">0</strong> Characters</div>
-                <div><strong id="wc-sentences">0</strong> Sentences</div>
-                <div><strong id="wc-paras">0</strong> Paragraphs</div>
-              </div>
-            </div>
-
-            <!-- Case Converter -->
-            <div class="panel" id="case">
-              <h3>Case Converter</h3>
-              <textarea id="case-input" placeholder="Enter text..."></textarea>
-              <div class="btn-row">
-                <button onclick="toUpper()">UPPERCASE</button>
-                <button onclick="toLower()">lowercase</button>
-                <button onclick="toTitle()">Title Case</button>
-                <button onclick="toCapitalize()">Capitalize</button>
-              </div>
-              <textarea id="case-output" readonly placeholder="Result..."></textarea>
-            </div>
-
-            <!-- Lorem -->
-            <div class="panel" id="lorem">
-              <h3>Lorem Ipsum Generator</h3>
-              <div class="btn-row">
-                <button onclick="genLorem(1)">1 Paragraph</button>
-                <button onclick="genLorem(3)">3 Paragraphs</button>
-                <button onclick="genLorem(5)">5 Paragraphs</button>
-              </div>
-              <textarea id="lorem-output" readonly></textarea>
-            </div>
-
-            <!-- Base64 -->
-            <div class="panel" id="base64">
-              <h3>Base64 Encode / Decode</h3>
-              <textarea id="b64-input" placeholder="Enter text..."></textarea>
-              <div class="btn-row">
-                <button onclick="encodeB64()">Encode</button>
-                <button onclick="decodeB64()">Decode</button>
-              </div>
-              <textarea id="b64-output" readonly></textarea>
-            </div>
-
-            <!-- JSON -->
-            <div class="panel" id="json">
-              <h3>JSON Formatter</h3>
-              <textarea id="json-input" placeholder='{"key": "value"}'></textarea>
-              <div class="btn-row">
-                <button onclick="formatJSON()">Format</button>
-                <button onclick="minifyJSON()">Minify</button>
-              </div>
-              <textarea id="json-output" readonly></textarea>
-            </div>
-
-            <!-- Password -->
-            <div class="panel" id="password">
-              <h3>Password Generator</h3>
-              <div class="btn-row">
-                <button onclick="genPass(12)">12 Chars</button>
-                <button onclick="genPass(16)">16 Chars</button>
-                <button onclick="genPass(24)">24 Chars</button>
-              </div>
-              <input type="text" id="pass-output" readonly />
-              <button onclick="copyPass()" class="copy-btn">Copy</button>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- AI -->
-    <section id="ai" class="section alt">
-      <div class="wrap">
-        <p class="label">02 — AI TOOLS</p>
-        <h2>AI features<br><span>coming with backend</span></h2>
-        <div class="grid2">
-          <div class="card"><h3>AI Text Generator</h3><p>Content, emails, captions</p></div>
-          <div class="card"><h3>AI Summarizer</h3><p>Long text to short summary</p></div>
-          <div class="card"><h3>AI Image Tools</h3><p>Background remove & enhance</p></div>
-          <div class="card"><h3>AI Code Assistant</h3><p>Explain & improve code</p></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SERVICES -->
-    <section id="services" class="section">
-      <div class="wrap">
-        <p class="label">03 — SERVICES</p>
-        <h2>Professional services</h2>
-        <div class="services">
-          <div class="service"><span>01</span><div><h3>Web Development</h3><p>Modern responsive websites</p></div></div>
-          <div class="service"><span>02</span><div><h3>Web Research & Leads</h3><p>Accurate research & lists</p></div></div>
-          <div class="service"><span>03</span><div><h3>Data Entry</h3><p>Clean structured data work</p></div></div>
-          <div class="service"><span>04</span><div><h3>Banner Design</h3><p>Social media graphics</p></div></div>
-          <div class="service"><span>05</span><div><h3>2D Games</h3><p>Interactive game projects</p></div></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- PRICING -->
-    <section id="pricing" class="section alt">
-      <div class="wrap">
-        <p class="label">04 — PRICING</p>
-        <h2>Simple pricing</h2>
-        <div class="pricing">
-          <div class="price-card">
-            <h3>Free</h3>
-            <div class="amount">$0</div>
-            <ul>
-              <li>Limited daily use</li>
-              <li>Basic tools</li>
-              <li>Ads supported</li>
-            </ul>
-            <button class="btn secondary">Current</button>
-          </div>
-          <div class="price-card popular">
-            <div class="pop">Popular</div>
-            <h3>Premium</h3>
-            <div class="amount">$9<span>/mo</span></div>
-            <ul>
-              <li>Unlimited use</li>
-              <li>All tools + AI</li>
-              <li>No ads</li>
-              <li>Faster speed</li>
-            </ul>
-            <button class="btn primary">Upgrade</button>
-          </div>
-          <div class="price-card">
-            <h3>Business</h3>
-            <div class="amount">$29<span>/mo</span></div>
-            <ul>
-              <li>Everything in Premium</li>
-              <li>API Access</li>
-              <li>Team seats</li>
-            </ul>
-            <button class="btn secondary">Contact</button>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- CONTACT -->
-    <section id="contact" class="section">
-      <div class="wrap">
-        <p class="label">05 — CONTACT</p>
-        <h2>Let’s work together</h2>
-        <div class="contact">
-          <p>Projects, API, partnership or custom work.</p>
-          <a href="mailto:zuhaibwazir558@gmail.com" class="btn primary">Email Me</a>
-          <div class="socials">
-            <a href="https://www.fiverr.com/s/X00PlkP" target="_blank">Fiverr</a>
-            <a href="https://www.linkedin.com/in/murad-wazir-bbb0b541a" target="_blank">LinkedIn</a>
-            <a href="https://x.com/waziraura553" target="_blank">X</a>
-            <a href="https://www.instagram.com/waziraura553/" target="_blank">Instagram</a>
-            <a href="https://www.facebook.com/profile.php?id=61578311048454" target="_blank">Facebook</a>
-          </div>
-        </div>
-      </div>
+    <section class="cta-section section-shell">
+      <div class="cta-stars" aria-hidden="true">✦　·　✧　·　✦</div>
+      <div class="eyebrow">THE NEXT STEP IS YOURS</div>
+      <h2>Ready to explore<br><span class="gradient-text">something new?</span></h2>
+      <p>Your next useful tool is just a click away.</p>
+      <a class="button button-primary button-large" href="#tools">Enter the workspace <span>↗</span></a>
     </section>
   </main>
 
-  <footer class="footer">
-    <div class="wrap foot">
-      <div>
-        <strong>Wazir Lab</strong>
-        <p>Free Tools • AI • Services by Murad Wazir</p>
-      </div>
-      <div class="flinks">
-        <a href="#tools">Tools</a>
-        <a href="#pricing">Pricing</a>
-        <a href="#contact">Contact</a>
-      </div>
-    </div>
-    <p class="copy">© 2026 Wazir Lab. All rights reserved.</p>
+  <footer class="site-footer section-shell">
+    <a href="#home" class="footer-brand">
+      <span class="footer-mark">W<span>A</span></span>
+      <span>Wazir Aura<small>BEYOND ORDINARY</small></span>
+    </a>
+    <p>Made with curiosity <span class="heart">♥</span> and a little cosmic energy.</p>
+    <div class="footer-links"><a href="#home">Home</a><a href="#tools">Tools</a><a href="#about">About</a><a href="#top">Back to top ↑</a></div>
+    <div class="footer-bottom"><span>© <span id="current-year"></span> Wazir Aura. All rights reserved.</span><span>BUILT FOR THE CURIOUS.</span></div>
   </footer>
 
-  <script type="module" src="./script.js"></script>
+  <div class="modal-backdrop" id="tool-modal" hidden>
+    <section class="tool-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+      <div class="modal-header">
+        <div><div class="eyebrow">WAZIR AURA WORKSPACE</div><h2 id="modal-title">Tool</h2></div>
+        <button class="icon-button modal-close" id="modal-close" aria-label="Close tool">✕</button>
+      </div>
+      <div class="modal-content" id="modal-content"></div>
+      <div class="modal-footer"><span>✦ Your work stays in this browser.</span><button class="button button-ghost button-small" id="modal-reset">Reset tool</button></div>
+    </section>
+  </div>
+
+  <div class="toast-container" id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+  <button class="back-to-top" id="back-to-top" aria-label="Back to top">↑</button>
 </body>
 </html>
