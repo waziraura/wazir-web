@@ -1,3 +1,4 @@
+
 "use strict";
 
 /* WAZIR AURA — FRONTEND WORKSPACE */
@@ -27,7 +28,7 @@ const write = (key, value) => {
     localStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch {
-    toast("Browser storage full ya unavailable hai.");
+    toast("Browser storage is full or unavailable.");
     return false;
   }
 };
@@ -110,11 +111,15 @@ for (const key of [
   "pageViews", "toolViews", "projectViews", "likes",
   "ratings", "events", "comments", "feedback"
 ]) {
-  if (!analytics[key]) analytics[key] =
-    ["events", "comments", "feedback"].includes(key) ? [] : {};
+  if (!analytics[key]) {
+    analytics[key] =
+      ["events", "comments", "feedback"].includes(key) ? [] : {};
+  }
 }
 
-if (typeof analytics.saves !== "number") analytics.saves = 0;
+if (typeof analytics.saves !== "number") {
+  analytics.saves = 0;
+}
 
 let currentPage = "overview";
 let currentTool = null;
@@ -156,6 +161,7 @@ function toast(message) {
   element.classList.add("show");
 
   clearTimeout(toastTimer);
+
   toastTimer = setTimeout(() => {
     element.classList.remove("show");
   }, 2600);
@@ -259,7 +265,7 @@ function renderTools() {
             <span>${escapeHTML(group)}</span>
             <span>${views} views · ${liked} ${analytics.likes[id] || 0}</span>
           </div>
-          <button class="btn secondary" data-tool="${escapeHTML(id)}">Open tool ↗</button>
+          <button class="btn secondary" data-tool="${escapeHTML(id)}">Open Tool ↗</button>
         </article>`;
     }).join("")
     : '<div class="empty-state">No tools match your search.</div>';
@@ -279,11 +285,17 @@ function openTool(id) {
   currentOutput = "";
 
   const rating = analytics.ratings[id] || 0;
+
   $$("#workspaceRating button").forEach(button => {
-    button.classList.toggle("selected", Number(button.dataset.rating) <= rating);
+    button.classList.toggle(
+      "selected",
+      Number(button.dataset.rating) <= rating
+    );
   });
 
-  $("#workspaceLike").textContent = analytics.likes[id] ? "♥ Liked" : "♡ Like";
+  $("#workspaceLike").textContent = analytics.likes[id]
+    ? "♥ Liked"
+    : "♡ Like";
 
   recordEvent("tool", tool[1]);
   saveAnalytics();
@@ -292,7 +304,7 @@ function openTool(id) {
 
 function processWorkspace() {
   if (!currentTool) {
-    toast("Pehle koi tool open karo.");
+    toast("Please open a tool first.");
     return;
   }
 
@@ -300,7 +312,7 @@ function processWorkspace() {
   const format = $("#outputFormat").value;
 
   if (!prompt) {
-    toast("Pehle apni idea ya content likho.");
+    toast("Please enter your idea or content first.");
     $("#workspacePrompt").focus();
     return;
   }
@@ -326,12 +338,15 @@ function processWorkspace() {
       "#" + Math.floor(Math.random() * 16777215)
         .toString(16).padStart(6, "0")
     );
+
     result = JSON.stringify(colors, null, 2);
   } else if (id === "gradient-maker") {
     const first = "#" + Math.floor(Math.random() * 16777215)
       .toString(16).padStart(6, "0");
+
     const second = "#" + Math.floor(Math.random() * 16777215)
       .toString(16).padStart(6, "0");
+
     result = `background: linear-gradient(135deg, ${first}, ${second});`;
   } else if (id === "html-starter") {
     result = `<!DOCTYPE html>
@@ -346,11 +361,32 @@ function processWorkspace() {
 </body>
 </html>`;
   } else if (id === "css-starter") {
-    result = `/* Project styles */\n:root {\n  --accent: #a78bfa;\n}\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n}\n\n/* Requirements:\n${prompt.replace(/\*\//g, "* /")}\n*/`;
+    result = `/* Project styles */
+:root {
+  --accent: #a78bfa;
+}
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+
+/* Requirements:
+${prompt.replace(/\*\//g, "* /")}
+*/`;
   } else if (id === "js-starter") {
-    result = `// Project: ${prompt.replace(/\n/g, " ")}\n"use strict";\n\nfunction init() {\n  console.log("Project initialized");\n}\n\ninit();`;
+    result = `// Project: ${prompt.replace(/\n/g, " ")}
+"use strict";
+
+function init() {
+  console.log("Project initialized");
+}
+
+init();`;
   } else if (id === "markdown-helper") {
-    result = `# ${prompt.split("\n")[0]}\n\n${prompt.split("\n").slice(1).join("\n") || "## Notes\n\nAdd your content here."}`;
+    result = `# ${prompt.split("\n")[0]}
+
+${prompt.split("\n").slice(1).join("\n") || "## Notes\n\nAdd your content here."}`;
   } else if (id === "api-planner") {
     result = JSON.stringify({
       project: prompt,
@@ -370,31 +406,72 @@ function processWorkspace() {
         value: item
       }))
     }, null, 2);
-  } else if (id === "todo-planner" || id === "project-planner" || id === "study-planner" || id === "launch-planner") {
-    result = `# ${currentTool[1]}\n\nGoal: ${prompt}\n\n## Tasks\n- [ ] Define the objective\n- [ ] Break work into smaller tasks\n- [ ] Set priorities and deadlines\n- [ ] Review progress\n- [ ] Complete and evaluate`;
+  } else if (
+    id === "todo-planner" ||
+    id === "project-planner" ||
+    id === "study-planner" ||
+    id === "launch-planner"
+  ) {
+    result = `# ${currentTool[1]}
+
+Goal: ${prompt}
+
+## Tasks
+- [ ] Define the objective
+- [ ] Break work into smaller tasks
+- [ ] Set priorities and deadlines
+- [ ] Review progress
+- [ ] Complete and evaluate`;
   } else if (id === "notepad-tool") {
     notes.content = prompt;
-    notes.title = "Quick note";
+    notes.title = "Quick Note";
     write(KEYS.notes, notes);
+
     result = "Your note has been saved in this browser.\n\n" + prompt;
   } else {
-    result = `${currentTool[1]} — Planning draft\n\nYour input:\n${prompt}\n\nNext steps:\n1. Define your requirements.\n2. Refine the concept and desired outcome.\n3. Choose the tools or services required.\n4. Test the result and improve it.\n\nNote: This frontend demo organizes your input. Connected AI generation requires a configured AI backend.`;
+    result = `${currentTool[1]} — Planning Draft
+
+Your input:
+${prompt}
+
+Next steps:
+1. Define your requirements.
+2. Refine the concept and desired outcome.
+3. Choose the tools or services required.
+4. Test the result and improve it.
+
+Note: This frontend demo organizes your input. Connected AI generation requires a configured AI backend.`;
   }
 
   if (format === "json" && id !== "json-formatter") {
-    result = JSON.stringify({ tool: currentTool[1], input: prompt, result }, null, 2);
+    result = JSON.stringify({
+      tool: currentTool[1],
+      input: prompt,
+      result
+    }, null, 2);
   } else if (format === "markdown" && !String(result).startsWith("#")) {
     result = `# ${currentTool[1]}\n\n${result}`;
   } else if (format === "html" && id !== "html-starter") {
     result = `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><title>${escapeHTML(currentTool[1])}</title></head>
-<body><main><h1>${escapeHTML(currentTool[1])}</h1><pre>${escapeHTML(result)}</pre></main></body></html>`;
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>${escapeHTML(currentTool[1])}</title>
+</head>
+<body>
+  <main>
+    <h1>${escapeHTML(currentTool[1])}</h1>
+    <pre>${escapeHTML(result)}</pre>
+  </main>
+</body>
+</html>`;
   }
 
   currentOutput = String(result);
   $("#workspaceOutput").textContent = currentOutput;
+
   recordEvent("process", currentTool[1]);
-  toast("Result tayyar hai.");
+  toast("Your result is ready.");
 }
 
 function openModal() {
@@ -420,15 +497,19 @@ function createProject(name, description) {
 
   projects.unshift(project);
   write(KEYS.projects, projects);
+
   analytics.saves++;
   recordEvent("save", project.name);
+
   renderProjects();
   renderOverview();
+
   return project;
 }
 
 function renderProjects() {
-  $("#projectCount").textContent = `${projects.length} project${projects.length === 1 ? "" : "s"}`;
+  $("#projectCount").textContent =
+    `${projects.length} project${projects.length === 1 ? "" : "s"}`;
 
   $("#projectsGrid").innerHTML = projects.length
     ? projects.map(project => `
@@ -439,7 +520,10 @@ function renderProjects() {
         </div>
         <h3>${escapeHTML(project.name)}</h3>
         <p>${escapeHTML(project.description || "No description provided.")}</p>
-        <div class="tool-meta"><span>${project.views || 0} opens</span><span>${(project.comments || []).length} comments</span></div>
+        <div class="tool-meta">
+          <span>${project.views || 0} opens</span>
+          <span>${(project.comments || []).length} comments</span>
+        </div>
         <div class="project-actions">
           <button class="mini-button" data-project-open="${escapeHTML(project.id)}">Open</button>
           <button class="mini-button" data-project-comment="${escapeHTML(project.id)}">Comment</button>
@@ -447,7 +531,7 @@ function renderProjects() {
         </div>
       </article>
     `).join("")
-    : '<div class="empty-state">Abhi koi project nahi. “New project” par click karke shuru karo.</div>';
+    : '<div class="empty-state">No projects yet. Click "New Project" to get started.</div>';
 }
 
 function openProject(id) {
@@ -456,27 +540,36 @@ function openProject(id) {
 
   project.views = (project.views || 0) + 1;
   analytics.projectViews[id] = (analytics.projectViews[id] || 0) + 1;
+
   write(KEYS.projects, projects);
   recordEvent("project", project.name);
 
   currentOutput = project.description || "";
   currentTool = null;
+
   $("#workspaceTitle").textContent = project.name;
-  $("#workspaceDescription").textContent = "Saved project";
+  $("#workspaceDescription").textContent = "Saved Project";
   $("#workspacePrompt").value = project.description || "";
-  $("#workspaceOutput").textContent = project.description || "This project has no saved content.";
+  $("#workspaceOutput").textContent =
+    project.description || "This project has no saved content.";
+
   showPage("workspace");
 }
 
 function saveOutputAsProject() {
   if (!currentOutput.trim()) {
-    toast("Save karne se pehle output tayyar karo.");
+    toast("Please generate an output before saving.");
     return;
   }
 
-  const name = currentTool ? currentTool[1] : "Saved output";
-  createProject(`${name} — ${new Date().toLocaleDateString()}`, currentOutput);
-  toast("Output project mein save ho gaya.");
+  const name = currentTool ? currentTool[1] : "Saved Output";
+
+  createProject(
+    `${name} — ${new Date().toLocaleDateString()}`,
+    currentOutput
+  );
+
+  toast("Output saved as a project successfully.");
 }
 
 function saveNote() {
@@ -487,9 +580,11 @@ function saveNote() {
   };
 
   if (write(KEYS.notes, notes)) {
-    $("#noteStatus").textContent = `Saved at ${new Date().toLocaleTimeString()}`;
-    recordEvent("note", notes.title || "Untitled note");
-    toast("Note save ho gaya.");
+    $("#noteStatus").textContent =
+      `Saved at ${new Date().toLocaleTimeString()}`;
+
+    recordEvent("note", notes.title || "Untitled Note");
+    toast("Note saved successfully.");
   }
 }
 
@@ -499,12 +594,23 @@ function loadNote() {
 }
 
 function renderAnalytics() {
-  const total = object => Object.values(object).reduce((sum, value) => sum + Number(value || 0), 0);
+  const total = object =>
+    Object.values(object).reduce(
+      (sum, value) => sum + Number(value || 0),
+      0
+    );
+
   const toolOpens = total(analytics.toolViews);
   const likes = total(analytics.likes);
   const ratings = Object.values(analytics.ratings);
-  const comments = analytics.comments.length + analytics.feedback.length +
-    projects.reduce((sum, project) => sum + (project.comments || []).length, 0);
+
+  const comments =
+    analytics.comments.length +
+    analytics.feedback.length +
+    projects.reduce(
+      (sum, project) => sum + (project.comments || []).length,
+      0
+    );
 
   $("#statViews").textContent = total(analytics.pageViews);
   $("#statToolOpens").textContent = toolOpens;
@@ -513,11 +619,21 @@ function renderAnalytics() {
   $("#statRatings").textContent = ratings.length;
   $("#statComments").textContent = comments;
 
-  const maxViews = Math.max(1, ...tools.map(tool => analytics.toolViews[tool[0]] || 0));
+  const maxViews = Math.max(
+    1,
+    ...tools.map(tool => analytics.toolViews[tool[0]] || 0)
+  );
 
   $("#toolAnalytics").innerHTML = tools
-    .filter(tool => analytics.toolViews[tool[0]] || analytics.likes[tool[0]] || analytics.ratings[tool[0]])
-    .sort((a, b) => (analytics.toolViews[b[0]] || 0) - (analytics.toolViews[a[0]] || 0))
+    .filter(tool =>
+      analytics.toolViews[tool[0]] ||
+      analytics.likes[tool[0]] ||
+      analytics.ratings[tool[0]]
+    )
+    .sort((a, b) =>
+      (analytics.toolViews[b[0]] || 0) -
+      (analytics.toolViews[a[0]] || 0)
+    )
     .map(tool => {
       const id = tool[0];
       const views = analytics.toolViews[id] || 0;
@@ -526,43 +642,67 @@ function renderAnalytics() {
 
       return `
         <div class="analytics-row">
-          <div>${escapeHTML(tool[1])}
-            <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, views / maxViews * 100)}%"></div></div>
+          <div>
+            ${escapeHTML(tool[1])}
+            <div class="bar-track">
+              <div class="bar-fill"
+                style="width:${Math.min(100, views / maxViews * 100)}%">
+              </div>
+            </div>
             <small>Rating: ${rating ? `${rating}/5` : "Not rated"} · Likes: ${likeCount}</small>
           </div>
           <div class="analytics-numbers">${views} views</div>
         </div>`;
-    }).join("") || '<p class="muted">Tools open karne ke baad statistics yahan dikhengi.</p>';
+    })
+    .join("") ||
+    '<p class="muted">Statistics will appear here after you open some tools.</p>';
 
-  $("#analyticsEvents").innerHTML = analytics.events.slice(0, 15).map(event => `
-    <div class="analytics-row">
-      <div>${escapeHTML(event.type)} — ${escapeHTML(event.name)}<small>${escapeHTML(formatDate(event.at))}</small></div>
-    </div>
-  `).join("") || '<p class="muted">Abhi koi event record nahi hua.</p>';
+  $("#analyticsEvents").innerHTML = analytics.events
+    .slice(0, 15)
+    .map(event => `
+      <div class="analytics-row">
+        <div>
+          ${escapeHTML(event.type)} — ${escapeHTML(event.name)}
+          <small>${escapeHTML(formatDate(event.at))}</small>
+        </div>
+      </div>
+    `)
+    .join("") ||
+    '<p class="muted">No events have been recorded yet.</p>';
 
-  $("#feedbackList").innerHTML = analytics.feedback.slice(0, 5).map(item => `
-    <div class="feedback-item">${escapeHTML(item.text)}<br><small>${escapeHTML(formatDate(item.at))}</small></div>
-  `).join("");
+  $("#feedbackList").innerHTML = analytics.feedback
+    .slice(0, 5)
+    .map(item => `
+      <div class="feedback-item">
+        ${escapeHTML(item.text)}<br>
+        <small>${escapeHTML(formatDate(item.at))}</small>
+      </div>
+    `)
+    .join("");
 }
 
 function toggleLike() {
   if (!currentTool) {
-    toast("Like karne ke liye pehle tool open karo.");
+    toast("Please open a tool before liking it.");
     return;
   }
 
   const id = currentTool[0];
+
   analytics.likes[id] = analytics.likes[id] ? 0 : 1;
   saveAnalytics();
 
-  $("#workspaceLike").textContent = analytics.likes[id] ? "♥ Liked" : "♡ Like";
+  $("#workspaceLike").textContent = analytics.likes[id]
+    ? "♥ Liked"
+    : "♡ Like";
+
   recordEvent("like", currentTool[1]);
   renderOverview();
 }
 
 function setRating(value) {
   if (!currentTool) {
-    toast("Rating dene ke liye pehle tool open karo.");
+    toast("Please open a tool before rating it.");
     return;
   }
 
@@ -570,17 +710,24 @@ function setRating(value) {
   saveAnalytics();
 
   $$("#workspaceRating button").forEach(button => {
-    button.classList.toggle("selected", Number(button.dataset.rating) <= value);
+    button.classList.toggle(
+      "selected",
+      Number(button.dataset.rating) <= value
+    );
   });
 
   recordEvent("rating", `${currentTool[1]} (${value}/5)`);
-  toast(`Rating ${value}/5 save ho gayi.`);
+  toast(`Rating ${value}/5 saved successfully.`);
 }
 
 function renderCodeEditor() {
   $("#codeEditor").value = code[currentCodeTab] || "";
+
   $$(".code-tabs button").forEach(button => {
-    button.classList.toggle("active", button.dataset.codeTab === currentCodeTab);
+    button.classList.toggle(
+      "active",
+      button.dataset.codeTab === currentCodeTab
+    );
   });
 }
 
@@ -596,12 +743,17 @@ function runCode() {
   const css = code.css || "";
   const js = code.js || "";
 
-  // The iframe has allow-scripts only, not allow-same-origin.
+  // The preview iframe uses allow-scripts without allow-same-origin.
   // Never place trusted secrets in user-authored preview code.
   const documentContent = `<!doctype html>
-<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<style>${css.replace(/<\/style/gi, "<\\/style")}</style></head>
-<body>${html.replace(/<\/script/gi, "<\\/script")}
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>${css.replace(/<\/style/gi, "<\\/style")}</style>
+</head>
+<body>
+${html.replace(/<\/script/gi, "<\\/script")}
 <script>
 try {
 ${js.replace(/<\/script/gi, "<\\/script")}
@@ -611,20 +763,27 @@ ${js.replace(/<\/script/gi, "<\\/script")}
   document.body.querySelector('pre').textContent = error.message;
 }
 <\/script>
-</body></html>`;
+</body>
+</html>`;
 
   $("#codePreview").srcdoc = documentContent;
+
   recordEvent("code", "Run Code Lab");
-  toast("Preview update ho gaya.");
+  toast("Preview updated successfully.");
 }
 
-function downloadFile(filename, content, type = "text/plain;charset=utf-8") {
+function downloadFile(
+  filename,
+  content,
+  type = "text/plain;charset=utf-8"
+) {
   const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
 
   anchor.href = url;
   anchor.download = filename;
+
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();
@@ -634,16 +793,31 @@ function downloadFile(filename, content, type = "text/plain;charset=utf-8") {
 
 function downloadCode() {
   saveCode();
-  const combined = `<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<style>${code.css || ""}</style></head><body>${code.html || ""}
-<script>${(code.js || "").replace(/<\/script/gi, "<\\/script")}<\/script></body></html>`;
 
-  downloadFile("wazir-aura-project.html", combined, "text/html;charset=utf-8");
+  const combined = `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>${code.css || ""}</style>
+</head>
+<body>
+${code.html || ""}
+<script>${(code.js || "").replace(/<\/script/gi, "<\\/script")}<\/script>
+</body>
+</html>`;
+
+  downloadFile(
+    "wazir-aura-project.html",
+    combined,
+    "text/html;charset=utf-8"
+  );
 }
 
 function resetAnalytics() {
-  if (!confirm("Kya tum is browser ki tamam local analytics delete karna chahte ho?")) return;
+  if (!confirm(
+    "Do you want to delete all local analytics stored in this browser?"
+  )) return;
 
   analytics = {
     pageViews: {},
@@ -661,12 +835,14 @@ function resetAnalytics() {
   renderAnalytics();
   renderOverview();
   renderTools();
-  toast("Local analytics reset ho gayi.");
+
+  toast("Local analytics have been reset successfully.");
 }
 
 function initSpace() {
   const canvas = $("#spaceCanvas");
   const ctx = canvas.getContext("2d");
+
   if (!ctx) return;
 
   let width = 0;
@@ -675,32 +851,41 @@ function initSpace() {
 
   function resize() {
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
+
     width = window.innerWidth;
     height = window.innerHeight;
+
     canvas.width = width * dpr;
     canvas.height = height * dpr;
+
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    stars = Array.from({ length: Math.min(150, Math.floor(width / 8)) }, () => ({
-      x: Math.random() * width,
-      y: Math.random() * height,
-      radius: Math.random() * 1.3 + 0.2,
-      speed: Math.random() * 0.24 + 0.04,
-      phase: Math.random() * Math.PI * 2
-    }));
+    stars = Array.from(
+      { length: Math.min(150, Math.floor(width / 8)) },
+      () => ({
+        x: Math.random() * width,
+        y: Math.random() * height,
+        radius: Math.random() * 1.3 + 0.2,
+        speed: Math.random() * 0.24 + 0.04,
+        phase: Math.random() * Math.PI * 2
+      })
+    );
   }
 
   function draw(time) {
     ctx.clearRect(0, 0, width, height);
 
     for (const star of stars) {
-      const alpha = 0.3 + (Math.sin(time * 0.001 + star.phase) + 1) * 0.32;
+      const alpha =
+        0.3 + (Math.sin(time * 0.001 + star.phase) + 1) * 0.32;
+
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
       ctx.fillStyle = `rgba(205,198,255,${alpha})`;
       ctx.fill();
 
       star.y += star.speed;
+
       if (star.y > height) {
         star.y = 0;
         star.x = Math.random() * width;
@@ -711,6 +896,7 @@ function initSpace() {
   }
 
   resize();
+
   window.addEventListener("resize", resize);
   requestAnimationFrame(draw);
 }
@@ -718,6 +904,7 @@ function initSpace() {
 function bindEvents() {
   document.addEventListener("click", event => {
     const pageButton = event.target.closest("[data-page]");
+
     if (pageButton) {
       event.preventDefault();
       showPage(pageButton.dataset.page);
@@ -725,40 +912,56 @@ function bindEvents() {
     }
 
     const toolButton = event.target.closest("[data-tool]");
+
     if (toolButton) {
       openTool(toolButton.dataset.tool);
       return;
     }
 
     const projectOpen = event.target.closest("[data-project-open]");
+
     if (projectOpen) {
       openProject(projectOpen.dataset.projectOpen);
       return;
     }
 
     const projectDelete = event.target.closest("[data-project-delete]");
+
     if (projectDelete) {
-      const project = projects.find(item => item.id === projectDelete.dataset.projectDelete);
+      const project = projects.find(
+        item => item.id === projectDelete.dataset.projectDelete
+      );
+
       if (!project) return;
-      if (!confirm(`"${project.name}" delete karna hai?`)) return;
+
+      if (!confirm(`Delete "${project.name}"?`)) return;
 
       projects = projects.filter(item => item.id !== project.id);
+
       write(KEYS.projects, projects);
       recordEvent("delete", project.name);
+
       renderProjects();
       renderOverview();
-      toast("Project delete ho gaya.");
+
+      toast("Project deleted successfully.");
       return;
     }
 
     const projectComment = event.target.closest("[data-project-comment]");
+
     if (projectComment) {
-      const project = projects.find(item => item.id === projectComment.dataset.projectComment);
+      const project = projects.find(
+        item => item.id === projectComment.dataset.projectComment
+      );
+
       if (!project) return;
 
-      const comment = prompt("Project comment likho:");
+      const comment = prompt("Please enter a project comment:");
+
       if (comment && comment.trim()) {
         project.comments ||= [];
+
         project.comments.push({
           text: comment.trim(),
           at: new Date().toISOString()
@@ -772,20 +975,25 @@ function bindEvents() {
 
         write(KEYS.projects, projects);
         saveAnalytics();
+
         renderProjects();
         renderAnalytics();
-        toast("Comment save ho gaya.");
+
+        toast("Comment saved successfully.");
       }
+
       return;
     }
 
     const ratingButton = event.target.closest("[data-rating]");
+
     if (ratingButton) {
       setRating(ratingButton.dataset.rating);
       return;
     }
 
     const codeTab = event.target.closest("[data-code-tab]");
+
     if (codeTab) {
       saveCode();
       currentCodeTab = codeTab.dataset.codeTab;
@@ -801,7 +1009,9 @@ function bindEvents() {
   $("#cancelProject").addEventListener("click", closeModal);
 
   $("#projectModal").addEventListener("click", event => {
-    if (event.target.id === "projectModal") closeModal();
+    if (event.target.id === "projectModal") {
+      closeModal();
+    }
   });
 
   $("#createProject").addEventListener("click", () => {
@@ -809,19 +1019,23 @@ function bindEvents() {
     const description = $("#projectDescription").value.trim();
 
     if (!name) {
-      toast("Project ka naam likho.");
+      toast("Please enter a project name.");
       $("#projectName").focus();
       return;
     }
 
     createProject(name, description);
+
     closeModal();
+
     $("#projectName").value = "";
     $("#projectDescription").value = "";
-    toast("Project create ho gaya.");
+
+    toast("Project created successfully.");
   });
 
   $("#runWorkspace").addEventListener("click", processWorkspace);
+
   $("#clearWorkspace").addEventListener("click", () => {
     $("#workspacePrompt").value = "";
     $("#workspaceOutput").textContent = "Your result will appear here.";
@@ -830,26 +1044,39 @@ function bindEvents() {
 
   $("#copyOutput").addEventListener("click", async () => {
     if (!currentOutput) {
-      toast("Copy karne ke liye output nahi hai.");
+      toast("There is no output to copy.");
       return;
     }
 
     try {
       await navigator.clipboard.writeText(currentOutput);
-      toast("Output copy ho gaya.");
+      toast("Output copied successfully.");
     } catch {
       const area = document.createElement("textarea");
+
       area.value = currentOutput;
       document.body.appendChild(area);
+
       area.select();
+
       const copied = document.execCommand("copy");
+
       area.remove();
-      toast(copied ? "Output copy ho gaya." : "Copy nahi ho saka.");
+
+      toast(
+        copied
+          ? "Output copied successfully."
+          : "Could not copy the output."
+      );
     }
   });
 
   $("#downloadOutput").addEventListener("click", () => {
-    if (!currentOutput) return toast("Download karne ke liye output nahi hai.");
+    if (!currentOutput) {
+      toast("There is no output to download.");
+      return;
+    }
+
     downloadFile("wazir-aura-output.txt", currentOutput);
   });
 
@@ -859,18 +1086,22 @@ function bindEvents() {
   $("#saveNote").addEventListener("click", saveNote);
 
   let noteTimer;
+
   $("#noteTitle").addEventListener("input", autoSaveNote);
   $("#noteContent").addEventListener("input", autoSaveNote);
 
   function autoSaveNote() {
     clearTimeout(noteTimer);
+
     $("#noteStatus").textContent = "Saving...";
+
     noteTimer = setTimeout(() => {
       notes = {
         title: $("#noteTitle").value,
         content: $("#noteContent").value,
         updatedAt: new Date().toISOString()
       };
+
       if (write(KEYS.notes, notes)) {
         $("#noteStatus").textContent = "Automatically saved";
       }
@@ -885,8 +1116,10 @@ function bindEvents() {
   $("#runCode").addEventListener("click", runCode);
 
   $("#resetCode").addEventListener("click", () => {
-    if (!confirm("Code Lab ko default code par reset karna hai?")) return;
+    if (!confirm("Reset Code Lab to the default code?")) return;
+
     code = { ...defaultCode };
+
     write(KEYS.code, code);
     renderCodeEditor();
     runCode();
@@ -899,7 +1132,7 @@ function bindEvents() {
     const value = input.value.trim();
 
     if (!value) {
-      toast("Pehle feedback likho.");
+      toast("Please enter your feedback first.");
       return;
     }
 
@@ -909,52 +1142,79 @@ function bindEvents() {
     });
 
     analytics.feedback = analytics.feedback.slice(0, 100);
+
     saveAnalytics();
     recordEvent("feedback", "Website feedback");
+
     input.value = "";
+
     renderAnalytics();
-    toast("Feedback is browser mein save ho gaya.");
+
+    toast("Your feedback has been saved in this browser.");
   });
 
   $("#exportAnalytics").addEventListener("click", () => {
-    downloadFile("wazir-aura-analytics.json", JSON.stringify({
-      exportedAt: new Date().toISOString(),
-      scope: "This browser only",
-      analytics,
-      projects
-    }, null, 2), "application/json;charset=utf-8");
+    downloadFile(
+      "wazir-aura-analytics.json",
+      JSON.stringify({
+        exportedAt: new Date().toISOString(),
+        scope: "This browser only",
+        analytics,
+        projects
+      }, null, 2),
+      "application/json;charset=utf-8"
+    );
   });
 
   $("#resetAnalytics").addEventListener("click", resetAnalytics);
 
   const toggleTheme = () => {
     document.body.classList.toggle("light");
-    write(KEYS.theme, document.body.classList.contains("light") ? "light" : "dark");
+
+    write(
+      KEYS.theme,
+      document.body.classList.contains("light") ? "light" : "dark"
+    );
   };
 
   $("#themeToggle").addEventListener("click", toggleTheme);
   $("#quickTheme").addEventListener("click", toggleTheme);
-  $("#menuToggle").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
+
+  $("#menuToggle").addEventListener("click", () => {
+    $("#sidebar").classList.toggle("open");
+  });
 
   $("#premiumInfo").addEventListener("click", () => {
-    toast("Premium ke liye backend, authentication aur payment provider configure karna hoga.");
+    toast(
+      "Premium requires backend integration, user authentication, and payment provider configuration."
+    );
   });
 
   $("#workspacePrompt").addEventListener("keydown", event => {
-    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") processWorkspace();
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+      processWorkspace();
+    }
   });
 
   $("#projectDescription").addEventListener("keydown", event => {
-    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") $("#createProject").click();
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") {
+      $("#createProject").click();
+    }
   });
 }
 
 function init() {
-  document.body.classList.toggle("light", read(KEYS.theme, "dark") === "light");
+  document.body.classList.toggle(
+    "light",
+    read(KEYS.theme, "dark") === "light"
+  );
+
   $("#currentYear").textContent = new Date().getFullYear();
 
   // Record this browser's initial page visit.
-  analytics.pageViews.overview = (analytics.pageViews.overview || 0) + 1;
+  analytics.pageViews.overview =
+    (analytics.pageViews.overview || 0) + 1;
+
   recordEvent("page", "overview");
 
   renderOverview();
@@ -975,7 +1235,7 @@ function init() {
     $("#intro")?.remove();
   }, 1900);
 
-  // Build an initial Code Lab preview.
+  // Build the initial Code Lab preview.
   runCode();
 }
 
