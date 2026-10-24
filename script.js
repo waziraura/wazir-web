@@ -1,598 +1,611 @@
 
-/*
- * WAZIR AURA — MODULAR CORE
- * Shared application system and automatic tool discovery.
- *
- * New tools belong in /tools/*.js
- * Each tool registers itself with:
- * window.WazirAura.registerTool({...})
- */
-
 (() => {
   "use strict";
 
-  const CONFIG = {
-    owner: "waziraura",
-    repository: "wazir-web",
-    branch: "main",
-    toolsPath: "tools",
-    maxTextLength: 200000,
-    freeUsageLimit: 10,
-    premiumUsageLimit: 100,
-    githubApi:
-      "https://api.github.com/repos/waziraura/wazir-web/contents/tools?ref=main",
-  };
+  const REPO_OWNER = "waziraura";
+  const REPO_NAME = "wazir-web";
+  const BRANCH = "main";
+  const TOOLS_API =
+    `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/tools?ref=${BRANCH}`;
 
-  const state = {
-    tools: new Map(),
-    activeTool: null,
-    search: "",
-    category: "all",
-    usage: {},
-    isPremium: false,
-  };
+  const tools = new Map();
+  let activeCategory = "All";
+  let activeTool = null;
+  let toastTimer = null;
 
-  const $ = (selector, root = document) =>
-    root.querySelector(selector);
-
+  const $ = (selector, root = document) => root.querySelector(selector);
   const $$ = (selector, root = document) =>
-    [...root.querySelectorAll(selector)];
+    Array.from(root.querySelectorAll(selector));
 
-  const escapeHTML = (value = "") =>
-    String(value).replace(/[&<>"']/g, (character) => ({
+  function escapeHTML(value) {
+    return String(value ?? "").replace(/[&<>"']/g, char => ({
       "&": "&amp;",
       "<": "&lt;",
       ">": "&gt;",
       '"': "&quot;",
-      "'": "&#39;",
-    })[character]);
+      "'": "&#39;"
+    })[char]);
+  }
 
-  function notify(message, type = "info") {
-    let toast = $("#wa-toast");
+  function showToast(message) {
+    const toast = $("#toast");
+    if (!toast) return;
 
-    if (!toast) {
-      toast = document.createElement("div");
-      toast.id = "wa-toast";
-      toast.className = "toast";
-      toast.setAttribute("role", "status");
-      toast.setAttribute("aria-live", "polite");
-      document.body.appendChild(toast);
-    }
+    toast.textContent = String(message);
+    toast.classList.remove("is-hidden");
 
-    toast.textContent = message;
-    toast.dataset.type = type;
-    toast.classList.add("is-visible");
-
-    clearTimeout(notify.timer);
-    notify.timer = setTimeout(() => {
-      toast.classList.remove("is-visible");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => {
+      toast.classList.add("is-hidden");
     }, 3200);
   }
 
-  function registerTool(tool) {
-    if (!tool || typeof tool !== "object") {
-      console.error("Invalid tool registration:", tool);
-      return false;
-    }
-
-    const required = ["id", "name", "description", "category"];
-
-    for (const key of required) {
-      if (!tool[key] || typeof tool[key] !== "string") {
-        console.error(`Tool is missing a valid "${key}"`, tool);
-        return false;
-      }
-    }
-
-    if (state.tools.has(tool.id)) {
-      console.warn(`Duplicate tool ignored: ${tool.id}`);
-      return false;
-    }
-
-    state.tools.set(tool.id, {
-      icon: "✦",
-      status: "ready",
-      premium: false,
-      ...tool,
-    });
-
-    document.dispatchEvent(
-      new CustomEvent("waziraura:tool-registered", {
-        detail: { id: tool.id },
-      })
-    );
-
-    return true;
-  }
-
-  function getTools() {
-    return [...state.tools.values()];
-  }
-
-  function getTool(id) {
-    return state.tools.get(id) || null;
-  }
-
-  function getUsageKey(id) {
-    const day = new Date().toISOString().slice(0, 10);
-    return `wa-usage:${day}:${id}`;
-  }
-
-  function getUsage(id) {
-    try {
-      return Number(localStorage.getItem(getUsageKey(id))) || 0;
-    } catch {
-      return 0;
-    }
-  }
-
-  function getUsageLimit() {
-    return state.isPremium
-      ? CONFIG.premiumUsageLimit
-      : CONFIG.freeUsageLimit;
-  }
-
-  function canUseTool(id) {
-    const tool = getTool(id);
-
-    if (!tool) return false;
-
-    if (tool.premium && !state.isPremium) {
-      notify("This tool requires a premium plan.", "warning");
-      return false;
-    }
-
-    if (getUsage(id) >= getUsageLimit()) {
-      notify(
-        "Your local usage limit has been reached. Premium limits and billing need a connected backend.",
-        "warning"
-      );
-      return false;
-    }
-
-    return true;
-  }
-
-  function recordUsage(id) {
-    try {
-      localStorage.setItem(
-        getUsageKey(id),
-        String(getUsage(id) + 1)
-      );
-    } catch {
-      // Usage tracking may be unavailable in private browsing.
-    }
-  }
-
-  function setPremium(enabled) {
-    state.isPremium = Boolean(enabled);
-    renderTools();
-  }
-
-  function setOutput(value, target = "#workspace-result") {
-    const element = typeof target === "string" ? $(target) : target;
-    if (!element) return;
-
-    if (element instanceof HTMLInputElement ||
-        element instanceof HTMLTextAreaElement) {
-      element.value = String(value ?? "");
-    } else {
-      element.textContent = String(value ?? "");
-    }
+  function setLoadingStatus(message) {
+    const status = $("#tools-loading-status");
+    if (status) status.textContent = message || "";
   }
 
   function field(label, options = {}) {
     const {
-      name = "input",
+      name = "field",
+      type = "text",
       placeholder = "",
-      type = "textarea",
-      value = "",
-      accept = "",
-      help = "",
       required = false,
+      value = "",
+      help = "",
+      rows = 4
     } = options;
 
-    const id = `wa-field-${name}-${Math.random()
-      .toString(36)
-      .slice(2, 8)}`;
+    const id = `wa-field-${String(name).replace(/[^a-zA-Z0-9_-]/g, "-")}`;
+    const safeName = escapeHTML(name);
+    const safeLabel = escapeHTML(label);
+    const safePlaceholder = escapeHTML(placeholder);
+    const safeValue = escapeHTML(value);
+    const requiredAttr = required ? " required" : "";
 
     let control;
 
-    if (type === "file") {
-      control = `<input id="${id}" name="${escapeHTML(name)}"
-        type="file" ${accept ? `accept="${escapeHTML(accept)}"` : ""}
-        ${required ? "required" : ""}>`;
-    } else if (type === "text" || type === "number") {
-      control = `<input id="${id}" name="${escapeHTML(name)}"
-        type="${type}" value="${escapeHTML(value)}"
-        placeholder="${escapeHTML(placeholder)}"
-        ${required ? "required" : ""}>`;
+    if (type === "textarea") {
+      control = `<textarea id="${id}" name="${safeName}" rows="${Number(rows) || 4}" placeholder="${safePlaceholder}"${requiredAttr}>${safeValue}</textarea>`;
     } else {
-      control = `<textarea id="${id}" name="${escapeHTML(name)}"
-        rows="5" maxlength="${CONFIG.maxTextLength}"
-        placeholder="${escapeHTML(placeholder)}"
-        ${required ? "required" : ""}>${escapeHTML(value)}</textarea>`;
+      const safeType = ["text", "email", "number", "url", "password", "search"].includes(type)
+        ? type
+        : "text";
+
+      control = `<input id="${id}" name="${safeName}" type="${safeType}" placeholder="${safePlaceholder}" value="${safeValue}"${requiredAttr}>`;
     }
 
     return `
-      <label class="workspace-field" for="${id}">
-        <span class="field-label">${escapeHTML(label)}</span>
+      <div class="form-field">
+        <label for="${id}">${safeLabel}</label>
         ${control}
         ${help ? `<small class="field-help">${escapeHTML(help)}</small>` : ""}
-      </label>`;
+      </div>
+    `;
   }
 
   function button(label, options = {}) {
     const {
       action = "run",
-      variant = "primary",
       type = "button",
-      disabled = false,
+      variant = "primary"
     } = options;
 
-    return `<button type="${type}"
-      class="button button-${escapeHTML(variant)}"
-      data-wa-action="${escapeHTML(action)}"
-      ${disabled ? "disabled" : ""}>
-      ${escapeHTML(label)}
-    </button>`;
+    const safeType = ["button", "submit", "reset"].includes(type)
+      ? type
+      : "button";
+
+    const safeAction = escapeHTML(action);
+    const safeLabel = escapeHTML(label);
+    const safeVariant = escapeHTML(variant);
+
+    return `
+      <button
+        type="${safeType}"
+        class="btn btn-${safeVariant}"
+        data-wa-action="${safeAction}"
+      >${safeLabel}</button>
+    `;
   }
 
-  function openWorkspace(id) {
-    const tool = getTool(id);
-    if (!tool) {
-      notify("This tool has not loaded yet.", "warning");
-      return;
+  function setOutput(value) {
+    const workspace = $("#workspace-content");
+    if (!workspace) return;
+
+    let output = $("#workspace-result", workspace);
+
+    if (!output) {
+      const wrap = document.createElement("div");
+      wrap.className = "workspace-result-wrap";
+
+      const heading = document.createElement("div");
+      heading.className = "result-header";
+
+      const title = document.createElement("strong");
+      title.textContent = "Result";
+      heading.appendChild(title);
+
+      output = document.createElement("div");
+      output.id = "workspace-result";
+      output.className = "workspace-result";
+      output.setAttribute("aria-live", "polite");
+
+      wrap.append(heading, output);
+      workspace.appendChild(wrap);
     }
 
-    state.activeTool = id;
+    output.textContent =
+      typeof value === "string" ? value : JSON.stringify(value, null, 2);
+  }
 
-    const workspace = $("#workspace");
-    const title = $("#workspace-title");
-    const description = $("#workspace-description");
-    const content = $("#workspace-content");
-    const placeholder = $("#workspace-placeholder");
+  function setStatus(message) {
+    const status = $("#workspace-status");
+    if (status) status.textContent = String(message || "");
+  }
 
-    if (title) title.textContent = tool.name;
-    if (description) description.textContent = tool.description;
-    if (placeholder) placeholder.hidden = true;
-
-    if (content) {
-      content.hidden = false;
-      content.replaceChildren();
-
-      if (typeof tool.render === "function") {
-        const rendered = tool.render({ field, button, escapeHTML });
-
-        if (typeof rendered === "string") {
-          content.innerHTML = rendered;
-        } else if (rendered instanceof Node) {
-          content.appendChild(rendered);
-        }
-      } else {
-        content.innerHTML = `
-          <p>This tool is registered but has no interface yet.</p>`;
+  const WazirAura = {
+    registerTool(tool) {
+      if (!tool || typeof tool !== "object") {
+        console.error("Invalid Wazir Aura tool.");
+        return;
       }
-    }
 
-    if (workspace) {
-      workspace.hidden = false;
-      workspace.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "auto"
-          : "smooth",
-        block: "start",
+      if (!/^[a-z0-9_-]+$/i.test(String(tool.id || ""))) {
+        console.error("A tool needs a valid id.");
+        return;
+      }
+
+      if (!tool.name || typeof tool.render !== "function") {
+        console.error(`Tool "${tool.id}" needs a name and render() function.`);
+        return;
+      }
+
+      if (tools.has(tool.id)) {
+        console.warn(`Duplicate tool ignored: ${tool.id}`);
+        return;
+      }
+
+      tools.set(tool.id, {
+        category: "AI",
+        description: "",
+        icon: "✦",
+        premium: false,
+        ...tool
       });
-    }
+    },
 
-    $("#workspace-status")?.replaceChildren();
-    renderTools();
-  }
+    getTools() {
+      return Array.from(tools.values());
+    },
 
-  function closeWorkspace() {
-    state.activeTool = null;
+    getTool(id) {
+      return tools.get(id);
+    },
 
-    const workspace = $("#workspace");
-    if (workspace) workspace.hidden = true;
+    field,
+    button,
+    setOutput,
+    setStatus,
+    showToast
+  };
 
-    renderTools();
-  }
+  // Make the tool API available before any tool file is imported.
+  window.WazirAura = WazirAura;
 
   function renderTools() {
     const grid = $("#tools-grid");
     if (!grid) return;
 
-    const tools = getTools().filter((tool) => {
-      const matchesCategory =
-        state.category === "all" ||
-        tool.category.toLowerCase() === state.category.toLowerCase();
+    const search = ($("#tool-search")?.value || "").trim().toLowerCase();
 
-      const searchText =
+    const filtered = WazirAura.getTools().filter(tool => {
+      const matchesCategory =
+        activeCategory === "All" || tool.category === activeCategory;
+
+      const searchable =
         `${tool.name} ${tool.description} ${tool.category}`.toLowerCase();
 
-      return matchesCategory && searchText.includes(state.search);
+      return matchesCategory && searchable.includes(search);
     });
 
-    grid.innerHTML = tools.map((tool) => `
-      <article class="tool-card"
-        data-tool-id="${escapeHTML(tool.id)}">
+    grid.replaceChildren();
+
+    filtered.forEach(tool => {
+      const card = document.createElement("button");
+      card.type = "button";
+      card.className = "tool-card";
+      card.dataset.openTool = tool.id;
+      card.setAttribute("aria-label", `Open ${tool.name}`);
+
+      card.innerHTML = `
         <div class="tool-card-top">
-          <span class="tool-icon" aria-hidden="true">
-            ${escapeHTML(tool.icon)}
-          </span>
+          <span class="tool-icon">${escapeHTML(tool.icon)}</span>
           <span class="tool-label">${escapeHTML(tool.category)}</span>
         </div>
         <h3>${escapeHTML(tool.name)}</h3>
         <p>${escapeHTML(tool.description)}</p>
-        <button class="button button-ghost button-small"
-          type="button" data-wa-open="${escapeHTML(tool.id)}">
-          Open tool <span aria-hidden="true">→</span>
-        </button>
-        ${tool.premium
-          ? '<span class="tool-premium-label">Premium</span>'
-          : ""}
-      </article>
-    `).join("");
+        <span class="tool-open">Open tool <span aria-hidden="true">→</span></span>
+      `;
 
-    const count = $("#tool-count");
-    if (count) count.textContent = String(tools.length);
+      grid.appendChild(card);
+    });
+
+    const count = $("#visible-tool-count");
+    if (count) count.textContent = String(filtered.length);
+
+    const total = $("#tool-count");
+    if (total) total.textContent = String(tools.size);
 
     const empty = $("#no-tools-message");
-    if (empty) empty.hidden = tools.length > 0;
+    if (empty) {
+      empty.classList.toggle("is-hidden", filtered.length > 0);
+    }
+
+    if (tools.size > 0) {
+      setLoadingStatus("");
+    }
   }
 
-  function setSearch(value) {
-    state.search = String(value || "").trim().toLowerCase();
-    renderTools();
-  }
-
-  function setCategory(value) {
-    state.category = String(value || "all");
-    renderTools();
-
-    $$(".category-tab").forEach((tab) => {
-      const active =
-        (tab.dataset.category || "all") === state.category;
-
-      tab.classList.toggle("active", active);
-      tab.setAttribute("aria-pressed", String(active));
-    });
-  }
-
-  async function runTool(id, formData, context = {}) {
-    const tool = getTool(id);
-
-    if (!tool || typeof tool.run !== "function") {
-      notify("This tool is not ready yet.", "warning");
+  function openTool(id) {
+    const tool = WazirAura.getTool(id);
+    if (!tool) {
+      showToast("This tool could not be found.");
       return;
     }
 
-    if (!canUseTool(id)) return;
+    activeTool = tool;
 
-    const runButton = context.submitter;
-    if (runButton) runButton.disabled = true;
+    const section = $("#workspace");
+    const title = $("#workspace-title");
+    const description = $("#workspace-description");
+    const content = $("#workspace-content");
+    const placeholder = $("#workspace-placeholder");
 
-    const status = $("#workspace-status");
-    if (status) status.textContent = "Working…";
+    if (!section || !content) return;
+
+    if (title) title.textContent = tool.name;
+    if (description) description.textContent = tool.description;
+
+    content.replaceChildren();
+    setStatus("");
+
+    if (placeholder) placeholder.classList.add("is-hidden");
 
     try {
-      const result = await tool.run({
-        input: formData,
+      const rendered = tool.render({
+        field,
+        button,
         setOutput,
-        notify,
-        isPremium: state.isPremium,
-        usage: getUsage(id),
-        usageLimit: getUsageLimit(),
+        setStatus,
+        showToast
+      });
+
+      if (typeof rendered === "string") {
+        content.innerHTML = rendered;
+      } else if (rendered instanceof HTMLElement) {
+        content.appendChild(rendered);
+      } else {
+        content.textContent = "This tool did not return a valid interface.";
+      }
+    } catch (error) {
+      console.error("Tool render error:", error);
+      content.textContent = "This tool could not be opened. Please check its JavaScript file.";
+    }
+
+    section.classList.remove("is-hidden");
+    section.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  async function runActiveTool(form) {
+    if (!activeTool || typeof activeTool.run !== "function") {
+      showToast("This tool is not ready yet.");
+      return;
+    }
+
+    const submitButton = $('button[type="submit"]', form);
+    const oldButtonText = submitButton?.textContent;
+
+    const input = {};
+    new FormData(form).forEach((value, key) => {
+      input[key] = value;
+    });
+
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = "Working...";
+    }
+
+    setStatus("Processing your request...");
+
+    try {
+      const result = await activeTool.run({
+        input,
+        tool: activeTool,
+        setOutput,
+        setStatus,
+        showToast
       });
 
       if (result !== undefined && result !== null) {
-        if (typeof result === "string") {
-          setOutput(result);
-        } else if (result.text !== undefined) {
+        if (typeof result === "object" && "text" in result) {
           setOutput(result.text);
+        } else if (typeof result === "string") {
+          setOutput(result);
+        } else {
+          setOutput(JSON.stringify(result, null, 2));
         }
       }
 
-      recordUsage(id);
-      if (status) status.textContent = "Finished";
+      setStatus("Finished.");
     } catch (error) {
-      console.error(`Tool "${id}" failed:`, error);
-      if (status) status.textContent = "Something went wrong";
-      notify(error?.message || "Tool failed. Please try again.", "error");
+      console.error("Tool run error:", error);
+      setOutput(`Something went wrong: ${error?.message || "Unknown error"}`);
+      setStatus("Request failed.");
     } finally {
-      if (runButton) runButton.disabled = false;
+      if (submitButton) {
+        submitButton.disabled = false;
+        submitButton.textContent = oldButtonText || "Run";
+      }
     }
   }
 
-  async function discoverAndLoadTools() {
-    const status = $("#tools-loading-status");
+  async function loadTools() {
+    setLoadingStatus("Discovering tools...");
 
     try {
-      const response = await fetch(CONFIG.githubApi, {
+      const response = await fetch(TOOLS_API, {
         headers: { Accept: "application/vnd.github+json" },
-        cache: "no-cache",
+        cache: "no-store"
       });
 
+      if (response.status === 404) {
+        setLoadingStatus("No tools folder found yet. Add your first file: tools/chat.js");
+        renderTools();
+        return;
+      }
+
+      if (response.status === 403) {
+        throw new Error("GitHub API rate limit reached. Please try again later.");
+      }
+
       if (!response.ok) {
-        throw new Error(
-          `Tool listing unavailable (${response.status}).`
-        );
+        throw new Error(`GitHub returned status ${response.status}.`);
       }
 
       const files = await response.json();
 
-      const modules = files.filter((file) =>
+      if (!Array.isArray(files)) {
+        throw new Error("The tools folder could not be read.");
+      }
+
+      const jsFiles = files.filter(file =>
         file.type === "file" &&
-        file.name.endsWith(".js") &&
-        !file.name.startsWith("_")
+        /\.js$/i.test(file.name) &&
+        file.download_url
       );
 
-      const results = await Promise.allSettled(
-        modules.map((file) => {
-          const url =
-            `https://raw.githubusercontent.com/` +
-            `${CONFIG.owner}/${CONFIG.repository}/` +
-            `${CONFIG.branch}/${CONFIG.toolsPath}/${file.name}`;
+      if (jsFiles.length === 0) {
+        setLoadingStatus("No tool files found. Add a JavaScript file inside tools/.");
+        renderTools();
+        return;
+      }
 
-          return import(url);
-        })
-      );
+      let loaded = 0;
+      const failed = [];
 
-      const failures = results.filter(
-        (result) => result.status === "rejected"
-      );
+      for (const file of jsFiles) {
+        try {
+          const sourceResponse = await fetch(file.download_url, {
+            cache: "no-store"
+          });
 
-      if (failures.length) {
-        console.warn("Some tool modules failed to load:", failures);
+          if (!sourceResponse.ok) {
+            throw new Error(`Could not download ${file.name}.`);
+          }
+
+          const source = await sourceResponse.text();
+          const blob = new Blob([source], { type: "text/javascript" });
+          const moduleURL = URL.createObjectURL(blob);
+
+          try {
+            await import(moduleURL);
+            loaded++;
+          } finally {
+            URL.revokeObjectURL(moduleURL);
+          }
+        } catch (error) {
+          console.error(`Failed to load ${file.name}:`, error);
+          failed.push(file.name);
+        }
       }
 
       renderTools();
 
-      if (status) {
-        status.textContent = state.tools.size
-          ? `${state.tools.size} tools loaded`
-          : "No tools registered yet";
+      if (loaded === 0) {
+        setLoadingStatus(
+          failed.length
+            ? `No tools loaded. Check these files: ${failed.join(", ")}`
+            : "No tools registered. Check that each file calls window.WazirAura.registerTool(...)."
+        );
+      } else if (failed.length) {
+        setLoadingStatus(
+          `${loaded} tool(s) loaded. Could not load: ${failed.join(", ")}`
+        );
+      } else {
+        setLoadingStatus(`${loaded} tool(s) ready.`);
       }
     } catch (error) {
-      console.error("Automatic tool discovery failed:", error);
-
-      if (status) {
-        status.textContent =
-          "Tools could not load. Open this website through GitHub Pages or a local web server.";
-      }
-
-      notify("Could not load tool files. Check the repository and connection.", "error");
+      console.error("Tool discovery error:", error);
+      setLoadingStatus(
+        `Could not load tools from GitHub. ${error.message} Check that the repository is public and the tools/ folder exists.`
+      );
+      renderTools();
     }
   }
 
-  function bindEvents() {
-    $("#tool-search")?.addEventListener("input", (event) => {
-      setSearch(event.target.value);
+  function setupTheme() {
+    const toggle = $("#theme-toggle");
+
+    try {
+      if (localStorage.getItem("wazir-aura-theme") === "light") {
+        document.body.classList.add("light-mode");
+      }
+    } catch (_) {}
+
+    toggle?.addEventListener("click", () => {
+      document.body.classList.toggle("light-mode");
+
+      try {
+        localStorage.setItem(
+          "wazir-aura-theme",
+          document.body.classList.contains("light-mode") ? "light" : "dark"
+        );
+      } catch (_) {}
+    });
+  }
+
+  function setupMobileMenu() {
+    const toggle = $("#mobile-menu-toggle");
+    const nav = $("#mobile-nav");
+
+    toggle?.addEventListener("click", () => {
+      const isOpen = nav?.classList.toggle("open") || false;
+      toggle.setAttribute("aria-expanded", String(isOpen));
     });
 
-    $("#category-tabs")?.addEventListener("click", (event) => {
-      const tab = event.target.closest("[data-category]");
-      if (tab) setCategory(tab.dataset.category);
+    $$("#mobile-nav a").forEach(link => {
+      link.addEventListener("click", () => {
+        nav?.classList.remove("open");
+        toggle?.setAttribute("aria-expanded", "false");
+      });
     });
+  }
 
-    $("#tools-grid")?.addEventListener("click", (event) => {
-      const trigger = event.target.closest("[data-wa-open]");
-      if (trigger) openWorkspace(trigger.dataset.waOpen);
-    });
+  function setupContactForm() {
+    const form = $("#contact-form");
+    if (!form) return;
 
-    $("#close-workspace")?.addEventListener("click", closeWorkspace);
-
-    $("#workspace-content")?.addEventListener("submit", async (event) => {
-      const form = event.target.closest("[data-wa-tool-form]");
-      if (!form) return;
-
+    form.addEventListener("submit", event => {
       event.preventDefault();
 
-      const id = form.dataset.waToolForm;
-      const formData = new FormData(form);
-      const values = {};
+      const data = new FormData(form);
+      const name = String(data.get("name") || "").trim();
+      const email = String(data.get("email") || "").trim();
+      const message = String(data.get("message") || "").trim();
 
-      for (const [key, value] of formData.entries()) {
-        if (value instanceof File) {
-          values[key] = value;
-        } else {
-          values[key] = String(value).slice(0, CONFIG.maxTextLength);
-        }
+      if (!name || !email || !message) {
+        showToast("Please complete all fields.");
+        return;
       }
 
-      await runTool(id, values, { submitter: event.submitter });
+      const subject = encodeURIComponent(`Website inquiry from ${name}`);
+      const body = encodeURIComponent(
+        `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+      );
+
+      showToast("Opening your email app...");
+      window.location.href =
+        `mailto:wazirlab@proton.me?subject=${subject}&body=${body}`;
+    });
+  }
+
+  function setupWorkspace() {
+    $("#tools-grid")?.addEventListener("click", event => {
+      const card = event.target.closest("[data-open-tool]");
+      if (card) openTool(card.dataset.openTool);
     });
 
-    $("#theme-toggle")?.addEventListener("click", () => {
-      const light = document.body.classList.toggle("light-mode");
-      try {
-        localStorage.setItem("wa-theme", light ? "light" : "dark");
-      } catch {}
+    $("#close-workspace")?.addEventListener("click", () => {
+      $("#workspace")?.classList.add("is-hidden");
+      activeTool = null;
     });
 
-    $("#mobile-menu-toggle")?.addEventListener("click", () => {
-      const nav = $("#mobile-nav");
-      if (!nav) return;
+    $("#workspace-content")?.addEventListener("submit", event => {
+      const form = event.target.closest("form");
+      if (!form || !activeTool) return;
 
-      const open = nav.classList.toggle("is-open");
-      $("#mobile-menu-toggle")?.setAttribute("aria-expanded", String(open));
+      event.preventDefault();
+      runActiveTool(form);
     });
 
     $("#copy-result")?.addEventListener("click", async () => {
       const result = $("#workspace-result");
-      const text = result?.value ?? result?.textContent ?? "";
+      const text = result?.textContent?.trim();
 
       if (!text) {
-        notify("There is no output to copy.", "warning");
+        showToast("There is no result to copy yet.");
         return;
       }
 
       try {
         await navigator.clipboard.writeText(text);
-        notify("Copied to clipboard.");
-      } catch {
-        notify("Clipboard access is unavailable in this browser.", "error");
+        showToast("Result copied.");
+      } catch (_) {
+        const area = document.createElement("textarea");
+        area.value = text;
+        document.body.appendChild(area);
+        area.select();
+
+        const copied = document.execCommand("copy");
+        area.remove();
+
+        showToast(copied ? "Result copied." : "Could not copy the result.");
       }
     });
 
     $("#download-result")?.addEventListener("click", () => {
-      const result = $("#workspace-result");
-      const text = result?.value ?? result?.textContent ?? "";
+      const text = $("#workspace-result")?.textContent?.trim();
 
       if (!text) {
-        notify("There is no output to download.", "warning");
+        showToast("There is no result to download yet.");
         return;
       }
 
-      const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement("a");
+      const blobURL = URL.createObjectURL(
+        new Blob([text], { type: "text/plain;charset=utf-8" })
+      );
 
-      anchor.href = url;
-      anchor.download = "wazir-aura-output.txt";
-      anchor.click();
-
-      URL.revokeObjectURL(url);
+      const link = document.createElement("a");
+      link.href = blobURL;
+      link.download = `${(activeTool?.id || "wazir-aura")}-result.txt`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(blobURL);
     });
-
-    $("#current-year")?.replaceChildren(
-      document.createTextNode(String(new Date().getFullYear()))
-    );
-
-    try {
-      if (localStorage.getItem("wa-theme") === "light") {
-        document.body.classList.add("light-mode");
-      }
-    } catch {}
   }
 
-  window.WazirAura = Object.freeze({
-    registerTool,
-    getTools,
-    getTool,
-    openWorkspace,
-    closeWorkspace,
-    runTool,
-    setOutput,
-    notify,
-    escapeHTML,
-    field,
-    button,
-    getUsage,
-    getUsageLimit,
-    setPremium,
-    config: Object.freeze({ ...CONFIG }),
-  });
+  function setupToolFilters() {
+    $("#tool-search")?.addEventListener("input", renderTools);
 
-  function start() {
-    bindEvents();
+    $("#category-tabs")?.addEventListener("click", event => {
+      const tab = event.target.closest("[data-category]");
+      if (!tab) return;
+
+      activeCategory = tab.dataset.category || "All";
+
+      $$("#category-tabs [data-category]").forEach(button => {
+        const active = button === tab;
+        button.classList.toggle("active", active);
+        button.setAttribute("aria-pressed", String(active));
+      });
+
+      renderTools();
+    });
+  }
+
+  function init() {
+    const year = $("#current-year");
+    if (year) year.textContent = String(new Date().getFullYear());
+
+    setupTheme();
+    setupMobileMenu();
+    setupContactForm();
+    setupWorkspace();
+    setupToolFilters();
     renderTools();
-    discoverAndLoadTools();
+    loadTools();
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", start, { once: true });
-  } else {
-    start();
-  }
+  init();
 })();
