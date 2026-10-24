@@ -1,727 +1,982 @@
-
 "use strict";
 
-/* WAZIR AURA — standalone browser edition.
-   Real AI, authentication, payments and secure quotas require a backend. */
+/* WAZIR AURA — FRONTEND WORKSPACE */
 
-const $ = (selector) => document.querySelector(selector);
-const $$ = (selector) => [...document.querySelectorAll(selector)];
+const $ = (selector, root = document) => root.querySelector(selector);
+const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 
-const STORAGE = {
-  notes: "wazirAura.notes.v1",
-  projects: "wazirAura.projects.v1",
-  theme: "wazirAura.theme.v1"
+const KEYS = {
+  projects: "wa_projects_v2",
+  notes: "wa_notes_v2",
+  theme: "wa_theme_v2",
+  analytics: "wa_analytics_v2",
+  code: "wa_code_v2"
 };
 
-const tools = [
-  { id: 1, name: "General AI Chat", category: "AI & Chat", icon: "✧", description: "Explore questions, ideas and general topics.", type: "ai" },
-  { id: 2, name: "Study Assistant", category: "AI & Chat", icon: "▤", description: "Organize study topics and learning questions.", type: "ai" },
-  { id: 3, name: "Text Writer", category: "AI & Chat", icon: "✎", description: "Prepare drafts for articles, emails and posts.", type: "ai" },
-  { id: 4, name: "Summarizer", category: "AI & Chat", icon: "≡", description: "Prepare concise summaries from supplied text.", type: "ai" },
-  { id: 5, name: "Translator", category: "AI & Chat", icon: "文", description: "Submit text for translation workflows.", type: "ai" },
-  { id: 6, name: "Prompt Generator", category: "AI & Chat", icon: "✦", description: "Develop a clearer prompt for a creative task.", type: "ai" },
-  { id: 7, name: "Research Assistant", category: "AI & Chat", icon: "⌕", description: "Organize research questions and source notes.", type: "ai" },
-  { id: 8, name: "Quiz & Flashcards", category: "AI & Chat", icon: "▣", description: "Plan quiz questions and flashcard content.", type: "ai" },
-
-  { id: 9, name: "Image Generator", category: "Image & Design", icon: "▧", description: "Prepare an image-generation brief.", type: "ai" },
-  { id: 10, name: "Image Editor", category: "Image & Design", icon: "◩", description: "Describe edits you want to make to an image.", type: "ai" },
-  { id: 11, name: "Background Removal", category: "Image & Design", icon: "◌", description: "Prepare a background-removal workflow.", type: "ai" },
-  { id: 12, name: "Image Upscaler", category: "Image & Design", icon: "⤢", description: "Plan image enhancement requirements.", type: "ai" },
-  { id: 13, name: "Image Variations", category: "Image & Design", icon: "▦", description: "Describe alternate visual concepts.", type: "ai" },
-  { id: 14, name: "Logo Studio", category: "Image & Design", icon: "◈", description: "Develop a logo brief and brand direction.", type: "ai" },
-  { id: 15, name: "Banner Designer", category: "Image & Design", icon: "▰", description: "Plan social and promotional banner designs.", type: "ai" },
-  { id: 16, name: "Thumbnail Designer", category: "Image & Design", icon: "▣", description: "Prepare a thumbnail concept and layout.", type: "ai" },
-  { id: 17, name: "Color Palette Studio", category: "Image & Design", icon: "◉", description: "Create and copy a useful color palette.", type: "palette" },
-  { id: 18, name: "Image-to-Prompt Assistant", category: "Image & Design", icon: "◎", description: "Write a visual description for prompt development.", type: "ai" },
-
-  { id: 19, name: "Short Video Generator", category: "Video & Audio", icon: "▶", description: "Prepare a short-video production brief.", type: "ai" },
-  { id: 20, name: "Storyboard Creator", category: "Video & Audio", icon: "▤", description: "Outline scenes and camera directions.", type: "ai" },
-  { id: 21, name: "Video Caption Generator", category: "Video & Audio", icon: "T", description: "Prepare captions from supplied content.", type: "ai" },
-  { id: 22, name: "Video Editing Assistant", category: "Video & Audio", icon: "✂", description: "Plan editing steps and visual transitions.", type: "ai" },
-  { id: 23, name: "Text-to-Speech", category: "Video & Audio", icon: "♫", description: "Prepare a text-to-speech request.", type: "ai" },
-  { id: 24, name: "Speech-to-Text", category: "Video & Audio", icon: "♬", description: "Prepare an audio transcription workflow.", type: "ai" },
-  { id: 25, name: "Voiceover Studio", category: "Video & Audio", icon: "◖", description: "Prepare voiceover scripts and delivery notes.", type: "ai" },
-  { id: 26, name: "Music & Soundtrack Studio", category: "Video & Audio", icon: "♫", description: "Plan music mood, tempo and sound effects.", type: "ai" },
-
-  { id: 27, name: "Website Builder", category: "Web & Code", icon: "⌘", description: "Draft a website brief and build a live preview in Code Lab.", type: "website" },
-  { id: 28, name: "Frontend Code Generator", category: "Web & Code", icon: "</>", description: "Prepare a frontend code specification.", type: "ai" },
-  { id: 29, name: "Code Explainer", category: "Web & Code", icon: "{ }", description: "Review code and prepare explanation questions.", type: "ai" },
-  { id: 30, name: "Debugging Assistant", category: "Web & Code", icon: "⌁", description: "Organize error messages and debugging context.", type: "ai" },
-  { id: 31, name: "HTML/CSS/JS Playground", category: "Web & Code", icon: "▣", description: "Write code and run a sandboxed preview.", type: "codelab" },
-  { id: 32, name: "JSON Formatter & Validator", category: "Web & Code", icon: "{ }", description: "Format, validate and copy JSON locally.", type: "json" },
-  { id: 33, name: "API Request Builder", category: "Web & Code", icon: "⇄", description: "Draft an API request. No request is sent automatically.", type: "api" },
-  { id: 34, name: "Code-to-Project Workspace", category: "Web & Code", icon: "▧", description: "Save code notes and project specifications.", type: "project" },
-
-  { id: 35, name: "2D Game Builder", category: "Game Development", icon: "▣", description: "Plan a playable game prototype and mechanics.", type: "ai" },
-  { id: 36, name: "Game Character Designer", category: "Game Development", icon: "♙", description: "Develop character concepts and abilities.", type: "ai" },
-  { id: 37, name: "Game Level Designer", category: "Game Development", icon: "⌖", description: "Plan levels, objectives and difficulty.", type: "ai" },
-  { id: 38, name: "Game Audio Planner", category: "Game Development", icon: "♫", description: "Plan game music, ambience and sound effects.", type: "ai" },
-
-  { id: 39, name: "Notepad & Long-Form Editor", category: "Productivity", icon: "▤", description: "Write, save and download notes locally.", type: "notepad" },
-  { id: 40, name: "Business Content & Ad Copy", category: "Productivity", icon: "◈", description: "Prepare a brief for marketing and advertising copy.", type: "ai" }
-];
-
-const state = {
-  currentPage: "home",
-  currentTool: tools[0],
-  output: "",
-  editorTab: "html",
-  code: {
-    html: '<main class="welcome"><h1>Hello, Wazir Aura!</h1><p>Your first web preview is running.</p><button id="hello">Click me</button><p id="message"></p></main>',
-    css: 'body { font-family: Arial, sans-serif; background: #f4f1ff; color: #211b3a; padding: 30px; }\n.welcome { max-width: 600px; margin: 35px auto; padding: 28px; background: white; border-radius: 18px; box-shadow: 0 8px 30px #29204b18; }\nbutton { padding: 10px 15px; border: 0; border-radius: 8px; background: #7961dc; color: white; cursor: pointer; }',
-    js: 'document.getElementById("hello").addEventListener("click", () => {\n  document.getElementById("message").textContent = "Your preview works!";\n});'
-  }
-};
-
-let toastTimer;
-let lastFocusedElement = null;
-
-function showToast(message) {
-  const toast = $("#toast");
-  toast.textContent = message;
-  toast.classList.add("visible");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove("visible"), 3000);
-}
-
-function readStorage(key, fallback) {
+const read = (key, fallback) => {
   try {
     const value = localStorage.getItem(key);
-    return value === null ? fallback : JSON.parse(value);
+    return value ? JSON.parse(value) : fallback;
   } catch {
     return fallback;
   }
-}
+};
 
-function writeStorage(key, value) {
+const write = (key, value) => {
   try {
     localStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch {
-    showToast("Browser storage unavailable. Please check your browser settings.");
+    toast("Browser storage full ya unavailable hai.");
     return false;
+  }
+};
+
+const uid = () =>
+  window.crypto?.randomUUID?.() ||
+  `${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+
+const escapeHTML = value =>
+  String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+
+const tools = [
+  ["ai-chat", "AI Chat", "Prepare ideas, prompts and content briefs.", "✧", "creative", "AI"],
+  ["logo-studio", "Logo Studio", "Plan a memorable brand identity.", "◈", "creative", "Design"],
+  ["website-builder", "Website Builder", "Create a detailed website project brief.", "⌘", "development", "Web"],
+  ["game-builder", "2D Game Builder", "Plan a playable 2D game concept.", "♧", "development", "Games"],
+  ["image-prompt", "Image Prompt Studio", "Write detailed prompts for image generators.", "▧", "creative", "Design"],
+  ["story-writer", "Story Writer", "Organize characters, plots and story ideas.", "✎", "creative", "Writing"],
+  ["caption-maker", "Caption Maker", "Prepare social media captions.", "＠", "creative", "Social"],
+  ["bio-maker", "Bio Generator", "Draft a personal or professional bio.", "◉", "creative", "Writing"],
+  ["name-generator", "Name Generator", "Brainstorm names for brands and projects.", "✦", "creative", "Ideas"],
+  ["color-palette", "Color Palette", "Generate a random color palette.", "◉", "creative", "Design"],
+  ["gradient-maker", "Gradient Maker", "Create CSS gradient backgrounds.", "◒", "creative", "Design"],
+  ["logo-brief", "Brand Brief", "Organize your branding requirements.", "◇", "creative", "Brand"],
+  ["slogan-maker", "Slogan Maker", "Develop slogan ideas for your brand.", "❝", "creative", "Writing"],
+  ["post-planner", "Post Planner", "Outline a social media content plan.", "▦", "productivity", "Social"],
+  ["hashtag-helper", "Hashtag Planner", "Organize relevant hashtags.", "#", "creative", "Social"],
+  ["email-drafter", "Email Drafter", "Draft a structured email.", "✉", "productivity", "Writing"],
+  ["resume-helper", "Resume Helper", "Organize your resume information.", "▤", "productivity", "Career"],
+  ["todo-planner", "Task Planner", "Break an idea into manageable tasks.", "☑", "productivity", "Planning"],
+  ["project-planner", "Project Planner", "Create a project outline and milestones.", "▦", "productivity", "Planning"],
+  ["meeting-notes", "Meeting Notes", "Structure agendas and meeting notes.", "▧", "productivity", "Notes"],
+  ["text-counter", "Text Counter", "Count words, characters and lines.", "≡", "data", "Utility"],
+  ["json-formatter", "JSON Formatter", "Format and validate JSON.", "{ }", "development", "Code"],
+  ["html-starter", "HTML Starter", "Create a basic HTML starter document.", "〈/〉", "development", "Code"],
+  ["css-starter", "CSS Starter", "Create a CSS starter template.", "▧", "development", "Code"],
+  ["js-starter", "JavaScript Starter", "Create a JavaScript starter.", "JS", "development", "Code"],
+  ["regex-helper", "Regex Notes", "Document a regular expression and its purpose.", ".*", "development", "Code"],
+  ["api-planner", "API Planner", "Draft an API endpoint specification.", "⇄", "development", "Development"],
+  ["sql-helper", "SQL Planner", "Draft a database query or schema idea.", "▤", "development", "Database"],
+  ["markdown-helper", "Markdown Helper", "Organize content using Markdown.", "M↓", "productivity", "Writing"],
+  ["data-table", "Data Organizer", "Structure information as a JSON table.", "▦", "data", "Data"],
+  ["budget-planner", "Budget Planner", "Draft a simple budget breakdown.", "$", "data", "Finance"],
+  ["study-planner", "Study Planner", "Build a study schedule outline.", "▣", "productivity", "Learning"],
+  ["idea-board", "Idea Board", "Turn rough thoughts into organized ideas.", "✧", "productivity", "Ideas"],
+  ["feedback-helper", "Feedback Form", "Draft questions for a feedback form.", "♡", "productivity", "Forms"],
+  ["faq-builder", "FAQ Builder", "Prepare a frequently asked questions outline.", "?", "productivity", "Writing"],
+  ["launch-planner", "Launch Planner", "Plan the steps for a product launch.", "↗", "productivity", "Planning"],
+  ["portfolio-planner", "Portfolio Planner", "Outline your portfolio sections.", "▣", "creative", "Portfolio"],
+  ["seo-brief", "SEO Brief", "Prepare a checklist for page SEO.", "◎", "development", "Web"],
+  ["privacy-checklist", "Privacy Checklist", "Draft a privacy and security checklist.", "⌑", "development", "Security"],
+  ["notepad-tool", "Quick Notepad", "Open your saved workspace notes.", "▤", "productivity", "Notes"]
+];
+
+let projects = read(KEYS.projects, []);
+let notes = read(KEYS.notes, { title: "", content: "" });
+let analytics = read(KEYS.analytics, null);
+
+if (!analytics || typeof analytics !== "object") {
+  analytics = {
+    pageViews: {},
+    toolViews: {},
+    projectViews: {},
+    likes: {},
+    ratings: {},
+    saves: 0,
+    comments: [],
+    events: [],
+    feedback: []
+  };
+}
+
+for (const key of [
+  "pageViews", "toolViews", "projectViews", "likes",
+  "ratings", "events", "comments", "feedback"
+]) {
+  if (!analytics[key]) analytics[key] =
+    ["events", "comments", "feedback"].includes(key) ? [] : {};
+}
+
+if (typeof analytics.saves !== "number") analytics.saves = 0;
+
+let currentPage = "overview";
+let currentTool = null;
+let currentOutput = "";
+let currentCodeTab = "html";
+let toastTimer;
+
+const defaultCode = {
+  html: '<main class="card">\n  <h1>Hello, Wazir Aura!</h1>\n  <p>Your creative universe starts here.</p>\n  <button onclick="this.textContent=\'It works! ✦\'">Click me</button>\n</main>',
+  css: 'body {\n  margin: 0;\n  min-height: 100vh;\n  display: grid;\n  place-items: center;\n  background: #101020;\n  color: white;\n  font-family: sans-serif;\n}\n.card {\n  padding: 30px;\n  border: 1px solid #a78bfa;\n  border-radius: 20px;\n  text-align: center;\n}\nbutton {\n  padding: 10px 16px;\n  border: 0;\n  border-radius: 8px;\n  cursor: pointer;\n}',
+  js: 'console.log("Wazir Aura Code Lab is ready!");'
+};
+
+let code = read(KEYS.code, { ...defaultCode });
+
+function saveAnalytics() {
+  write(KEYS.analytics, analytics);
+}
+
+function recordEvent(type, name, extra = {}) {
+  analytics.events.unshift({
+    id: uid(),
+    type,
+    name,
+    extra,
+    at: new Date().toISOString()
+  });
+
+  analytics.events = analytics.events.slice(0, 200);
+  saveAnalytics();
+  renderAnalytics();
+}
+
+function toast(message) {
+  const element = $("#toast");
+  if (!element) return;
+
+  element.textContent = message;
+  element.classList.add("show");
+
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    element.classList.remove("show");
+  }, 2600);
+}
+
+function formatDate(value) {
+  try {
+    return new Date(value).toLocaleString();
+  } catch {
+    return "";
   }
 }
 
-function escapeHTML(value) {
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
-  })[char]);
-}
+function showPage(page) {
+  const target = $(`#page-${page}`);
+  if (!target) return;
 
-function getProjects() {
-  const projects = readStorage(STORAGE.projects, []);
-  return Array.isArray(projects) ? projects : [];
-}
+  currentPage = page;
 
-function getPageFromHash() {
-  const hash = location.hash.replace("#", "") || "home";
-  const valid = ["home", "tools", "projects", "notepad", "codelab", "pricing", "about"];
-  return valid.includes(hash) ? hash : "home";
-}
+  $$(".page").forEach(element => {
+    element.classList.toggle("active", element.id === `page-${page}`);
+  });
 
-function navigate(page) {
-  const knownPages = ["home", "tools", "projects", "notepad", "codelab", "pricing", "about", "workspace"];
-  if (!knownPages.includes(page)) page = "home";
-
-  state.currentPage = page;
-  $$(".page").forEach(section => section.classList.remove("active-page"));
-  const pageElement = $(`#page-${page}`);
-  if (pageElement) pageElement.classList.add("active-page");
-
-  $$(".nav-link").forEach(link => {
-    link.classList.toggle("active", link.dataset.page === page);
+  $$(".nav-link[data-page]").forEach(button => {
+    button.classList.toggle("active", button.dataset.page === page);
   });
 
   const titles = {
-    home: "Overview", tools: "All tools", projects: "Projects",
-    notepad: "Notepad", codelab: "Code Lab", pricing: "Plans & pricing",
-    about: "About", workspace: state.currentTool?.name || "Workspace"
+    overview: "Overview",
+    tools: "AI Tools",
+    workspace: "Creative Workspace",
+    projects: "Projects",
+    analytics: "Analytics",
+    notepad: "Notepad",
+    codelab: "Code Lab",
+    pricing: "Pricing",
+    about: "About"
   };
-  $("#pageTitle").textContent = titles[page] || "Overview";
+
+  $("#pageTitle").textContent = titles[page] || "Workspace";
   $("#sidebar").classList.remove("open");
 
-  if (page === "projects") renderProjects();
+  if (page === "overview") renderOverview();
   if (page === "tools") renderTools();
+  if (page === "projects") renderProjects();
+  if (page === "analytics") renderAnalytics();
+
+  recordEvent("page", page);
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
-function routeTo(page) {
-  if (location.hash === `#${page}`) navigate(page);
-  else location.hash = page;
+function renderOverview() {
+  $("#overviewViews").textContent = Object.values(analytics.pageViews)
+    .reduce((sum, value) => sum + value, 0);
+
+  $("#overviewProjects").textContent = projects.length;
+  $("#overviewTools").textContent = Object.keys(analytics.toolViews).length;
+
+  $("#overviewLikes").textContent = Object.values(analytics.likes)
+    .reduce((sum, value) => sum + value, 0);
+
+  const activity = $("#recentActivity");
+  const events = analytics.events.slice(0, 5);
+
+  activity.innerHTML = events.length
+    ? events.map(event => `
+      <div class="activity-row">
+        <span class="activity-dot"></span>
+        <div>${escapeHTML(event.type)} — ${escapeHTML(event.name)}
+          <small>${escapeHTML(formatDate(event.at))}</small>
+        </div>
+      </div>
+    `).join("")
+    : '<p class="muted">Your recent activity will appear here.</p>';
 }
 
 function renderTools() {
-  const search = ($("#toolSearch").value || "").trim().toLowerCase();
-  const category = $("#categoryFilter").value;
+  const query = ($("#toolSearch")?.value || "").trim().toLowerCase();
+  const category = $("#toolCategory")?.value || "all";
 
   const filtered = tools.filter(tool => {
-    const matchesSearch = `${tool.name} ${tool.description} ${tool.category}`.toLowerCase().includes(search);
-    const matchesCategory = category === "all" || tool.category === category;
-    return matchesSearch && matchesCategory;
+    const matchesQuery = tool.slice(1, 3).join(" ").toLowerCase().includes(query);
+    return matchesQuery && (category === "all" || tool[4] === category);
   });
 
-  $("#resultsCount").textContent = `${filtered.length} of ${tools.length} tools`;
-  $("#noTools").classList.toggle("hidden", filtered.length > 0);
+  $("#toolsGrid").innerHTML = filtered.length
+    ? filtered.map(tool => {
+      const [id, name, description, icon, group, label] = tool;
+      const views = analytics.toolViews[id] || 0;
+      const liked = analytics.likes[id] ? "♥" : "♡";
 
-  $("#toolsGrid").innerHTML = filtered.map(tool => `
-    <article class="tool-card">
-      <span class="tool-icon ${iconClass(tool.category)}">${escapeHTML(tool.icon)}</span>
-      <h3>${escapeHTML(tool.name)}</h3>
-      <p>${escapeHTML(tool.description)}</p>
-      <div class="tool-card-bottom">
-        <span class="category-tag">${escapeHTML(tool.category)}</span>
-        <button class="open-tool" data-open-tool="${tool.id}" aria-label="Open ${escapeHTML(tool.name)}">Open ↗</button>
-      </div>
-    </article>
-  `).join("");
-}
-
-function iconClass(category) {
-  if (category === "Image & Design") return "pink";
-  if (category === "Video & Audio") return "cyan";
-  if (category === "Web & Code") return "purple";
-  if (category === "Game Development") return "orange";
-  if (category === "Productivity") return "cyan";
-  return "purple";
+      return `
+        <article class="tool-card panel">
+          <div class="tool-card-top">
+            <span class="tool-icon">${escapeHTML(icon)}</span>
+            <span class="eyebrow">${escapeHTML(label)}</span>
+          </div>
+          <h3>${escapeHTML(name)}</h3>
+          <p>${escapeHTML(description)}</p>
+          <div class="tool-meta">
+            <span>${escapeHTML(group)}</span>
+            <span>${views} views · ${liked} ${analytics.likes[id] || 0}</span>
+          </div>
+          <button class="btn secondary" data-tool="${escapeHTML(id)}">Open tool ↗</button>
+        </article>`;
+    }).join("")
+    : '<div class="empty-state">No tools match your search.</div>';
 }
 
 function openTool(id) {
-  const tool = tools.find(item => item.id === Number(id));
+  const tool = tools.find(item => item[0] === id);
   if (!tool) return;
 
-  state.currentTool = tool;
-  state.output = "";
-  $("#workspaceIcon").textContent = tool.icon;
-  $("#workspaceIcon").className = `tool-icon ${iconClass(tool.category)}`;
-  $("#workspaceCategory").textContent = tool.category.toUpperCase();
-  $("#workspaceTitle").textContent = tool.name;
-  $("#workspaceDescription").textContent = tool.description;
-  $("#promptLabel").textContent = promptLabel(tool);
+  currentTool = tool;
+  analytics.toolViews[id] = (analytics.toolViews[id] || 0) + 1;
+
+  $("#workspaceTitle").textContent = tool[1];
+  $("#workspaceDescription").textContent = tool[2];
   $("#workspacePrompt").value = "";
-  $("#outputFormat").value = "text";
-  $("#outputTitle").textContent = "Ready when you are";
-  $("#workspaceOutput").innerHTML = `
-    <div class="output-placeholder">
-      <span>✧</span><strong>Your workspace output appears here</strong>
-      <p>${escapeHTML(tool.description)} Connect a suitable backend for AI processing.</p>
-    </div>`;
-  $("#outputIndicator").style.background = "";
-  navigate("workspace");
-  $("#workspacePrompt").focus({ preventScroll: true });
+  $("#workspaceOutput").textContent = "Your result will appear here.";
+  currentOutput = "";
+
+  const rating = analytics.ratings[id] || 0;
+  $$("#workspaceRating button").forEach(button => {
+    button.classList.toggle("selected", Number(button.dataset.rating) <= rating);
+  });
+
+  $("#workspaceLike").textContent = analytics.likes[id] ? "♥ Liked" : "♡ Like";
+
+  recordEvent("tool", tool[1]);
+  saveAnalytics();
+  showPage("workspace");
 }
 
-function promptLabel(tool) {
-  if (tool.type === "json") return "Paste JSON to format and validate";
-  if (tool.type === "api") return "Describe the API request you want to prepare";
-  if (tool.type === "website") return "Describe the website you want to build";
-  if (tool.type === "codelab") return "Describe your coding task, or open Code Lab";
-  if (tool.type === "palette") return "Optional: describe a color mood or brand";
-  if (tool.type === "project") return "Describe the code project you want to organize";
-  return `Describe your ${tool.name.toLowerCase()} request`;
-}
+function processWorkspace() {
+  if (!currentTool) {
+    toast("Pehle koi tool open karo.");
+    return;
+  }
 
-function setOutput(text, title = "Output") {
-  state.output = String(text);
-  $("#outputTitle").textContent = title;
-  $("#workspaceOutput").innerHTML = "";
-  const pre = document.createElement("pre");
-  pre.className = "output-text";
-  pre.textContent = state.output;
-  $("#workspaceOutput").appendChild(pre);
-}
-
-function runWorkspace() {
-  const tool = state.currentTool;
   const prompt = $("#workspacePrompt").value.trim();
+  const format = $("#outputFormat").value;
 
-  if (!prompt && tool.type !== "palette") {
-    showToast("Pehle apna text ya request likho.");
+  if (!prompt) {
+    toast("Pehle apni idea ya content likho.");
     $("#workspacePrompt").focus();
     return;
   }
 
-  if (tool.type === "json") {
+  const id = currentTool[0];
+  let result;
+
+  if (id === "json-formatter") {
     try {
-      const parsed = JSON.parse(prompt);
-      const formatted = JSON.stringify(parsed, null, 2);
-      setOutput(formatted, "Valid JSON");
-      showToast("JSON valid hai aur format ho gaya.");
+      result = JSON.stringify(JSON.parse(prompt), null, 2);
     } catch (error) {
-      setOutput(`JSON validation failed:\n${error.message}`, "Invalid JSON");
-      showToast("JSON mein error hai. Output mein details dekho.");
+      result = `Invalid JSON: ${error.message}`;
     }
-    return;
+  } else if (id === "text-counter") {
+    result = JSON.stringify({
+      characters: prompt.length,
+      charactersWithoutSpaces: prompt.replace(/\s/g, "").length,
+      words: (prompt.match(/\S+/g) || []).length,
+      lines: prompt.split(/\r\n|\r|\n/).length
+    }, null, 2);
+  } else if (id === "color-palette") {
+    const colors = Array.from({ length: 5 }, () =>
+      "#" + Math.floor(Math.random() * 16777215)
+        .toString(16).padStart(6, "0")
+    );
+    result = JSON.stringify(colors, null, 2);
+  } else if (id === "gradient-maker") {
+    const first = "#" + Math.floor(Math.random() * 16777215)
+      .toString(16).padStart(6, "0");
+    const second = "#" + Math.floor(Math.random() * 16777215)
+      .toString(16).padStart(6, "0");
+    result = `background: linear-gradient(135deg, ${first}, ${second});`;
+  } else if (id === "html-starter") {
+    result = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Project</title>
+</head>
+<body>
+  <h1>${escapeHTML(prompt)}</h1>
+</body>
+</html>`;
+  } else if (id === "css-starter") {
+    result = `/* Project styles */\n:root {\n  --accent: #a78bfa;\n}\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n}\n\n/* Requirements:\n${prompt.replace(/\*\//g, "* /")}\n*/`;
+  } else if (id === "js-starter") {
+    result = `// Project: ${prompt.replace(/\n/g, " ")}\n"use strict";\n\nfunction init() {\n  console.log("Project initialized");\n}\n\ninit();`;
+  } else if (id === "markdown-helper") {
+    result = `# ${prompt.split("\n")[0]}\n\n${prompt.split("\n").slice(1).join("\n") || "## Notes\n\nAdd your content here."}`;
+  } else if (id === "api-planner") {
+    result = JSON.stringify({
+      project: prompt,
+      endpoints: [{
+        method: "GET",
+        path: "/api/example",
+        description: "Replace with your endpoint purpose",
+        authentication: "Define before deployment"
+      }],
+      note: "Planning draft only; no API is created."
+    }, null, 2);
+  } else if (id === "data-table") {
+    result = JSON.stringify({
+      title: "Data draft",
+      items: prompt.split("\n").filter(Boolean).map((item, index) => ({
+        id: index + 1,
+        value: item
+      }))
+    }, null, 2);
+  } else if (id === "todo-planner" || id === "project-planner" || id === "study-planner" || id === "launch-planner") {
+    result = `# ${currentTool[1]}\n\nGoal: ${prompt}\n\n## Tasks\n- [ ] Define the objective\n- [ ] Break work into smaller tasks\n- [ ] Set priorities and deadlines\n- [ ] Review progress\n- [ ] Complete and evaluate`;
+  } else if (id === "notepad-tool") {
+    notes.content = prompt;
+    notes.title = "Quick note";
+    write(KEYS.notes, notes);
+    result = "Your note has been saved in this browser.\n\n" + prompt;
+  } else {
+    result = `${currentTool[1]} — Planning draft\n\nYour input:\n${prompt}\n\nNext steps:\n1. Define your requirements.\n2. Refine the concept and desired outcome.\n3. Choose the tools or services required.\n4. Test the result and improve it.\n\nNote: This frontend demo organizes your input. Connected AI generation requires a configured AI backend.`;
   }
 
-  if (tool.type === "palette") {
-    const palette = [
-      { name: "Aura Violet", hex: "#A18AFF" },
-      { name: "Electric Cyan", hex: "#67E6FF" },
-      { name: "Cosmic Blue", hex: "#536DFA" },
-      { name: "Nebula Pink", hex: "#E68CFF" },
-      { name: "Deep Space", hex: "#090817" }
-    ];
-    const result = palette.map(color => `${color.name}: ${color.hex}`).join("\n");
-    setOutput(`${prompt ? `Mood: ${prompt}\n\n` : ""}${result}`, "Wazir Aura color palette");
-    showToast("Palette ready. Copy kar sakte ho.");
-    return;
+  if (format === "json" && id !== "json-formatter") {
+    result = JSON.stringify({ tool: currentTool[1], input: prompt, result }, null, 2);
+  } else if (format === "markdown" && !String(result).startsWith("#")) {
+    result = `# ${currentTool[1]}\n\n${result}`;
+  } else if (format === "html" && id !== "html-starter") {
+    result = `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>${escapeHTML(currentTool[1])}</title></head>
+<body><main><h1>${escapeHTML(currentTool[1])}</h1><pre>${escapeHTML(result)}</pre></main></body></html>`;
   }
 
-  if (tool.type === "codelab") {
-    routeTo("codelab");
-    showToast("Code Lab open ho gaya.");
-    return;
-  }
-
-  if (tool.type === "notepad") {
-    routeTo("notepad");
-    showToast("Notepad open ho gaya.");
-    return;
-  }
-
-  if (tool.type === "project") {
-    createProjectFromPrompt(tool.name, prompt);
-    return;
-  }
-
-  if (tool.type === "website") {
-    const brief = [
-      "WEBSITE PROJECT BRIEF",
-      "",
-      `Project request: ${prompt}`,
-      "",
-      "Suggested next steps:",
-      "1. Define the target audience and main goal.",
-      "2. List the required pages and sections.",
-      "3. Choose the visual style, colors and typography.",
-      "4. Open Code Lab to write HTML, CSS and JavaScript.",
-      "5. Test the preview at desktop and mobile sizes.",
-      "",
-      "Note: This is a planning brief, not an AI-generated website."
-    ].join("\n");
-    setOutput(brief, "Website brief prepared");
-    showToast("Website brief tayar hai. Code Lab mein preview bana sakte ho.");
-    return;
-  }
-
-  if (tool.type === "api") {
-    const request = [
-      "API REQUEST DRAFT",
-      "",
-      "Request description:",
-      prompt,
-      "",
-      "Before sending a real request, configure:",
-      "- Exact API URL and HTTP method",
-      "- Authentication handled securely by an appropriate backend",
-      "- Required headers and request body",
-      "- Timeout, error handling and rate limits",
-      "",
-      "No network request was sent by this demo."
-    ].join("\n");
-    setOutput(request, "API draft prepared");
-    showToast("API request ka draft tayar hai; request send nahi hui.");
-    return;
-  }
-
-  setOutput(
-    [
-      `${tool.name} — Setup required`,
-      "",
-      "Tumhari request:",
-      prompt,
-      "",
-      "Is tool ko real AI result dene ke liye secure backend aur compatible AI provider configure karna hoga.",
-      "Abhi koi AI request send nahi hui aur koi generated result claim nahi kiya ja raha.",
-      "",
-      "Required setup:",
-      "1. Suitable provider aur model choose karo.",
-      "2. API key sirf server-side environment mein rakho.",
-      "3. Server endpoint, input validation aur error handling implement karo.",
-      "4. Usage limits aur permissions server par enforce karo.",
-      "5. Real provider response ke saath is interface ko connect aur test karo."
-    ].join("\n"),
-    "Provider connection required"
-  );
-  showToast("Is feature ke liye AI backend configure karna hoga.");
+  currentOutput = String(result);
+  $("#workspaceOutput").textContent = currentOutput;
+  recordEvent("process", currentTool[1]);
+  toast("Result tayyar hai.");
 }
 
-function createProjectFromPrompt(name, description) {
-  const title = name || "New project";
-  openProjectModal(title, description);
-}
-
-function renderProjects() {
-  const projects = getProjects();
-  $("#projectsEmpty").classList.toggle("hidden", projects.length > 0);
-
-  $("#projectsGrid").innerHTML = projects.map(project => `
-    <article class="project-card">
-      <span class="tool-icon purple">▧</span>
-      <h3>${escapeHTML(project.name)}</h3>
-      <p>${escapeHTML(project.description || "No description provided.")}</p>
-      <p class="project-date">${escapeHTML(project.updatedAt || "Saved locally")}</p>
-      <div class="project-card-actions">
-        <button class="secondary-button" data-open-project="${escapeHTML(project.id)}">Open</button>
-        <button class="secondary-button danger-button" data-delete-project="${escapeHTML(project.id)}">Delete</button>
-      </div>
-    </article>
-  `).join("");
-}
-
-function openProjectModal(prefillName = "", prefillDescription = "") {
-  lastFocusedElement = document.activeElement;
-  $("#projectName").value = prefillName;
-  $("#projectDescription").value = prefillDescription;
-  $("#modalBackdrop").classList.remove("hidden");
+function openModal() {
+  $("#projectModal").classList.add("open");
+  $("#projectModal").setAttribute("aria-hidden", "false");
   $("#projectName").focus();
 }
 
-function closeProjectModal() {
-  $("#modalBackdrop").classList.add("hidden");
-  if (lastFocusedElement && typeof lastFocusedElement.focus === "function") {
-    lastFocusedElement.focus();
-  }
+function closeModal() {
+  $("#projectModal").classList.remove("open");
+  $("#projectModal").setAttribute("aria-hidden", "true");
 }
 
 function createProject(name, description) {
-  const projects = getProjects();
   const project = {
-    id: `project-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+    id: uid(),
     name: name.trim(),
     description: description.trim(),
-    updatedAt: new Date().toLocaleString()
+    createdAt: new Date().toISOString(),
+    views: 0,
+    comments: []
   };
 
   projects.unshift(project);
-  if (!writeStorage(STORAGE.projects, projects)) return;
+  write(KEYS.projects, projects);
+  analytics.saves++;
+  recordEvent("save", project.name);
   renderProjects();
-  closeProjectModal();
-  showToast("Project is browser mein save ho gaya.");
+  renderOverview();
+  return project;
 }
 
-function deleteProject(id) {
-  const projects = getProjects().filter(project => project.id !== id);
-  if (!writeStorage(STORAGE.projects, projects)) return;
-  renderProjects();
-  showToast("Project delete ho gaya.");
+function renderProjects() {
+  $("#projectCount").textContent = `${projects.length} project${projects.length === 1 ? "" : "s"}`;
+
+  $("#projectsGrid").innerHTML = projects.length
+    ? projects.map(project => `
+      <article class="project-card panel">
+        <div class="tool-card-top">
+          <span class="tool-icon">▦</span>
+          <span class="eyebrow">${escapeHTML(new Date(project.createdAt).toLocaleDateString())}</span>
+        </div>
+        <h3>${escapeHTML(project.name)}</h3>
+        <p>${escapeHTML(project.description || "No description provided.")}</p>
+        <div class="tool-meta"><span>${project.views || 0} opens</span><span>${(project.comments || []).length} comments</span></div>
+        <div class="project-actions">
+          <button class="mini-button" data-project-open="${escapeHTML(project.id)}">Open</button>
+          <button class="mini-button" data-project-comment="${escapeHTML(project.id)}">Comment</button>
+          <button class="mini-button" data-project-delete="${escapeHTML(project.id)}">Delete</button>
+        </div>
+      </article>
+    `).join("")
+    : '<div class="empty-state">Abhi koi project nahi. “New project” par click karke shuru karo.</div>';
 }
 
-function openSavedProject(id) {
-  const project = getProjects().find(item => item.id === id);
-  if (!project) {
-    showToast("Project nahi mila.");
-    return;
-  }
+function openProject(id) {
+  const project = projects.find(item => item.id === id);
+  if (!project) return;
 
-  openTool(34);
-  $("#workspacePrompt").value =
-    `Project: ${project.name}\n\nDescription:\n${project.description || "(No description)"}\n\nUpdated: ${project.updatedAt}`;
-  showToast("Project details workspace mein khul gayi hain.");
+  project.views = (project.views || 0) + 1;
+  analytics.projectViews[id] = (analytics.projectViews[id] || 0) + 1;
+  write(KEYS.projects, projects);
+  recordEvent("project", project.name);
+
+  currentOutput = project.description || "";
+  currentTool = null;
+  $("#workspaceTitle").textContent = project.name;
+  $("#workspaceDescription").textContent = "Saved project";
+  $("#workspacePrompt").value = project.description || "";
+  $("#workspaceOutput").textContent = project.description || "This project has no saved content.";
+  showPage("workspace");
 }
 
 function saveOutputAsProject() {
-  if (!state.output.trim()) {
-    showToast("Save karne ke liye pehle output tayar karo.");
-    return;
-  }
-  openProjectModal(`${state.currentTool.name} output`, state.output);
-}
-
-function downloadText(filename, text, mime = "text/plain;charset=utf-8") {
-  const blob = new Blob([text], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement("a");
-  link.href = url;
-  link.download = filename;
-  document.body.appendChild(link);
-  link.click();
-  link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 1000);
-}
-
-async function copyText(text) {
-  if (!text) {
-    showToast("Copy karne ke liye koi text nahi hai.");
+  if (!currentOutput.trim()) {
+    toast("Save karne se pehle output tayyar karo.");
     return;
   }
 
-  try {
-    await navigator.clipboard.writeText(text);
-    showToast("Text copy ho gaya.");
-  } catch {
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
-    document.body.appendChild(textarea);
-    textarea.select();
+  const name = currentTool ? currentTool[1] : "Saved output";
+  createProject(`${name} — ${new Date().toLocaleDateString()}`, currentOutput);
+  toast("Output project mein save ho gaya.");
+}
 
-    let copied = false;
-    try { copied = document.execCommand("copy"); } catch {}
-    textarea.remove();
-    showToast(copied ? "Text copy ho gaya." : "Copy nahi hua. Text select karke manually copy karo.");
+function saveNote() {
+  notes = {
+    title: $("#noteTitle").value,
+    content: $("#noteContent").value,
+    updatedAt: new Date().toISOString()
+  };
+
+  if (write(KEYS.notes, notes)) {
+    $("#noteStatus").textContent = `Saved at ${new Date().toLocaleTimeString()}`;
+    recordEvent("note", notes.title || "Untitled note");
+    toast("Note save ho gaya.");
   }
 }
 
-function loadNotes() {
-  const notes = readStorage(STORAGE.notes, {});
-  $("#noteTitle").value = typeof notes.title === "string" ? notes.title : "";
-  $("#noteBody").value = typeof notes.body === "string" ? notes.body : "";
-  updateWordCount();
+function loadNote() {
+  $("#noteTitle").value = notes.title || "";
+  $("#noteContent").value = notes.content || "";
 }
 
-let noteSaveTimer;
-function saveNotes() {
-  $("#noteStatus").textContent = "Saving...";
-  clearTimeout(noteSaveTimer);
+function renderAnalytics() {
+  const total = object => Object.values(object).reduce((sum, value) => sum + Number(value || 0), 0);
+  const toolOpens = total(analytics.toolViews);
+  const likes = total(analytics.likes);
+  const ratings = Object.values(analytics.ratings);
+  const comments = analytics.comments.length + analytics.feedback.length +
+    projects.reduce((sum, project) => sum + (project.comments || []).length, 0);
 
-  noteSaveTimer = setTimeout(() => {
-    const saved = writeStorage(STORAGE.notes, {
-      title: $("#noteTitle").value,
-      body: $("#noteBody").value,
-      updatedAt: new Date().toISOString()
-    });
-    $("#noteStatus").textContent = saved ? "All changes saved locally" : "Save failed";
-    updateWordCount();
-  }, 200);
+  $("#statViews").textContent = total(analytics.pageViews);
+  $("#statToolOpens").textContent = toolOpens;
+  $("#statSaves").textContent = analytics.saves;
+  $("#statLikes").textContent = likes;
+  $("#statRatings").textContent = ratings.length;
+  $("#statComments").textContent = comments;
+
+  const maxViews = Math.max(1, ...tools.map(tool => analytics.toolViews[tool[0]] || 0));
+
+  $("#toolAnalytics").innerHTML = tools
+    .filter(tool => analytics.toolViews[tool[0]] || analytics.likes[tool[0]] || analytics.ratings[tool[0]])
+    .sort((a, b) => (analytics.toolViews[b[0]] || 0) - (analytics.toolViews[a[0]] || 0))
+    .map(tool => {
+      const id = tool[0];
+      const views = analytics.toolViews[id] || 0;
+      const rating = analytics.ratings[id] || 0;
+      const likeCount = analytics.likes[id] || 0;
+
+      return `
+        <div class="analytics-row">
+          <div>${escapeHTML(tool[1])}
+            <div class="bar-track"><div class="bar-fill" style="width:${Math.min(100, views / maxViews * 100)}%"></div></div>
+            <small>Rating: ${rating ? `${rating}/5` : "Not rated"} · Likes: ${likeCount}</small>
+          </div>
+          <div class="analytics-numbers">${views} views</div>
+        </div>`;
+    }).join("") || '<p class="muted">Tools open karne ke baad statistics yahan dikhengi.</p>';
+
+  $("#analyticsEvents").innerHTML = analytics.events.slice(0, 15).map(event => `
+    <div class="analytics-row">
+      <div>${escapeHTML(event.type)} — ${escapeHTML(event.name)}<small>${escapeHTML(formatDate(event.at))}</small></div>
+    </div>
+  `).join("") || '<p class="muted">Abhi koi event record nahi hua.</p>';
+
+  $("#feedbackList").innerHTML = analytics.feedback.slice(0, 5).map(item => `
+    <div class="feedback-item">${escapeHTML(item.text)}<br><small>${escapeHTML(formatDate(item.at))}</small></div>
+  `).join("");
 }
 
-function updateWordCount() {
-  const text = $("#noteBody").value.trim();
-  const words = text ? text.split(/\s+/).length : 0;
-  $("#noteWordCount").textContent = `${words} word${words === 1 ? "" : "s"}`;
-}
-
-function clearNote() {
-  if (!$("#noteTitle").value && !$("#noteBody").value) {
-    showToast("Note pehle se khali hai.");
+function toggleLike() {
+  if (!currentTool) {
+    toast("Like karne ke liye pehle tool open karo.");
     return;
   }
-  if (!confirm("Kya tum waqai current note clear karna chahte ho?")) return;
-  $("#noteTitle").value = "";
-  $("#noteBody").value = "";
-  saveNotes();
-  showToast("Note clear ho gaya.");
+
+  const id = currentTool[0];
+  analytics.likes[id] = analytics.likes[id] ? 0 : 1;
+  saveAnalytics();
+
+  $("#workspaceLike").textContent = analytics.likes[id] ? "♥ Liked" : "♡ Like";
+  recordEvent("like", currentTool[1]);
+  renderOverview();
 }
 
-function downloadNote() {
-  const title = $("#noteTitle").value.trim() || "Wazir Aura Note";
-  const body = `${title}\n${"=".repeat(Math.min(title.length, 70))}\n\n${$("#noteBody").value}`;
-  downloadText("wazir-aura-note.txt", body);
+function setRating(value) {
+  if (!currentTool) {
+    toast("Rating dene ke liye pehle tool open karo.");
+    return;
+  }
+
+  analytics.ratings[currentTool[0]] = Number(value);
+  saveAnalytics();
+
+  $$("#workspaceRating button").forEach(button => {
+    button.classList.toggle("selected", Number(button.dataset.rating) <= value);
+  });
+
+  recordEvent("rating", `${currentTool[1]} (${value}/5)`);
+  toast(`Rating ${value}/5 save ho gayi.`);
 }
 
-function switchEditor(tab) {
-  if (!Object.hasOwn(state.code, tab)) return;
-  state.editorTab = tab;
-  $$(".editor-tab").forEach(button => button.classList.toggle("active", button.dataset.editor === tab));
-  $("#codeEditor").value = state.code[tab];
+function renderCodeEditor() {
+  $("#codeEditor").value = code[currentCodeTab] || "";
+  $$(".code-tabs button").forEach(button => {
+    button.classList.toggle("active", button.dataset.codeTab === currentCodeTab);
+  });
 }
 
-function saveCurrentEditor() {
-  state.code[state.editorTab] = $("#codeEditor").value;
+function saveCode() {
+  code[currentCodeTab] = $("#codeEditor").value;
+  write(KEYS.code, code);
 }
 
-function runCodePreview() {
-  saveCurrentEditor();
+function runCode() {
+  saveCode();
 
-  const html = state.code.html;
-  const css = state.code.css;
-  const js = state.code.js;
+  const html = code.html || "";
+  const css = code.css || "";
+  const js = code.js || "";
 
-  // The sandboxed iframe has scripts enabled but does not receive same-origin access.
-  // The generated source is intentionally executed only inside this isolated preview.
-  const srcdoc = `<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<style>${css.replace(/<\/style/gi, "<\\/style")}</style>
-</head>
-<body>
-${html.replace(/<\/body/gi, "<\\/body")}
+  // The iframe has allow-scripts only, not allow-same-origin.
+  // Never place trusted secrets in user-authored preview code.
+  const documentContent = `<!doctype html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>${css.replace(/<\/style/gi, "<\\/style")}</style></head>
+<body>${html.replace(/<\/script/gi, "<\\/script")}
 <script>
 try {
 ${js.replace(/<\/script/gi, "<\\/script")}
 } catch (error) {
-  const message = document.createElement("pre");
-  message.textContent = "JavaScript error: " + error.message;
-  document.body.appendChild(message);
+  document.body.insertAdjacentHTML("beforeend",
+    '<pre style="color:red;white-space:pre-wrap"></pre>');
+  document.body.querySelector('pre').textContent = error.message;
 }
 <\/script>
-</body>
-</html>`;
+</body></html>`;
 
-  $("#codePreview").srcdoc = srcdoc;
-  showToast("Preview update ho gaya.");
+  $("#codePreview").srcdoc = documentContent;
+  recordEvent("code", "Run Code Lab");
+  toast("Preview update ho gaya.");
 }
 
-function resetCode() {
-  if (!confirm("Code Lab ko default example par reset karna hai?")) return;
+function downloadFile(filename, content, type = "text/plain;charset=utf-8") {
+  const blob = new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
 
-  state.code.html = '<main class="welcome"><h1>Hello, Wazir Aura!</h1><p>Your first web preview is running.</p><button id="hello">Click me</button><p id="message"></p></main>';
-  state.code.css = 'body { font-family: Arial, sans-serif; background: #f4f1ff; color: #211b3a; padding: 30px; }\n.welcome { max-width: 600px; margin: 35px auto; padding: 28px; background: white; border-radius: 18px; box-shadow: 0 8px 30px #29204b18; }\nbutton { padding: 10px 15px; border: 0; border-radius: 8px; background: #7961dc; color: white; cursor: pointer; }';
-  state.code.js = 'document.getElementById("hello").addEventListener("click", () => {\n  document.getElementById("message").textContent = "Your preview works!";\n});';
+  anchor.href = url;
+  anchor.download = filename;
+  document.body.appendChild(anchor);
+  anchor.click();
+  anchor.remove();
 
-  switchEditor(state.editorTab);
-  runCodePreview();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
-function downloadEditorFile() {
-  saveCurrentEditor();
-  const filenames = { html: "index.html", css: "style.css", js: "script.js" };
-  const mime = { html: "text/html;charset=utf-8", css: "text/css;charset=utf-8", js: "text/javascript;charset=utf-8" };
-  downloadText(filenames[state.editorTab], state.code[state.editorTab], mime[state.editorTab]);
+function downloadCode() {
+  saveCode();
+  const combined = `<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<style>${code.css || ""}</style></head><body>${code.html || ""}
+<script>${(code.js || "").replace(/<\/script/gi, "<\\/script")}<\/script></body></html>`;
+
+  downloadFile("wazir-aura-project.html", combined, "text/html;charset=utf-8");
 }
 
-function initTheme() {
-  const theme = readStorage(STORAGE.theme, "dark");
-  document.body.classList.toggle("light-mode", theme === "light");
-  $("#themeToggle").innerHTML = theme === "light" ? "☾ <span>Switch to dark</span>" : "☼ <span>Switch appearance</span>";
+function resetAnalytics() {
+  if (!confirm("Kya tum is browser ki tamam local analytics delete karna chahte ho?")) return;
+
+  analytics = {
+    pageViews: {},
+    toolViews: {},
+    projectViews: {},
+    likes: {},
+    ratings: {},
+    saves: 0,
+    comments: [],
+    events: [],
+    feedback: []
+  };
+
+  saveAnalytics();
+  renderAnalytics();
+  renderOverview();
+  renderTools();
+  toast("Local analytics reset ho gayi.");
 }
 
-function toggleTheme() {
-  const isLight = document.body.classList.toggle("light-mode");
-  writeStorage(STORAGE.theme, isLight ? "light" : "dark");
-  $("#themeToggle").innerHTML = isLight ? "☾ <span>Switch to dark</span>" : "☼ <span>Switch appearance</span>";
+function initSpace() {
+  const canvas = $("#spaceCanvas");
+  const ctx = canvas.getContext("2d");
+  if (!ctx) return;
+
+  let width = 0;
+  let height = 0;
+  let stars = [];
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    width = window.innerWidth;
+    height = window.innerHeight;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    stars = Array.from({ length: Math.min(150, Math.floor(width / 8)) }, () => ({
+      x: Math.random() * width,
+      y: Math.random() * height,
+      radius: Math.random() * 1.3 + 0.2,
+      speed: Math.random() * 0.24 + 0.04,
+      phase: Math.random() * Math.PI * 2
+    }));
+  }
+
+  function draw(time) {
+    ctx.clearRect(0, 0, width, height);
+
+    for (const star of stars) {
+      const alpha = 0.3 + (Math.sin(time * 0.001 + star.phase) + 1) * 0.32;
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(205,198,255,${alpha})`;
+      ctx.fill();
+
+      star.y += star.speed;
+      if (star.y > height) {
+        star.y = 0;
+        star.x = Math.random() * width;
+      }
+    }
+
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener("resize", resize);
+  requestAnimationFrame(draw);
 }
 
 function bindEvents() {
-  window.addEventListener("hashchange", () => navigate(getPageFromHash()));
-
   document.addEventListener("click", event => {
-    const toolButton = event.target.closest("[data-tool], [data-open-tool]");
-    if (toolButton) {
-      openTool(toolButton.dataset.tool || toolButton.dataset.openTool);
-      return;
-    }
-
-    const categoryButton = event.target.closest("[data-category]");
-    if (categoryButton) {
-      $("#categoryFilter").value = categoryButton.dataset.category;
-      $("#toolSearch").value = "";
-      renderTools();
-      routeTo("tools");
-      return;
-    }
-
-    const goButton = event.target.closest("[data-go]");
-    if (goButton) {
+    const pageButton = event.target.closest("[data-page]");
+    if (pageButton) {
       event.preventDefault();
-      routeTo(goButton.dataset.go);
+      showPage(pageButton.dataset.page);
       return;
     }
 
-    const openProjectButton = event.target.closest("[data-open-project]");
-    if (openProjectButton) {
-      openSavedProject(openProjectButton.dataset.openProject);
+    const toolButton = event.target.closest("[data-tool]");
+    if (toolButton) {
+      openTool(toolButton.dataset.tool);
       return;
     }
 
-    const deleteProjectButton = event.target.closest("[data-delete-project]");
-    if (deleteProjectButton) {
-      deleteProject(deleteProjectButton.dataset.deleteProject);
+    const projectOpen = event.target.closest("[data-project-open]");
+    if (projectOpen) {
+      openProject(projectOpen.dataset.projectOpen);
+      return;
+    }
+
+    const projectDelete = event.target.closest("[data-project-delete]");
+    if (projectDelete) {
+      const project = projects.find(item => item.id === projectDelete.dataset.projectDelete);
+      if (!project) return;
+      if (!confirm(`"${project.name}" delete karna hai?`)) return;
+
+      projects = projects.filter(item => item.id !== project.id);
+      write(KEYS.projects, projects);
+      recordEvent("delete", project.name);
+      renderProjects();
+      renderOverview();
+      toast("Project delete ho gaya.");
+      return;
+    }
+
+    const projectComment = event.target.closest("[data-project-comment]");
+    if (projectComment) {
+      const project = projects.find(item => item.id === projectComment.dataset.projectComment);
+      if (!project) return;
+
+      const comment = prompt("Project comment likho:");
+      if (comment && comment.trim()) {
+        project.comments ||= [];
+        project.comments.push({
+          text: comment.trim(),
+          at: new Date().toISOString()
+        });
+
+        analytics.comments.push({
+          text: comment.trim(),
+          projectId: project.id,
+          at: new Date().toISOString()
+        });
+
+        write(KEYS.projects, projects);
+        saveAnalytics();
+        renderProjects();
+        renderAnalytics();
+        toast("Comment save ho gaya.");
+      }
+      return;
+    }
+
+    const ratingButton = event.target.closest("[data-rating]");
+    if (ratingButton) {
+      setRating(ratingButton.dataset.rating);
+      return;
+    }
+
+    const codeTab = event.target.closest("[data-code-tab]");
+    if (codeTab) {
+      saveCode();
+      currentCodeTab = codeTab.dataset.codeTab;
+      renderCodeEditor();
     }
   });
-
-  $$(".nav-link").forEach(link => link.addEventListener("click", event => {
-    event.preventDefault();
-    routeTo(link.dataset.page);
-  }));
-
-  $("#exploreTools").addEventListener("click", () => routeTo("tools"));
-  $("#newProject").addEventListener("click", () => openProjectModal());
-  $("#heroNewProject").addEventListener("click", () => openProjectModal());
-  $("#projectCreateButton").addEventListener("click", () => openProjectModal());
-  $("#emptyCreateProject").addEventListener("click", () => openProjectModal());
-  $("#menuToggle").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
 
   $("#toolSearch").addEventListener("input", renderTools);
-  $("#categoryFilter").addEventListener("change", renderTools);
+  $("#toolCategory").addEventListener("change", renderTools);
 
-  $("#runWorkspace").addEventListener("click", runWorkspace);
-  $("#clearWorkspace").addEventListener("click", () => {
-    $("#workspacePrompt").value = "";
-    state.output = "";
-    $("#workspaceOutput").innerHTML = `<div class="output-placeholder"><span>✧</span><strong>Your workspace output appears here</strong><p>Enter a new request to continue.</p></div>`;
-    $("#outputTitle").textContent = "Ready when you are";
-  });
-  $("#backToTools").addEventListener("click", () => routeTo("tools"));
-  $("#copyOutput").addEventListener("click", () => copyText(state.output));
-  $("#downloadOutput").addEventListener("click", () => {
-    if (!state.output) return showToast("Download karne ke liye output nahi hai.");
-    downloadText("wazir-aura-output.txt", state.output);
-  });
-  $("#saveOutput").addEventListener("click", saveOutputAsProject);
+  $("#newProject").addEventListener("click", openModal);
+  $("#closeModal").addEventListener("click", closeModal);
+  $("#cancelProject").addEventListener("click", closeModal);
 
-  $("#projectForm").addEventListener("submit", event => {
-    event.preventDefault();
+  $("#projectModal").addEventListener("click", event => {
+    if (event.target.id === "projectModal") closeModal();
+  });
+
+  $("#createProject").addEventListener("click", () => {
     const name = $("#projectName").value.trim();
     const description = $("#projectDescription").value.trim();
-    if (!name) return showToast("Project ka naam likho.");
+
+    if (!name) {
+      toast("Project ka naam likho.");
+      $("#projectName").focus();
+      return;
+    }
+
     createProject(name, description);
+    closeModal();
+    $("#projectName").value = "";
+    $("#projectDescription").value = "";
+    toast("Project create ho gaya.");
   });
 
-  $("#closeModal").addEventListener("click", closeProjectModal);
-  $("#cancelModal").addEventListener("click", closeProjectModal);
-  $("#modalBackdrop").addEventListener("click", event => {
-    if (event.target === $("#modalBackdrop")) closeProjectModal();
+  $("#runWorkspace").addEventListener("click", processWorkspace);
+  $("#clearWorkspace").addEventListener("click", () => {
+    $("#workspacePrompt").value = "";
+    $("#workspaceOutput").textContent = "Your result will appear here.";
+    currentOutput = "";
   });
-  document.addEventListener("keydown", event => {
-    if (event.key === "Escape") {
-      if (!$("#modalBackdrop").classList.contains("hidden")) closeProjectModal();
-      $("#sidebar").classList.remove("open");
+
+  $("#copyOutput").addEventListener("click", async () => {
+    if (!currentOutput) {
+      toast("Copy karne ke liye output nahi hai.");
+      return;
+    }
+
+    try {
+      await navigator.clipboard.writeText(currentOutput);
+      toast("Output copy ho gaya.");
+    } catch {
+      const area = document.createElement("textarea");
+      area.value = currentOutput;
+      document.body.appendChild(area);
+      area.select();
+      const copied = document.execCommand("copy");
+      area.remove();
+      toast(copied ? "Output copy ho gaya." : "Copy nahi ho saka.");
     }
   });
 
-  $("#noteTitle").addEventListener("input", saveNotes);
-  $("#noteBody").addEventListener("input", saveNotes);
-  $("#clearNote").addEventListener("click", clearNote);
-  $("#downloadNote").addEventListener("click", downloadNote);
+  $("#downloadOutput").addEventListener("click", () => {
+    if (!currentOutput) return toast("Download karne ke liye output nahi hai.");
+    downloadFile("wazir-aura-output.txt", currentOutput);
+  });
 
-  $$(".editor-tab").forEach(button => button.addEventListener("click", () => {
-    saveCurrentEditor();
-    switchEditor(button.dataset.editor);
-  }));
-  $("#codeEditor").addEventListener("input", saveCurrentEditor);
-  $("#runCode").addEventListener("click", runCodePreview);
-  $("#resetCode").addEventListener("click", resetCode);
-  $("#downloadCode").addEventListener("click", downloadEditorFile);
+  $("#saveOutput").addEventListener("click", saveOutputAsProject);
+  $("#workspaceLike").addEventListener("click", toggleLike);
+
+  $("#saveNote").addEventListener("click", saveNote);
+
+  let noteTimer;
+  $("#noteTitle").addEventListener("input", autoSaveNote);
+  $("#noteContent").addEventListener("input", autoSaveNote);
+
+  function autoSaveNote() {
+    clearTimeout(noteTimer);
+    $("#noteStatus").textContent = "Saving...";
+    noteTimer = setTimeout(() => {
+      notes = {
+        title: $("#noteTitle").value,
+        content: $("#noteContent").value,
+        updatedAt: new Date().toISOString()
+      };
+      if (write(KEYS.notes, notes)) {
+        $("#noteStatus").textContent = "Automatically saved";
+      }
+    }, 500);
+  }
+
+  $("#codeEditor").addEventListener("input", () => {
+    code[currentCodeTab] = $("#codeEditor").value;
+    write(KEYS.code, code);
+  });
+
+  $("#runCode").addEventListener("click", runCode);
+
+  $("#resetCode").addEventListener("click", () => {
+    if (!confirm("Code Lab ko default code par reset karna hai?")) return;
+    code = { ...defaultCode };
+    write(KEYS.code, code);
+    renderCodeEditor();
+    runCode();
+  });
+
+  $("#downloadCode").addEventListener("click", downloadCode);
+
+  $("#submitFeedback").addEventListener("click", () => {
+    const input = $("#feedbackInput");
+    const value = input.value.trim();
+
+    if (!value) {
+      toast("Pehle feedback likho.");
+      return;
+    }
+
+    analytics.feedback.unshift({
+      text: value,
+      at: new Date().toISOString()
+    });
+
+    analytics.feedback = analytics.feedback.slice(0, 100);
+    saveAnalytics();
+    recordEvent("feedback", "Website feedback");
+    input.value = "";
+    renderAnalytics();
+    toast("Feedback is browser mein save ho gaya.");
+  });
+
+  $("#exportAnalytics").addEventListener("click", () => {
+    downloadFile("wazir-aura-analytics.json", JSON.stringify({
+      exportedAt: new Date().toISOString(),
+      scope: "This browser only",
+      analytics,
+      projects
+    }, null, 2), "application/json;charset=utf-8");
+  });
+
+  $("#resetAnalytics").addEventListener("click", resetAnalytics);
+
+  const toggleTheme = () => {
+    document.body.classList.toggle("light");
+    write(KEYS.theme, document.body.classList.contains("light") ? "light" : "dark");
+  };
+
   $("#themeToggle").addEventListener("click", toggleTheme);
+  $("#quickTheme").addEventListener("click", toggleTheme);
+  $("#menuToggle").addEventListener("click", () => $("#sidebar").classList.toggle("open"));
 
   $("#premiumInfo").addEventListener("click", () => {
-    alert(
-      "Premium enable karne ke liye secure backend, authentication, payment provider integration, server-side payment verification, usage quotas aur environment configuration chahiye. Is demo mein checkout active nahi hai."
-    );
+    toast("Premium ke liye backend, authentication aur payment provider configure karna hoga.");
+  });
+
+  $("#workspacePrompt").addEventListener("keydown", event => {
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") processWorkspace();
+  });
+
+  $("#projectDescription").addEventListener("keydown", event => {
+    if ((event.ctrlKey || event.metaKey) && event.key === "Enter") $("#createProject").click();
   });
 }
 
 function init() {
-  $("#year").textContent = new Date().getFullYear();
+  document.body.classList.toggle("light", read(KEYS.theme, "dark") === "light");
+  $("#currentYear").textContent = new Date().getFullYear();
 
-  // Show the welcome animation once per browser tab session.
-  try {
-    if (sessionStorage.getItem("wazirAura.introSeen") === "1") {
-      $("#intro").classList.add("finished");
-    } else {
-      setTimeout(() => {
-        $("#intro").classList.add("finished");
-        try { sessionStorage.setItem("wazirAura.introSeen", "1"); } catch {}
-      }, 3000);
-    }
-  } catch {
-    setTimeout(() => $("#intro").classList.add("finished"), 3000);
-  }
+  // Record this browser's initial page visit.
+  analytics.pageViews.overview = (analytics.pageViews.overview || 0) + 1;
+  recordEvent("page", "overview");
 
-  initTheme();
-  loadNotes();
+  renderOverview();
   renderTools();
   renderProjects();
+  renderAnalytics();
+  loadNote();
+  renderCodeEditor();
   bindEvents();
-  switchEditor("html");
-  runCodePreview();
-  navigate(getPageFromHash());
+  initSpace();
+
+  setTimeout(() => {
+    $("#intro").classList.add("done");
+    $("#appShell").classList.add("ready");
+  }, 1100);
+
+  setTimeout(() => {
+    $("#intro")?.remove();
+  }, 1900);
+
+  // Build an initial Code Lab preview.
+  runCode();
 }
 
 document.addEventListener("DOMContentLoaded", init);
