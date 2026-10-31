@@ -30,6 +30,7 @@
     codelab: "Code Lab",
     notepad: "Notepad",
     analytics: "Analytics",
+    services: "Services & Hire",
     pricing: "Plans & Pricing",
     reviews: "Reviews",
     about: "About Us",
@@ -970,7 +971,9 @@ button {
 
     grid.innerHTML = list
       .map(
-        (project) => `
+        (project) => {
+          const progress = Math.min(100, Math.max(0, Number(project.progress) || 0));
+          return `
       <article class="project-card" data-color="${escapeHTML(project.color || "purple")}">
         <div class="project-card-top">
           <span class="project-category">${escapeHTML(project.category || "Personal")}</span>
@@ -978,12 +981,18 @@ button {
         </div>
         <h3>${escapeHTML(project.name)}</h3>
         <p>${escapeHTML(project.description || "No description added.")}</p>
+        <div class="project-meta-row">
+          <span class="tag">Priority: ${escapeHTML(project.priority || "Medium")}</span>
+          <span class="tag">${progress}%</span>
+        </div>
+        <div class="project-progress-bar"><span style="width:${progress}%"></span></div>
         <small>${escapeHTML(formatDate(project.updatedAt || project.createdAt))}</small>
         <div class="project-actions">
           <button type="button" class="secondary-btn" data-action="edit-project" data-id="${escapeHTML(project.id)}">Edit</button>
           <button type="button" class="danger-btn" data-action="delete-project" data-id="${escapeHTML(project.id)}">Delete</button>
         </div>
-      </article>`
+      </article>`;
+        }
       )
       .join("");
   }
@@ -999,6 +1008,9 @@ button {
       project?.category || settings.defaultProjectCategory || "Personal";
     $("#projectDescription").value = project?.description || "";
     $("#projectColor").value = project?.color || settings.defaultProjectColor || "purple";
+    if ($("#projectStatus")) $("#projectStatus").value = project?.status || "Active";
+    if ($("#projectPriority")) $("#projectPriority").value = project?.priority || "Medium";
+    if ($("#projectProgress")) $("#projectProgress").value = project?.progress ?? 0;
     modal.classList.remove("hidden");
     $("#projectName")?.focus();
   }
@@ -1023,7 +1035,9 @@ button {
       category: $("#projectCategory")?.value || "Personal",
       description: ($("#projectDescription")?.value || "").trim(),
       color: $("#projectColor")?.value || "purple",
-      status: "Active",
+      status: $("#projectStatus")?.value || "Active",
+      priority: $("#projectPriority")?.value || "Medium",
+      progress: Math.min(100, Math.max(0, Number($("#projectProgress")?.value) || 0)),
       updatedAt: new Date().toISOString()
     };
 
@@ -1471,11 +1485,11 @@ ${code.js}
       icon: "fa-table-cells"
     },
     {
-      id: "typing",
-      name: "Typing Speed",
+      id: "snake",
+      name: "Cosmic Snake",
       category: "arcade",
-      description: "Type the sentence and check your WPM.",
-      icon: "fa-keyboard"
+      description: "Classic snake — eat stars, avoid walls and yourself.",
+      icon: "fa-dragon"
     },
     {
       id: "word",
@@ -1495,7 +1509,8 @@ ${code.js}
   let memoryOpen = [];
   let tttBoard = Array(9).fill(null);
   let tttOver = false;
-  let typingStarted = 0;
+  let snakeState = null;
+  let snakeTimer = null;
   let scrambleWord = "";
   let scrambleAnswer = "";
 
@@ -1535,7 +1550,7 @@ ${code.js}
     if (id === "math") createMathQuestion();
     if (id === "memory") createMemoryGame();
     if (id === "tictactoe") resetTtt();
-    if (id === "typing") setupTyping();
+    if (id === "snake") startSnake();
     if (id === "word") setupScramble();
 
     gamesPlayedCount += 1;
@@ -1590,15 +1605,21 @@ ${code.js}
           <div id="tttBoard" class="ttt-board"></div>
           <p id="tttResult">You are X. Computer is O.</p>
           <button class="secondary-btn" data-action="restart-ttt">Restart</button>`;
-      case "typing":
+      case "snake":
         return `
-          <p id="typingPrompt" class="typing-prompt"></p>
-          <textarea id="typingInput" rows="3" placeholder="Start typing here..."></textarea>
-          <div class="game-controls">
-            <button class="primary-btn" data-action="check-typing">Check Speed</button>
-            <button class="secondary-btn" data-action="restart-typing">New Sentence</button>
-          </div>
-          <p id="typingResult">Type the sentence above, then check your speed.</p>`;
+          <div class="snake-wrap">
+            <p>Use arrow keys or on-screen buttons. Eat gold food. Don't hit walls or yourself.</p>
+            <div id="snakeBoard" class="snake-board"></div>
+            <p id="snakeScore">Score: 0</p>
+            <div class="game-controls">
+              <button type="button" class="secondary-btn" data-action="snake-dir" data-dir="up">↑</button>
+              <button type="button" class="secondary-btn" data-action="snake-dir" data-dir="left">←</button>
+              <button type="button" class="secondary-btn" data-action="snake-dir" data-dir="down">↓</button>
+              <button type="button" class="secondary-btn" data-action="snake-dir" data-dir="right">→</button>
+              <button type="button" class="primary-btn" data-action="restart-snake">Restart</button>
+            </div>
+            <p id="snakeResult">Good luck!</p>
+          </div>`;
       case "word":
         return `
           <p>Unscramble this word:</p>
@@ -1617,6 +1638,7 @@ ${code.js}
   function closeGame() {
     $("#gameModal")?.classList.add("hidden");
     clearTimeout(reactionTimer);
+    clearInterval(snakeTimer);
     activeGame = null;
   }
 
@@ -1751,43 +1773,98 @@ ${code.js}
     "Explore tools games and ideas without leaving your browser."
   ];
 
-  function setupTyping() {
-    const sentence = TYPING_SENTENCES[Math.floor(Math.random() * TYPING_SENTENCES.length)];
-    const prompt = $("#typingPrompt");
-    if (prompt) prompt.textContent = sentence;
-    if ($("#typingInput")) {
-      $("#typingInput").value = "";
-      $("#typingInput").dataset.target = sentence;
-    }
-    typingStarted = 0;
-    if ($("#typingResult")) $("#typingResult").textContent = "Type the sentence above, then check your speed.";
-    $("#typingInput")?.addEventListener(
-      "input",
-      () => {
-        if (!typingStarted) typingStarted = performance.now();
-      },
-      { once: true }
-    );
+
+  function startSnake() {
+    const size = 16;
+    clearInterval(snakeTimer);
+    snakeState = {
+      size,
+      snake: [{ x: 8, y: 8 }, { x: 7, y: 8 }, { x: 6, y: 8 }],
+      dir: { x: 1, y: 0 },
+      nextDir: { x: 1, y: 0 },
+      food: { x: 12, y: 10 },
+      score: 0,
+      over: false
+    };
+    placeSnakeFood();
+    renderSnakeBoard();
+    const score = $("#snakeScore");
+    const result = $("#snakeResult");
+    if (score) score.textContent = "Score: 0";
+    if (result) result.textContent = "Use arrows to move.";
+    snakeTimer = setInterval(tickSnake, 120);
   }
 
-  function checkTyping() {
-    const input = $("#typingInput");
-    const target = input?.dataset.target || "";
-    const typed = input?.value || "";
-    const result = $("#typingResult");
-    if (!result) return;
-    if (!typed.trim()) {
-      result.textContent = "Type the sentence first.";
+  function placeSnakeFood() {
+    if (!snakeState) return;
+    const { size, snake } = snakeState;
+    let pos;
+    do {
+      pos = { x: Math.floor(Math.random() * size), y: Math.floor(Math.random() * size) };
+    } while (snake.some((s) => s.x === pos.x && s.y === pos.y));
+    snakeState.food = pos;
+  }
+
+  function renderSnakeBoard() {
+    const board = $("#snakeBoard");
+    if (!board || !snakeState) return;
+    const { size, snake, food } = snakeState;
+    const head = snake[0];
+    let html = "";
+    for (let y = 0; y < size; y++) {
+      for (let x = 0; x < size; x++) {
+        let cls = "snake-cell";
+        if (food.x === x && food.y === y) cls += " food";
+        const i = snake.findIndex((s) => s.x === x && s.y === y);
+        if (i === 0) cls += " snake head";
+        else if (i > 0) cls += " snake";
+        html += `<div class="${cls}"></div>`;
+      }
+    }
+    board.style.gridTemplateColumns = `repeat(${size}, 14px)`;
+    board.innerHTML = html;
+  }
+
+  function tickSnake() {
+    if (!snakeState || snakeState.over) return;
+    snakeState.dir = snakeState.nextDir;
+    const { snake, dir, size, food } = snakeState;
+    const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+    if (head.x < 0 || head.y < 0 || head.x >= size || head.y >= size ||
+        snake.some((s) => s.x === head.x && s.y === head.y)) {
+      snakeState.over = true;
+      clearInterval(snakeTimer);
+      const result = $("#snakeResult");
+      if (result) result.textContent = `Game over! Final score: ${snakeState.score}`;
       return;
     }
-    const seconds = Math.max(0.5, (performance.now() - (typingStarted || performance.now())) / 1000);
-    const words = typed.trim().split(/\s+/).length;
-    const wpm = Math.round((words / seconds) * 60);
-    const accuracy = Math.round(
-      ([...typed].filter((ch, i) => ch === target[i]).length / Math.max(target.length, 1)) * 100
-    );
-    result.textContent = `WPM: ${wpm} · Accuracy: ${accuracy}% · Time: ${seconds.toFixed(1)}s`;
+    snake.unshift(head);
+    if (head.x === food.x && head.y === food.y) {
+      snakeState.score += 1;
+      const score = $("#snakeScore");
+      if (score) score.textContent = `Score: ${snakeState.score}`;
+      placeSnakeFood();
+    } else {
+      snake.pop();
+    }
+    renderSnakeBoard();
   }
+
+  function setSnakeDir(name) {
+    if (!snakeState || snakeState.over) return;
+    const map = {
+      up: { x: 0, y: -1 },
+      down: { x: 0, y: 1 },
+      left: { x: -1, y: 0 },
+      right: { x: 1, y: 0 }
+    };
+    const nd = map[name];
+    if (!nd) return;
+    // prevent reverse
+    if (nd.x + snakeState.dir.x === 0 && nd.y + snakeState.dir.y === 0) return;
+    snakeState.nextDir = nd;
+  }
+
 
   const SCRAMBLE_WORDS = [
     "galaxy",
@@ -2042,6 +2119,7 @@ ${code.js}
     { id: "page-codelab", label: "Open Code Lab", group: "Pages", icon: "fa-code", run: () => openPage("codelab") },
     { id: "page-notepad", label: "Open Notepad", group: "Pages", icon: "fa-note-sticky", run: () => openPage("notepad") },
     { id: "page-analytics", label: "Open Analytics", group: "Pages", icon: "fa-chart-line", run: () => openPage("analytics") },
+    { id: "page-services", label: "Open Services & Hire", group: "Pages", icon: "fa-briefcase", run: () => openPage("services") },
     { id: "page-pricing", label: "Open Pricing", group: "Pages", icon: "fa-crown", run: () => openPage("pricing") },
     { id: "page-reviews", label: "Open Reviews", group: "Pages", icon: "fa-star", run: () => openPage("reviews") },
     { id: "page-about", label: "Open About", group: "Pages", icon: "fa-circle-info", run: () => openPage("about") },
@@ -2307,11 +2385,11 @@ ${code.js}
           case "restart-ttt":
             resetTtt();
             break;
-          case "check-typing":
-            checkTyping();
+          case "snake-dir":
+            setSnakeDir(actionButton.dataset.dir);
             break;
-          case "restart-typing":
-            setupTyping();
+          case "restart-snake":
+            startSnake();
             break;
           case "check-scramble": {
             const guess = ($("#scrambleInput")?.value || "").trim().toLowerCase();
@@ -2637,6 +2715,13 @@ ${code.js}
     });
 
     document.addEventListener("keydown", (event) => {
+      if (activeGame === "snake" && !snakeState?.over) {
+        const keyMap = { ArrowUp: "up", ArrowDown: "down", ArrowLeft: "left", ArrowRight: "right" };
+        if (keyMap[event.key]) {
+          event.preventDefault();
+          setSnakeDir(keyMap[event.key]);
+        }
+      }
       if (event.key === "Escape") {
         closeMobileMenu();
         closeGame();
