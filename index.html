@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080914">
+  <meta name="description" content="Wazir Aura — A futuristic digital universe for creativity, AI, coding, games and projects.">
+  <title>Wazir Aura — Enter Your Digital Universe</title>
+
+  <!-- Custom MW favicon -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%2300eaff'/%3E%3Cstop offset='.5' stop-color='%239b5cff'/%3E%3Cstop offset='1' stop-color='%23ffd76a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='25' fill='%23090b19'/%3E%3Cpath d='M13 70V29h13l13 22 13-22h13v41H51V49L39 68 27 49v21z' fill='url(%23g)'/%3E%3Ccircle cx='78' cy='25' r='7' fill='%23ffd76a'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+
+<body>
+
+  <!-- Premium splash intro (3–4s) -->
+  <div class="splash-screen" id="splashScreen" aria-hidden="true">
+    <div class="splash-inner">
+      <div class="splash-emblem">
+        <span class="splash-mw">MW</span>
+        <span class="splash-ring splash-ring-a"></span>
+        <span class="splash-ring splash-ring-b"></span>
+        <span class="splash-core"></span>
+      </div>
+      <h1 class="splash-title">WAZIR <span>AURA</span></h1>
+      <p class="splash-tag">Your Digital Universe</p>
+      <div class="splash-bar"><span></span></div>
+    </div>
+  </div>
+
+
+  <!-- Cosmic background -->
+  <div class="space-background" aria-hidden="true">
+    <div class="space-glow glow-one"></div>
+    <div class="space-glow glow-two"></div>
+    <div class="space-glow glow-three"></div>
+    <div class="planet planet-one"></div>
+    <div class="planet planet-two"></div>
+    <div class="planet planet-three"></div>
+    <div class="galaxy galaxy-one"></div>
+    <div class="galaxy galaxy-two"></div>
+    <canvas id="starCanvas"></canvas>
+    <div class="space-grid"></div>
+  </div>
+
+  <div class="app-shell">
+
+    <!-- Mobile top bar -->
+    <header class="mobile-header">
+      <button class="icon-button" id="mobileMenuBtn" aria-label="Open menu">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+      <a href="#" class="mobile-brand" data-page-link="overview">
+        <span class="mini-mw">MW</span> WAZIR AURA
+      </a>
+      <button class="icon-button" id="mobileThemeBtn" aria-label="Toggle theme">
+        <i class="fa-solid fa-sun"></i>
+      </button>
+    </header>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand-area">
+        <a href="#" class="brand-logo" data-page-link="overview" aria-label="Wazir Aura home">
+          <div class="mw-emblem">
+            <span class="mw-letter">M</span>
+            <span class="mw-letter">W</span>
+            <span class="mw-orbit orbit-a"></span>
+            <span class="mw-orbit orbit-b"></span>
+            <span class="mw-core"></span>
+          </div>
+          <div class="brand-text">
+            <strong>WAZIR <span>AURA</span></strong>
+            <small>YOUR DIGITAL UNIVERSE</small>
+          </div>
+        </a>
+      </div>
+
+      <div class="sidebar-profile">
+        <div class="profile-avatar"><i class="fa-solid fa-user-astronaut"></i></div>
+        <div>
+          <strong>Space Explorer</strong>
+          <small>Free Explorer</small>
+        </div>
+        <span class="online-dot"></span>
+      </div>
+
+      <nav class="main-navigation" aria-label="Main navigation">
+        <p class="nav-heading">MAIN UNIVERSE</p>
+        <button class="nav-link active" data-page="overview" data-page-link="overview"><i class="fa-solid fa-house"></i><span>Overview</span></button>
+        <button class="nav-link" data-page="ai" data-page-link="ai"><i class="fa-solid fa-robot"></i><span>AI Assistant</span><span class="nav-tag">AI</span></button>
+        <button class="nav-link" data-page="tools" data-page-link="tools"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Free Tools</span></button>
+        <button class="nav-link" data-page="projects" data-page-link="projects"><i class="fa-solid fa-layer-group"></i><span>My Projects</span></button>
+        <button class="nav-link" data-page="games" data-page-link="games"><i class="fa-solid fa-gamepad"></i><span>Game Galaxy</span></button>
+
+        <p class="nav-heading">CREATIVE STUDIO</p>
+        <button class="nav-link" data-page="codelab" data-page-link="codelab"><i class="fa-solid fa-code"></i><span>Code Lab</span></button>
+        <button class="nav-link" data-page="notepad" data-page-link="notepad"><i class="fa-solid fa-note-sticky"></i><span>Notepad</span></button>
+        <button class="nav-link" data-page="analytics" data-page-link="analytics"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></button>
+
+        <p class="nav-heading">WAZIR AURA</p>
+        <button class="nav-link" data-page="pricing" data-page-link="pricing"><i class="fa-solid fa-crown"></i><span>Plans & Pricing</span></button>
+        <button class="nav-link" data-page="reviews" data-page-link="reviews"><i class="fa-solid fa-star"></i><span>Reviews</span></button>
+        <button class="nav-link" data-page="about" data-page-link="about"><i class="fa-solid fa-circle-info"></i><span>About Us</span></button>
+        <button class="nav-link" data-page="contact" data-page-link="contact"><i class="fa-solid fa-envelope"></i><span>Contact</span></button>
+        <button class="nav-link" data-page="settings" data-page-link="settings"><i class="fa-solid fa-gear"></i><span>Settings</span></button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="sidebar-upgrade">
+          <div class="upgrade-icon"><i class="fa-solid fa-gem"></i></div>
+          <strong>Unlock the Universe</strong>
+          <p>Explore premium possibilities.</p>
+          <button class="small-primary-btn" data-page-link="pricing">Explore Plans <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+        <div class="sidebar-footer">
+          <span><i class="fa-solid fa-circle"></i> Wazir Aura</span>
+          <small>Version 2.0 · Made with creativity</small>
+        </div>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <!-- Main content -->
+    <main class="main-content">
+      <header class="topbar">
+        <div class="breadcrumb">
+          <span>WAZIR AURA</span><i class="fa-solid fa-chevron-right"></i>
+          <strong id="pageTitle">Overview</strong>
+        </div>
+        <div class="topbar-actions">
+          <div class="local-clock" id="localClock"><i class="fa-regular fa-clock"></i> <span>Welcome</span></div>
+          <button class="icon-button" id="commandBtn" aria-label="Command palette" title="Command palette (Ctrl+K)"><i class="fa-solid fa-terminal"></i></button>
+          <button class="icon-button" id="focusTimerBtn" aria-label="Focus timer" title="Focus timer"><i class="fa-solid fa-clock"></i></button>
+          <button class="icon-button" id="notificationBtn" aria-label="Notifications"><i class="fa-regular fa-bell"></i></button>
+          <button class="icon-button" id="themeToggle" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
+          <button class="topbar-avatar" data-page-link="settings" aria-label="Open settings"><i class="fa-solid fa-user-astronaut"></i></button>
+        </div>
+      </header>
+
+      <!-- OVERVIEW -->
+      <section class="page-section active" id="page-overview">
+        <div class="welcome-hero">
+          <div class="hero-copy">
+            <span class="eyebrow"><i class="fa-solid fa-satellite"></i> WELCOME TO YOUR DIGITAL UNIVERSE</span>
+            <h1>Explore Beyond<br><span>Imagination.</span></h1>
+            <p>Creativity has no limits. Build projects, explore AI, write code, play games and turn your ideas into something extraordinary.</p>
+            <div class="hero-buttons">
+              <button class="primary-btn" data-page-link="tools"><i class="fa-solid fa-rocket"></i> Explore Universe</button>
+              <button class="secondary-btn" data-page-link="about"><i class="fa-regular fa-circle-play"></i> Discover Wazir Aura</button>
+            </div>
+            <div class="hero-trust">
+              <span><i class="fa-solid fa-bolt"></i> Creative tools</span>
+              <span><i class="fa-solid fa-shield-halved"></i> Browser-based workspace</span>
+              <span><i class="fa-solid fa-infinity"></i> Endless ideas</span>
+            </div>
+          </div>
+          <div class="hero-art" aria-label="Wazir Aura cosmic emblem">
+            <div class="hero-orbit orbit-one"></div>
+            <div class="hero-orbit orbit-two"></div>
+            <div class="hero-orbit orbit-three"></div>
+            <div class="hero-planet"></div>
+            <div class="hero-logo-core">
+              <span>W</span><small>AURA</small>
+            </div>
+            <div class="floating-star star-a"><i class="fa-solid fa-star"></i></div>
+            <div class="floating-star star-b"><i class="fa-solid fa-sparkles"></i></div>
+            <div class="floating-chip chip-a">CREATE</div>
+            <div class="floating-chip chip-b">IMAGINE</div>
+          </div>
+        </div>
+
+        <div class="section-heading">
+          <div><span class="eyebrow">YOUR SPACE AT A GLANCE</span><h2>Universe Dashboard</h2></div>
+          <span class="live-label"><i class="fa-solid fa-circle"></i> LOCAL WORKSPACE</span>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-icon cyan"><i class="fa-solid fa-eye"></i></div><div><span>Local Visits</span><strong id="totalViews">0</strong><small>Your browser activity</small></div></article>
+          <article class="stat-card"><div class="stat-icon purple"><i class="fa-solid fa-folder-open"></i></div><div><span>My Projects</span><strong id="totalProjects">0</strong><small>Saved on this device</small></div></article>
+          <article class="stat-card"><div class="stat-icon gold"><i class="fa-solid fa-wand-magic-sparkles"></i></div><div><span>Tool Activities</span><strong id="totalEvents">0</strong><small>Local interactions</small></div></article>
+          <article class="stat-card"><div class="stat-icon pink"><i class="fa-solid fa-gamepad"></i></div><div><span>Games Played</span><strong id="gamesPlayed">0</strong><small>This browser</small></div></article>
+        </div>
+
+        <div class="dashboard-grid">
+          <div class="dashboard-main">
+            <div class="section-heading compact">
+              <div><span class="eyebrow">START CREATING</span><h2>Quick Launch</h2></div>
+            </div>
+            <div class="quick-grid">
+              <button class="quick-card" data-page-link="ai"><span class="quick-icon q-purple"><i class="fa-solid fa-robot"></i></span><strong>AI Assistant</strong><small>Chat with your AI interface</small><i class="fa-solid fa-arrow-up-right-from-square quick-arrow"></i></button>
+              <button class="quick-card" data-page-link="codelab"><span class="quick-icon q-cyan"><i class="fa-solid fa-code"></i></span><strong>Code Lab</strong><small>Build and test websites</small><i class="fa-solid fa-arrow-up-right-from-square quick-arrow"></i></button>
+              <button class="quick-card" data-page-link="games"><span class="quick-icon q-pink"><i class="fa-solid fa-gamepad"></i></span><strong>Play Games</strong><small>Enter the game galaxy</small><i class="fa-solid fa-arrow-up-right-from-square quick-arrow"></i></button>
+              <button class="quick-card" data-page-link="projects"><span class="quick-icon q-gold"><i class="fa-solid fa-folder-plus"></i></span><strong>New Project</strong><small>Organize your ideas</small><i class="fa-solid fa-arrow-up-right-from-square quick-arrow"></i></button>
+            </div>
+
+            <div class="section-heading compact">
+              <div><span class="eyebrow">HANDPICKED FOR YOU</span><h2>Featured Universe</h2></div>
+              <button class="text-link" data-page-link="tools">View all tools <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div class="featured-grid">
+              <article class="feature-card feature-ai">
+                <div class="feature-art"><i class="fa-solid fa-brain"></i><span class="feature-orbit"></span></div>
+                <span class="feature-label">INTELLIGENCE</span><h3>AI Workspace</h3>
+                <p>A dedicated space for prompts, ideas and AI conversations.</p>
+                <button class="card-action" data-page-link="ai">Open AI <i class="fa-solid fa-arrow-right"></i></button>
+              </article>
+              <article class="feature-card feature-code">
+                <div class="feature-art"><i class="fa-solid fa-terminal"></i><span class="feature-orbit"></span></div>
+                <span class="feature-label">DEVELOPMENT</span><h3>Creative Code Lab</h3>
+                <p>Experiment with HTML, CSS and JavaScript in your browser.</p>
+                <button class="card-action" data-page-link="codelab">Start Coding <i class="fa-solid fa-arrow-right"></i></button>
+              </article>
+              <article class="feature-card feature-games">
+                <div class="feature-art"><i class="fa-solid fa-gamepad"></i><span class="feature-orbit"></span></div>
+                <span class="feature-label">ENTERTAINMENT</span><h3>Game Galaxy</h3>
+                <p>Take a break with fun mini-games made for your browser.</p>
+                <button class="card-action" data-page-link="games">Explore Games <i class="fa-solid fa-arrow-right"></i></button>
+              </article>
+            </div>
+          </div>
+
+          <aside class="dashboard-side">
+            <div class="side-panel daily-panel">
+              <span class="eyebrow">A LITTLE INSPIRATION</span>
+              <div class="quote-mark"><i class="fa-solid fa-quote-left"></i></div>
+              <h3 id="dailyQuote">Great things begin with a curious mind.</h3>
+              <p>Keep exploring. Keep creating.</p>
+              <button class="text-link" id="newQuoteBtn">New inspiration <i class="fa-solid fa-rotate"></i></button>
+            </div>
+            <div class="side-panel activity-panel">
+              <div class="panel-title"><h3>Recent Activity</h3><i class="fa-solid fa-clock-rotate-left"></i></div>
+              <div id="recentActivity" class="activity-list"><p class="empty-state">Your activity will appear here.</p></div>
+            </div>
+            <div class="side-panel universe-panel">
+              <div class="universe-mini-art"><i class="fa-solid fa-earth-americas"></i></div>
+              <h3>Your Universe. Your Rules.</h3>
+              <p>Customize your workspace in Settings.</p>
+              <button class="secondary-btn full-btn" data-page-link="settings">Customize Workspace</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- AI ASSISTANT -->
+      <section class="page-section" id="page-ai">
+        <div class="page-intro">
+          <span class="eyebrow">YOUR CREATIVE COMPANION</span>
+          <h1>AI <span>Assistant</span></h1>
+          <p>Ask questions, brainstorm ideas, write, learn and explore.</p>
+        </div>
+        <div class="ai-layout">
+          <aside class="ai-sidebar">
+            <button class="primary-btn full-btn" id="newChatBtn"><i class="fa-solid fa-plus"></i> New Conversation</button>
+            <div class="ai-mode-label">ASSISTANT MODE</div>
+            <button class="ai-mode active" data-ai-mode="general"><i class="fa-solid fa-sparkles"></i> General Assistant</button>
+            <button class="ai-mode" data-ai-mode="creative"><i class="fa-solid fa-lightbulb"></i> Creative Writer</button>
+            <button class="ai-mode" data-ai-mode="coding"><i class="fa-solid fa-code"></i> Coding Helper</button>
+            <button class="ai-mode" data-ai-mode="learning"><i class="fa-solid fa-graduation-cap"></i> Learning Tutor</button>
+            <div class="ai-sidebar-note"><i class="fa-solid fa-circle-info"></i><span>AI connection requires a secure API and backend. Demo mode is available in this frontend.</span></div>
+          </aside>
+          <div class="ai-chat-panel">
+            <div class="chat-topbar">
+              <div class="chat-bot-avatar"><i class="fa-solid fa-robot"></i></div>
+              <div><strong>Wazir AI</strong><small><span class="online-dot"></span> Creative assistant interface</small></div>
+              <button class="icon-button" id="clearChatBtn" aria-label="Clear conversation"><i class="fa-solid fa-trash-can"></i></button>
+            </div>
+            <div class="chat-messages" id="chatMessages" aria-live="polite">
+              <div class="chat-welcome">
+                <div class="chat-welcome-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+                <h2>What shall we create today?</h2>
+                <p>Start with a question or choose an idea below.</p>
+                <div class="prompt-suggestions">
+                  <button class="prompt-chip" data-prompt="Help me plan a creative website."><i class="fa-solid fa-globe"></i> Plan a website</button>
+                  <button class="prompt-chip" data-prompt="Explain artificial intelligence in simple words."><i class="fa-solid fa-brain"></i> Explain AI</button>
+                  <button class="prompt-chip" data-prompt="Give me five creative business ideas."><i class="fa-solid fa-lightbulb"></i> Business ideas</button>
+                  <button class="prompt-chip" data-prompt="Help me write JavaScript code."><i class="fa-solid fa-code"></i> Write code</button>
+                </div>
+              </div>
+            </div>
+            <form class="chat-composer" id="chatForm">
+              <textarea id="chatInput" rows="1" placeholder="Message Wazir AI..." aria-label="Message Wazir AI"></textarea>
+              <div class="composer-bottom">
+                <span><i class="fa-solid fa-circle-info"></i> Demo mode until AI API is connected</span>
+                <button class="send-button" type="submit" aria-label="Send message"><i class="fa-solid fa-paper-plane"></i></button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <!-- FREE TOOLS -->
+      <section class="page-section" id="page-tools">
+        <div class="page-intro">
+          <span class="eyebrow">YOUR DIGITAL TOOLBOX</span>
+          <h1>Free <span>Tools</span></h1>
+          <p>Useful browser-based utilities for everyday creativity and productivity.</p>
+        </div>
+        <div class="tool-toolbar">
+          <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input id="toolSearch" type="search" placeholder="Search tools..."></div>
+          <select id="toolCategory" aria-label="Filter tools">
+            <option value="all">All Categories</option>
+            <option value="text">Text & Writing</option>
+            <option value="developer">Developer</option>
+            <option value="design">Design</option>
+            <option value="productivity">Productivity</option>
+            <option value="calculator">Calculators</option>
+          </select>
+        </div>
+        <div class="tools-grid" id="toolsGrid"></div>
+        <div class="tool-workspace hidden" id="toolWorkspace">
+          <div class="workspace-header">
+            <div><span class="eyebrow">TOOL WORKSPACE</span><h2 id="workspaceTitle">Selected Tool</h2><p id="workspaceDescription">Use this tool below.</p></div>
+            <button class="icon-button" id="closeWorkspaceBtn" aria-label="Close tool"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          <div id="toolFields" class="tool-fields"></div>
+          <div class="workspace-actions">
+            <button class="primary-btn" id="runWorkspace"><i class="fa-solid fa-play"></i> Run Tool</button>
+            <button class="secondary-btn" id="clearWorkspace"><i class="fa-solid fa-eraser"></i> Clear</button>
+            <button class="secondary-btn" id="copyWorkspaceOutput"><i class="fa-regular fa-copy"></i> Copy Result</button>
+          </div>
+          <div class="tool-result"><div class="result-heading">RESULT <span id="toolResultStatus">Ready</span></div><div id="toolOutput" class="tool-output">Your result will appear here.</div></div>
+        </div>
+      </section>
+
+      <!-- PROJECTS -->
+      <section class="page-section" id="page-projects">
+        <div class="page-intro page-intro-row">
+          <div><span class="eyebrow">YOUR CREATIVE WORKSPACE</span><h1>My <span>Projects</span></h1><p>Keep your ideas, plans and creations organized.</p></div>
+          <button class="primary-btn" id="addProjectBtn"><i class="fa-solid fa-plus"></i> New Project</button>
+        </div>
+        <div class="project-toolbar">
+          <div class="search-box"><i class="fa-solid fa-magnifying-glass"></i><input id="projectSearch" type="search" placeholder="Find a project..."></div>
+          <select id="projectSort" aria-label="Sort projects"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="name">Name A–Z</option></select>
+        </div>
+        <div class="projects-grid" id="projectsGrid"></div>
+        <div class="project-backup-actions">
+          <button class="secondary-btn" id="exportBackupBtn"><i class="fa-solid fa-download"></i> Export Workspace Backup</button>
+          <button class="secondary-btn" id="importBackupBtn"><i class="fa-solid fa-upload"></i> Import Backup</button>
+          <input type="file" id="backupImport" accept=".json,application/json" hidden>
+        </div>
+      </section>
+
+      <!-- GAMES -->
+      <section class="page-section" id="page-games">
+        <div class="page-intro">
+          <span class="eyebrow">TAKE A BREAK, HAVE SOME FUN</span>
+          <h1>Game <span>Galaxy</span></h1>
+          <p>Discover mini-games that run right in your browser.</p>
+        </div>
+        <div class="game-feature-banner">
+          <div><span class="eyebrow">READY PLAYER ONE?</span><h2>Your next adventure awaits.</h2><p>Pick a game, beat your best score and enjoy the universe.</p></div>
+          <div class="game-banner-art"><i class="fa-solid fa-gamepad"></i><span></span></div>
+        </div>
+        <div class="game-filter">
+          <button class="filter-chip active" data-game-filter="all">All Games</button>
+          <button class="filter-chip" data-game-filter="puzzle">Puzzle</button>
+          <button class="filter-chip" data-game-filter="arcade">Arcade</button>
+          <button class="filter-chip" data-game-filter="classic">Classic</button>
+        </div>
+        <div class="games-grid" id="gamesGrid"></div>
+        <div class="game-modal hidden" id="gameModal">
+          <div class="game-modal-card">
+            <div class="modal-heading"><div><span class="eyebrow">GAME GALAXY</span><h2 id="gameModalTitle">Game</h2></div><button class="icon-button" id="closeGameBtn" aria-label="Close game"><i class="fa-solid fa-xmark"></i></button></div>
+            <div id="gameModalBody" class="game-modal-body"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CODE LAB -->
+      <section class="page-section" id="page-codelab">
+        <div class="page-intro page-intro-row">
+          <div><span class="eyebrow">BUILD SOMETHING AMAZING</span><h1>Creative <span>Code Lab</span></h1><p>Write HTML, CSS and JavaScript, then preview your work.</p></div>
+          <div class="code-status"><span class="online-dot"></span> Browser Sandbox</div>
+        </div>
+        <div class="code-project-bar">
+          <input id="codeProjectName" type="text" value="My Creative Website" aria-label="Code project name">
+          <div class="code-actions">
+            <button class="secondary-btn" id="resetCodeBtn"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+            <button class="secondary-btn" id="runCodeBtn"><i class="fa-solid fa-play"></i> Run</button>
+            <button class="primary-btn" id="downloadCodeBtn"><i class="fa-solid fa-download"></i> Download</button>
+          </div>
+        </div>
+        <div class="code-workbench">
+          <div class="code-editors">
+            <div class="editor-panel">
+              <div class="editor-heading"><span><i class="fa-brands fa-html5"></i> HTML</span><small>index.html</small></div>
+              <textarea id="htmlCode" spellcheck="false" aria-label="HTML editor"><main class="demo"><h1>Hello, Creator!</h1><p>Welcome to my first Wazir Aura project.</p><button onclick="document.querySelector('p').textContent='You made it work!'">Click me</button></main></textarea>
+            </div>
+            <div class="editor-panel">
+              <div class="editor-heading"><span><i class="fa-brands fa-css3-alt"></i> CSS</span><small>style.css</small></div>
+              <textarea id="cssCode" spellcheck="false" aria-label="CSS editor">body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #101329; color: white; font-family: Arial, sans-serif; }
+.demo { text-align: center; padding: 40px; }
+h1 { color: #67e8f9; }
+button { padding: 12px 22px; border: 0; border-radius: 10px; background: #8258ff; color: white; cursor: pointer; }</textarea>
+            </div>
+            <div class="editor-panel">
+              <div class="editor-heading"><span><i class="fa-brands fa-js"></i> JAVASCRIPT</span><small>script.js</small></div>
+              <textarea id="jsCode" spellcheck="false" aria-label="JavaScript editor">console.log("Welcome to Wazir Aura Code Lab!");</textarea>
+            </div>
+          </div>
+          <div class="preview-panel">
+            <div class="preview-heading"><span><i class="fa-solid fa-display"></i> LIVE PREVIEW</span><button class="text-link" id="refreshPreviewBtn"><i class="fa-solid fa-rotate"></i> Refresh</button></div>
+            <iframe id="codePreview" title="Code preview" sandbox="allow-scripts" srcdoc="<h2 style='font-family:Arial;text-align:center;margin-top:50px'>Your preview will appear here</h2>"></iframe>
+          </div>
+        </div>
+        <div class="code-bottom-note"><i class="fa-solid fa-shield-halved"></i> Code runs in a restricted preview frame. Avoid entering code you do not trust.</div>
+      </section>
+
+      <!-- NOTEPAD -->
+      <section class="page-section" id="page-notepad">
+        <div class="page-intro page-intro-row">
+          <div><span class="eyebrow">THOUGHTS, IDEAS & PLANS</span><h1>Cosmic <span>Notepad</span></h1><p>Write notes and keep your ideas close.</p></div>
+          <button class="primary-btn" id="newNoteBtn"><i class="fa-solid fa-plus"></i> New Note</button>
+        </div>
+        <div class="notes-layout">
+          <aside class="notes-list-panel"><div class="notes-search"><i class="fa-solid fa-magnifying-glass"></i><input id="notesSearch" type="search" placeholder="Search notes..."></div><div id="notesList" class="notes-list"></div></aside>
+          <div class="note-editor">
+            <div class="note-editor-top"><span id="noteSaveStatus">All changes saved locally</span><div><button class="icon-button" id="deleteNoteBtn" aria-label="Delete note"><i class="fa-solid fa-trash-can"></i></button><button class="icon-button" id="downloadNoteBtn" aria-label="Download note"><i class="fa-solid fa-download"></i></button></div></div>
+            <input id="noteTitle" type="text" placeholder="Note title..." aria-label="Note title">
+            <textarea id="noteContent" placeholder="Start writing your ideas here..." aria-label="Note content"></textarea>
+            <div class="note-editor-footer"><span id="noteWordCount">0 words</span><span><i class="fa-solid fa-cloud-arrow-down"></i> Saved on this device</span></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ANALYTICS -->
+      <section class="page-section" id="page-analytics">
+        <div class="page-intro">
+          <span class="eyebrow">UNDERSTAND YOUR WORKSPACE</span>
+          <h1>Local <span>Analytics</span></h1>
+          <p>See activity recorded in this browser. These are not shared website-wide visitor statistics.</p>
+        </div>
+        <div class="stats-grid analytics-stats">
+          <article class="stat-card"><div class="stat-icon cyan"><i class="fa-solid fa-eye"></i></div><div><span>Page Visits</span><strong id="analyticsViews">0</strong><small>Local browser count</small></div></article>
+          <article class="stat-card"><div class="stat-icon purple"><i class="fa-solid fa-bolt"></i></div><div><span>Interactions</span><strong id="analyticsEvents">0</strong><small>Recorded actions</small></div></article>
+          <article class="stat-card"><div class="stat-icon gold"><i class="fa-solid fa-folder"></i></div><div><span>Projects</span><strong id="analyticsProjects">0</strong><small>Saved locally</small></div></article>
+        </div>
+        <div class="analytics-grid">
+          <div class="panel-card"><div class="panel-title"><h2>Page Activity</h2><i class="fa-solid fa-chart-column"></i></div><div id="analyticsPages" class="analytics-bars"></div></div>
+          <div class="panel-card"><div class="panel-title"><h2>Recent Events</h2><i class="fa-solid fa-clock"></i></div><div id="analyticsRecent" class="activity-list"></div></div>
+        </div>
+        <button class="secondary-btn" id="resetAnalyticsBtn"><i class="fa-solid fa-trash-can"></i> Reset Local Analytics</button>
+      </section>
+
+      <!-- PRICING -->
+      <section class="page-section" id="page-pricing">
+        <div class="page-intro centered-intro">
+          <span class="eyebrow">CHOOSE YOUR JOURNEY</span>
+          <h1>Plans & <span>Pricing</span></h1>
+          <p>Explore the available plans. Checkout and subscriptions are not active until a payment provider is connected.</p>
+          <div class="billing-switch"><button class="active" data-billing="monthly">Monthly</button><button data-billing="yearly">Yearly</button><span class="save-label">YEARLY VALUE</span></div>
+        </div>
+        <div class="pricing-grid">
+          <article class="pricing-card">
+            <div class="plan-icon"><i class="fa-solid fa-paper-plane"></i></div><span class="plan-label">GET STARTED</span><h2>Explorer</h2><p>For curious minds and new creators.</p>
+            <div class="plan-price"><strong data-monthly="Free" data-yearly="Free">Free</strong><span>/ forever</span></div>
+            <ul><li><i class="fa-solid fa-check"></i> Browser-based free tools</li><li><i class="fa-solid fa-check"></i> Personal projects</li><li><i class="fa-solid fa-check"></i> Basic Code Lab</li><li><i class="fa-solid fa-check"></i> Mini-games</li></ul>
+            <button class="secondary-btn full-btn" data-plan="Explorer">Current Free Plan</button>
+          </article>
+          <article class="pricing-card featured-plan">
+            <span class="popular-label">CREATOR CHOICE</span><div class="plan-icon"><i class="fa-solid fa-gem"></i></div><span class="plan-label">MORE POSSIBILITIES</span><h2>Creator</h2><p>For people who love to build and create.</p>
+            <div class="plan-price"><strong data-monthly="$5" data-yearly="$48">$5</strong><span class="billing-period">/ month</span></div>
+            <ul><li><i class="fa-solid fa-check"></i> Everything in Explorer</li><li><i class="fa-solid fa-check"></i> Expanded workspace features</li><li><i class="fa-solid fa-check"></i> More project organization</li><li><i class="fa-solid fa-check"></i> Future premium tools</li></ul>
+            <button class="primary-btn full-btn" data-plan="Creator">Explore Creator</button>
+          </article>
+          <article class="pricing-card">
+            <div class="plan-icon"><i class="fa-solid fa-crown"></i></div><span class="plan-label">ULTIMATE EXPERIENCE</span><h2>Elite</h2><p>For ambitious creators and teams.</p>
+            <div class="plan-price"><strong data-monthly="$12" data-yearly="$115">$12</strong><span class="billing-period">/ month</span></div>
+            <ul><li><i class="fa-solid fa-check"></i> Everything in Creator</li><li><i class="fa-solid fa-check"></i> Advanced workspace options</li><li><i class="fa-solid fa-check"></i> Future team features</li><li><i class="fa-solid fa-check"></i> Priority feature roadmap</li></ul>
+            <button class="secondary-btn full-btn" data-plan="Elite">Explore Elite</button>
+          </article>
+        </div>
+        <p class="pricing-disclaimer"><i class="fa-solid fa-circle-info"></i> Plan buttons are informational demos. No payment is collected and no subscription is activated on this frontend.</p>
+      </section>
+
+      <!-- REVIEWS -->
+      <section class="page-section" id="page-reviews">
+        <div class="page-intro">
+          <span class="eyebrow">YOUR VOICE MATTERS</span>
+          <h1>Community <span>Reviews</span></h1>
+          <p>Share feedback about your experience on this device.</p>
+        </div>
+        <div class="reviews-layout">
+          <div class="review-summary panel-card">
+            <span class="eyebrow">YOUR FEEDBACK SPACE</span><div class="review-big-icon"><i class="fa-solid fa-star"></i></div>
+            <h2>Help us improve.</h2><p>Tell us what you like and what we can make better.</p>
+            <div class="review-rating-display"><strong id="averageRating">—</strong><span>Local demo rating</span></div>
+          </div>
+          <form class="review-form panel-card" id="reviewForm">
+            <h2>Write a Review</h2>
+            <label for="reviewName">Display name</label><input id="reviewName" type="text" maxlength="40" placeholder="Your name">
+            <label>Your rating</label><div class="star-rating" id="starRating"><button type="button" data-rating="1" aria-label="1 star">★</button><button type="button" data-rating="2" aria-label="2 stars">★</button><button type="button" data-rating="3" aria-label="3 stars">★</button><button type="button" data-rating="4" aria-label="4 stars">★</button><button type="button" data-rating="5" aria-label="5 stars">★</button></div>
+            <label for="reviewText">Your review</label><textarea id="reviewText" rows="4" maxlength="600" placeholder="Share your thoughts..."></textarea>
+            <button class="primary-btn full-btn" type="submit"><i class="fa-solid fa-paper-plane"></i> Submit Review</button>
+            <small>Reviews are stored locally in this browser. Public reviews need a backend.</small>
+          </form>
+        </div>
+        <div class="section-heading"><div><span class="eyebrow">COMMUNITY VOICES</span><h2>Recent Reviews</h2></div></div>
+        <div id="reviewsList" class="reviews-list"></div>
+      </section>
+
+      <!-- ABOUT -->
+      <section class="page-section" id="page-about">
+        <div class="about-hero">
+          <div class="about-emblem"><div class="about-mw">MW</div><span class="about-ring"></span></div>
+          <span class="eyebrow">A UNIVERSE BUILT ON IMAGINATION</span>
+          <h1>Welcome to <span>Wazir Aura</span></h1>
+          <p>A creative digital space bringing tools, ideas, coding, entertainment and exploration together in one universe.</p>
+        </div>
+        <div class="about-grid">
+          <article class="panel-card"><i class="fa-solid fa-rocket"></i><h3>Our Vision</h3><p>Make digital creativity feel exciting, accessible and inspiring.</p></article>
+          <article class="panel-card"><i class="fa-solid fa-lightbulb"></i><h3>Our Mission</h3><p>Bring useful browser experiences and creative possibilities into one place.</p></article>
+          <article class="panel-card"><i class="fa-solid fa-infinity"></i><h3>Our Philosophy</h3><p>Imagine boldly, learn continuously and build something meaningful.</p></article>
+        </div>
+        <div class="about-owner panel-card"><div class="owner-avatar"><i class="fa-solid fa-user-astronaut"></i></div><div><span class="eyebrow">THE CREATOR</span><h2>Murad Wazir</h2><p>Founder and creator of Wazir Aura.</p>
+          <div class="about-contact-row">
+            <a href="https://www.fiverr.com/s/611l6KP" target="_blank" rel="noopener noreferrer" class="text-link"><i class="fa-solid fa-briefcase"></i> Fiverr</a>
+            <a href="https://www.instagram.com/waziraura553/" target="_blank" rel="noopener noreferrer" class="text-link"><i class="fa-brands fa-instagram"></i> Instagram</a>
+            <a href="https://www.linkedin.com/in/murad-wazir-bbb0b541a" target="_blank" rel="noopener noreferrer" class="text-link"><i class="fa-brands fa-linkedin-in"></i> LinkedIn</a>
+            <a href="mailto:wazirlab@proton.me" class="text-link"><i class="fa-solid fa-envelope"></i> Email</a>
+          </div>
+          <a href="https://github.com/waziraura/wazir-web/" target="_blank" rel="noopener noreferrer" class="text-link">Visit GitHub Repository <i class="fa-brands fa-github"></i></a>
+        </div></div>
+      </section>
+
+
+      <!-- CONTACT -->
+      <section class="page-section" id="page-contact">
+        <div class="page-intro centered-intro">
+          <span class="eyebrow">LET'S CONNECT</span>
+          <h1>Contact <span>Murad Wazir</span></h1>
+          <p>Reach out for projects, collaborations, freelance work, or questions about Wazir Aura.</p>
+        </div>
+        <div class="contact-grid">
+          <a class="contact-card" href="https://www.fiverr.com/s/611l6KP" target="_blank" rel="noopener noreferrer">
+            <div class="contact-icon fiverr"><i class="fa-brands fa-facebook-f" style="display:none"></i><i class="fa-solid fa-briefcase"></i></div>
+            <strong>Fiverr</strong>
+            <small>Hire me for freelance work</small>
+            <span class="contact-link-text">fiverr.com/s/611l6KP</span>
+          </a>
+          <a class="contact-card" href="https://www.instagram.com/waziraura553/" target="_blank" rel="noopener noreferrer">
+            <div class="contact-icon ig"><i class="fa-brands fa-instagram"></i></div>
+            <strong>Instagram</strong>
+            <small>@waziraura553</small>
+            <span class="contact-link-text">instagram.com/waziraura553</span>
+          </a>
+          <a class="contact-card" href="https://www.linkedin.com/in/murad-wazir-bbb0b541a" target="_blank" rel="noopener noreferrer">
+            <div class="contact-icon li"><i class="fa-brands fa-linkedin-in"></i></div>
+            <strong>LinkedIn</strong>
+            <small>Murad Wazir</small>
+            <span class="contact-link-text">linkedin.com/in/murad-wazir</span>
+          </a>
+          <a class="contact-card" href="mailto:wazirlab@proton.me">
+            <div class="contact-icon mail"><i class="fa-solid fa-envelope"></i></div>
+            <strong>Email</strong>
+            <small>Direct message</small>
+            <span class="contact-link-text">wazirlab@proton.me</span>
+          </a>
+        </div>
+        <div class="contact-note panel-card">
+          <i class="fa-solid fa-shield-halved"></i>
+          <div>
+            <h3>Safe collaboration</h3>
+            <p>For business or project inquiries, email or Fiverr is preferred. Social links open in a new tab.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="page-section" id="page-settings">
+        <div class="page-intro">
+          <span class="eyebrow">MAKE THIS SPACE YOURS</span>
+          <h1>Universe <span>Settings</span></h1>
+          <p>Customize the look, feel and behavior of your Wazir Aura workspace.</p>
+        </div>
+        <div class="settings-layout">
+          <aside class="settings-nav">
+            <button class="settings-tab active" data-settings-tab="appearance"><i class="fa-solid fa-palette"></i> Appearance</button>
+            <button class="settings-tab" data-settings-tab="effects"><i class="fa-solid fa-wand-magic-sparkles"></i> Effects & Motion</button>
+            <button class="settings-tab" data-settings-tab="workspace"><i class="fa-solid fa-sliders"></i> Workspace</button>
+            <button class="settings-tab" data-settings-tab="privacy"><i class="fa-solid fa-shield-halved"></i> Privacy & Data</button>
+            <button class="settings-tab" data-settings-tab="project"><i class="fa-solid fa-folder-gear"></i> Project Defaults</button>
+          </aside>
+
+          <div class="settings-content">
+            <div class="settings-panel active" id="settings-appearance">
+              <div class="settings-heading"><h2>Appearance</h2><p>Choose the visual atmosphere of your universe.</p></div>
+              <div class="setting-row"><div><strong>Color Theme</strong><small>Switch between dark and light appearance.</small></div><select id="appearanceTheme"><option value="dark">Cosmic Dark</option><option value="light">Light Mode</option></select></div>
+              <div class="setting-row"><div><strong>Accent Color</strong><small>Choose your interface highlight color.</small></div><select id="accentColor"><option value="aurora">Aurora Blue & Purple</option><option value="gold">Luxury Gold</option><option value="cyan">Cyber Cyan</option><option value="pink">Neon Pink</option><option value="green">Emerald</option></select></div>
+              <div class="setting-row"><div><strong>Interface Density</strong><small>Adjust the spacing of interface elements.</small></div><select id="interfaceDensity"><option value="comfortable">Comfortable</option><option value="compact">Compact</option></select></div>
+            </div>
+
+            <div class="settings-panel" id="settings-effects">
+              <div class="settings-heading"><h2>Effects & Motion</h2><p>Control the animations and atmosphere.</p></div>
+              <div class="setting-row"><div><strong>Animated Background</strong><small>Show stars, cosmic glow and space effects.</small></div><label class="switch"><input type="checkbox" id="starsToggle" checked><span></span></label></div>
+              <div class="setting-row"><div><strong>Interface Animations</strong><small>Enable card transitions and motion effects.</small></div><label class="switch"><input type="checkbox" id="animationsToggle" checked><span></span></label></div>
+              <div class="setting-row"><div><strong>3D Effects</strong><small>Enable visual depth and hover effects.</small></div><label class="switch"><input type="checkbox" id="effects3dToggle" checked><span></span></label></div>
+              <div class="setting-row"><div><strong>Sound Effects</strong><small>Allow optional interface sounds.</small></div><label class="switch"><input type="checkbox" id="soundToggle"><span></span></label></div>
+            </div>
+
+            <div class="settings-panel" id="settings-workspace">
+              <div class="settings-heading"><h2>Workspace</h2><p>Set your preferred workspace behavior.</p></div>
+              <div class="setting-row"><div><strong>Start Page</strong><small>Choose which page opens first.</small></div><select id="startPage"><option value="overview">Overview</option><option value="ai">AI Assistant</option><option value="tools">Free Tools</option><option value="projects">Projects</option><option value="codelab">Code Lab</option></select></div>
+              <div class="setting-row"><div><strong>Confirm Before Delete</strong><small>Ask before removing projects and notes.</small></div><label class="switch"><input type="checkbox" id="confirmDeleteToggle" checked><span></span></label></div>
+              <div class="setting-row"><div><strong>Autosave Notes</strong><small>Automatically save notes on this device.</small></div><label class="switch"><input type="checkbox" id="autosaveToggle" checked><span></span></label></div>
+            </div>
+
+            <div class="settings-panel" id="settings-privacy">
+              <div class="settings-heading"><h2>Privacy & Data</h2><p>Manage locally stored workspace information.</p></div>
+              <div class="setting-row"><div><strong>Local Storage</strong><small>Your projects, notes and settings are saved in this browser.</small></div><span class="setting-status">ON DEVICE</span></div>
+              <div class="setting-row"><div><strong>Export Workspace</strong><small>Download a backup of supported local data.</small></div><button class="secondary-btn" id="settingsExportBtn">Export Data</button></div>
+              <div class="setting-row"><div><strong>Clear Local Workspace</strong><small>Remove saved Wazir Aura data from this browser.</small></div><button class="danger-btn" id="clearDataBtn">Clear Data</button></div>
+            </div>
+
+            <div class="settings-panel" id="settings-project">
+              <div class="settings-heading"><h2>Project Defaults</h2><p>Set default options for newly created projects.</p></div>
+              <div class="setting-row"><div><strong>Default Project Category</strong><small>Starting category for new projects.</small></div><select id="defaultProjectCategory"><option value="Personal">Personal</option><option value="Website">Website</option><option value="Design">Design</option><option value="Business">Business</option><option value="Learning">Learning</option></select></div>
+              <div class="setting-row"><div><strong>Default Project Color</strong><small>Choose a color label for new projects.</small></div><select id="defaultProjectColor"><option value="purple">Purple</option><option value="cyan">Cyan</option><option value="gold">Gold</option><option value="pink">Pink</option><option value="green">Green</option></select></div>
+            </div>
+
+            <div class="settings-save-row"><span id="settingsSaveStatus">Settings are saved on this device.</span><button class="primary-btn" id="saveSettingsBtn"><i class="fa-solid fa-check"></i> Save Settings</button></div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="main-footer">
+        <div class="footer-brand"><span class="footer-mw">MW</span><strong>WAZIR AURA</strong></div>
+        <p>Explore. Imagine. Create. Your digital universe.</p>
+        <div class="footer-social">
+          <a href="https://www.fiverr.com/s/611l6KP" target="_blank" rel="noopener noreferrer" aria-label="Fiverr" title="Fiverr"><i class="fa-solid fa-briefcase"></i></a>
+          <a href="https://www.instagram.com/waziraura553/" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram"><i class="fa-brands fa-instagram"></i></a>
+          <a href="https://www.linkedin.com/in/murad-wazir-bbb0b541a" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" title="LinkedIn"><i class="fa-brands fa-linkedin-in"></i></a>
+          <a href="mailto:wazirlab@proton.me" aria-label="Email" title="Email"><i class="fa-solid fa-envelope"></i></a>
+        </div>
+        <span>© <span id="currentYear"></span> Wazir Aura · Murad Wazir. All rights reserved.</span>
+      </footer>
+    </main>
+  </div>
+
+  <!-- Project modal -->
+  <div class="modal-backdrop hidden" id="projectModal">
+    <div class="modal-card">
+      <div class="modal-heading"><div><span class="eyebrow">PROJECT WORKSPACE</span><h2 id="projectModalTitle">New Project</h2></div><button class="icon-button" id="closeProjectModal" aria-label="Close"><i class="fa-solid fa-xmark"></i></button></div>
+      <form id="projectForm">
+        <input type="hidden" id="projectId">
+        <label for="projectName">Project name</label><input id="projectName" type="text" maxlength="80" placeholder="Give your project a name..." required>
+        <label for="projectCategory">Category</label><select id="projectCategory"><option>Personal</option><option>Website</option><option>Design</option><option>Business</option><option>Learning</option></select>
+        <label for="projectDescription">Description</label><textarea id="projectDescription" rows="4" maxlength="800" placeholder="What is this project about?"></textarea>
+        <label for="projectColor">Project color</label><select id="projectColor"><option value="purple">Purple</option><option value="cyan">Cyan</option><option value="gold">Gold</option><option value="pink">Pink</option><option value="green">Green</option></select>
+        <div class="modal-actions"><button type="button" class="secondary-btn" id="cancelProjectBtn">Cancel</button><button type="submit" class="primary-btn"><i class="fa-solid fa-floppy-disk"></i> Save Project</button></div>
+      </form>
+    </div>
+  </div>
+
+
+  <!-- Command Palette -->
+  <div class="modal-backdrop hidden" id="commandPalette" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="modal-card command-palette-card">
+      <div class="command-search">
+        <i class="fa-solid fa-magnifying-glass"></i>
+        <input id="commandInput" type="search" placeholder="Type a command or search pages, tools, actions..." autocomplete="off" aria-label="Command search">
+        <kbd>Esc</kbd>
+      </div>
+      <div id="commandResults" class="command-results"></div>
+      <div class="command-hint"><span><kbd>↑</kbd><kbd>↓</kbd> navigate</span><span><kbd>Enter</kbd> open</span><span><kbd>Ctrl</kbd>+<kbd>K</kbd> toggle</span></div>
+    </div>
+  </div>
+
+  <!-- Focus / Pomodoro Timer -->
+  <div class="modal-backdrop hidden" id="focusModal">
+    <div class="modal-card focus-card">
+      <div class="modal-heading">
+        <div><span class="eyebrow">FOCUS MODE</span><h2>Pomodoro Timer</h2></div>
+        <button class="icon-button" id="closeFocusBtn" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="focus-display" id="focusDisplay">25:00</div>
+      <div class="focus-modes">
+        <button class="filter-chip active" data-focus-mode="25">Focus 25</button>
+        <button class="filter-chip" data-focus-mode="15">Short 15</button>
+        <button class="filter-chip" data-focus-mode="5">Break 5</button>
+        <button class="filter-chip" data-focus-mode="45">Deep 45</button>
+      </div>
+      <div class="modal-actions" style="justify-content:center">
+        <button class="primary-btn" id="focusStartBtn"><i class="fa-solid fa-play"></i> Start</button>
+        <button class="secondary-btn" id="focusPauseBtn"><i class="fa-solid fa-pause"></i> Pause</button>
+        <button class="secondary-btn" id="focusResetBtn"><i class="fa-solid fa-rotate-left"></i> Reset</button>
+      </div>
+      <p class="focus-note">Local timer only. Runs in this browser tab.</p>
+    </div>
+  </div>
+
+  <!-- Toast notifications -->
+  <div class="toast-container" id="toastContainer" aria-live="polite"></div>
+
+  <!-- Confirmation dialog -->
+  <div class="modal-backdrop hidden" id="confirmModal">
+    <div class="modal-card confirm-card">
+      <div class="confirm-icon"><i class="fa-solid fa-circle-question"></i></div>
+      <h2 id="confirmTitle">Are you sure?</h2>
+      <p id="confirmMessage">Please confirm this action.</p>
+      <div class="modal-actions"><button class="secondary-btn" id="confirmCancel">Cancel</button><button class="danger-btn" id="confirmAccept">Confirm</button></div>
+    </div>
+  </div>
+
+</body>
+</html>
