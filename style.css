@@ -4582,3 +4582,468 @@ body.no-3d .quick-card:hover {
   .splash-mw { font-size: 34px; }
   .splash-emblem { width: 96px; height: 96px; }
 }
+
+/* ==========================================================
+   TYPING SPEED GAME — FIXED INPUT VISIBILITY
+   ========================================================== */
+
+.typing-game {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.typing-hint {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.typing-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--cyan);
+  letter-spacing: 0.5px;
+}
+
+.typing-prompt {
+  padding: 16px 14px !important;
+  border-radius: 12px;
+  border: 1px solid rgba(54, 229, 255, .28) !important;
+  background: rgba(10, 14, 32, .9) !important;
+  color: #e8ecff !important;
+  font-size: 15px !important;
+  line-height: 1.85 !important;
+  font-family: "Inter", system-ui, sans-serif;
+  letter-spacing: 0.3px;
+  min-height: 64px;
+}
+
+.typing-prompt span {
+  display: inline;
+  border-radius: 3px;
+  padding: 0 1px;
+}
+
+.typing-prompt span.ok {
+  color: #52e6ae;
+  background: rgba(82, 230, 174, .12);
+}
+
+.typing-prompt span.bad {
+  color: #ff8b9f;
+  background: rgba(255, 100, 128, .15);
+  text-decoration: underline;
+}
+
+.typing-prompt span.next {
+  background: rgba(54, 229, 255, .25);
+  border-bottom: 2px solid #36e5ff;
+}
+
+.typing-input-box,
+#typingInput.typing-input-box,
+#typingInput {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  min-height: 110px !important;
+  padding: 14px 16px !important;
+  border: 1px solid rgba(130, 112, 255, .45) !important;
+  border-radius: 12px !important;
+  background: #0c1022 !important;
+  color: #f3f5ff !important;
+  caret-color: #36e5ff !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  font-family: "Inter", system-ui, sans-serif !important;
+  resize: vertical;
+  outline: none !important;
+  -webkit-text-fill-color: #f3f5ff !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: 2;
+  position: relative;
+}
+
+.typing-input-box:focus,
+#typingInput:focus {
+  border-color: #36e5ff !important;
+  box-shadow: 0 0 0 3px rgba(54, 229, 255, .18) !important;
+}
+
+.typing-input-box::placeholder,
+#typingInput::placeholder {
+  color: #7a849f !important;
+  -webkit-text-fill-color: #7a849f !important;
+  opacity: 1 !important;
+}
+
+.typing-live {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.typing-result {
+  font-size: 13px;
+  color: var(--text);
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: rgba(54, 229, 255, .08);
+  border: 1px solid var(--border);
+}
+
+body.light-theme .typing-prompt {
+  background: #eef1fa !important;
+  color: #1a2140 !important;
+  border-color: rgba(65, 77, 133, .25) !important;
+}
+
+body.light-theme .typing-input-box,
+body.light-theme #typingInput {
+  background: #ffffff !important;
+  color: #1a2140 !important;
+  -webkit-text-fill-color: #1a2140 !important;
+  caret-color: #466ce0 !important;
+  border-color: rgba(102, 85, 210, .35) !important;
+}
+
+body.light-theme .typing-prompt span.ok { color: #1a9a6a; }
+body.light-theme .typing-prompt span.bad { color: #c23050; }
+
+/* ==========================================================
+   PREMIUM 3D HERO + REAL PLATFORM LOOK
+   ========================================================== */
+
+.hero-art-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+}
+
+.hero-depth-layer.layer-back {
+  position: absolute;
+  inset: 10% 15%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(120, 90, 255, .2), transparent 70%);
+  filter: blur(20px);
+  animation: heroPulse 8s ease-in-out infinite;
+}
+
+.hero-galaxy-spin {
+  position: absolute;
+  width: 280px;
+  height: 100px;
+  border-radius: 50%;
+  border: 1px solid rgba(160, 120, 255, .25);
+  background: radial-gradient(ellipse, rgba(100, 80, 255, .12), transparent 70%);
+  transform: rotateX(65deg) rotateZ(-20deg);
+  animation: galaxySpin3d 28s linear infinite;
+  filter: blur(0.5px);
+}
+
+.logo-3d {
+  transform-style: preserve-3d;
+  animation: logoFloat3d 6s ease-in-out infinite;
+  box-shadow:
+    0 20px 50px rgba(0, 0, 0, .45),
+    0 0 40px rgba(80, 180, 255, .25),
+    inset 0 0 30px rgba(120, 90, 255, .2) !important;
+}
+
+.logo-3d-face {
+  font-family: "Orbitron", sans-serif;
+  font-size: 42px !important;
+  font-weight: 900;
+  letter-spacing: -2px;
+  background: linear-gradient(135deg, #9ef0ff, #b794ff, #ffd76a);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 4px 12px rgba(80, 200, 255, .45));
+}
+
+.hero-planet.planet-a {
+  width: 36px;
+  height: 36px;
+  top: 18%;
+  right: 14%;
+  background: radial-gradient(circle at 30% 25%, #ffe6ab, #a16c36 55%, #2a1a18);
+  box-shadow: inset -8px -6px 14px rgba(0,0,0,.5), 0 0 20px rgba(240, 180, 90, .35);
+  animation: planetFloat3d 9s ease-in-out infinite alternate;
+}
+
+.hero-planet.planet-b {
+  width: 22px;
+  height: 22px;
+  bottom: 22%;
+  left: 12%;
+  background: radial-gradient(circle at 35% 30%, #c8f0ff, #4a7dff 60%, #1a2040);
+  box-shadow: 0 0 16px rgba(80, 160, 255, .4);
+  animation: planetFloat3d 7s ease-in-out infinite alternate-reverse;
+}
+
+.hero-shape {
+  position: absolute;
+  border: 1px solid rgba(140, 200, 255, .35);
+  background: linear-gradient(145deg, rgba(80, 120, 255, .15), rgba(20, 30, 60, .4));
+  backdrop-filter: blur(4px);
+  transform-style: preserve-3d;
+}
+
+.shape-cube {
+  width: 28px;
+  height: 28px;
+  top: 28%;
+  left: 8%;
+  border-radius: 6px;
+  animation: shapeSpin3d 12s linear infinite;
+  box-shadow: 0 8px 20px rgba(0,0,0,.3);
+}
+
+.shape-ring {
+  width: 40px;
+  height: 40px;
+  bottom: 18%;
+  right: 8%;
+  border-radius: 50%;
+  border-width: 2px;
+  background: transparent;
+  animation: shapeSpin3d 16s linear infinite reverse;
+}
+
+.floating-star.star-c {
+  top: 48%;
+  left: 4%;
+  font-size: 14px;
+  color: #b59aff;
+  animation-delay: -2s;
+}
+
+.floating-chip.chip-c {
+  left: 18%;
+  top: 8%;
+  animation-delay: -1s;
+}
+
+/* 3D-ish buttons — subtle depth, not cartoon */
+.primary-btn,
+.secondary-btn {
+  transform-style: preserve-3d;
+  box-shadow:
+    0 4px 0 rgba(0, 0, 0, .2),
+    0 8px 20px rgba(80, 70, 200, .2);
+}
+
+.primary-btn:hover,
+.secondary-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+}
+
+.primary-btn:active,
+.secondary-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 0 rgba(0, 0, 0, .2);
+}
+
+.nav-link {
+  transition: transform .25s ease, background .25s ease, color .25s ease;
+}
+
+.nav-link:hover {
+  transform: translateX(4px);
+}
+
+.stat-card,
+.quick-card,
+.feature-card,
+.tool-card,
+.project-card,
+.service-card {
+  transform-style: preserve-3d;
+  transition: transform .35s cubic-bezier(.2, .8, .2, 1), box-shadow .35s ease, border-color .35s ease;
+}
+
+.stat-card:hover,
+.quick-card:hover,
+.feature-card:hover,
+.tool-card:hover,
+.project-card:hover,
+.service-card:hover {
+  transform: translateY(-6px) rotateX(2deg);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, .28);
+}
+
+/* Services */
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+  margin-bottom: 20px;
+}
+
+.service-card {
+  position: relative;
+  padding: 22px 18px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--panel);
+}
+
+.service-card.featured-service {
+  border-color: rgba(207, 169, 90, .5);
+  background: linear-gradient(160deg, rgba(75, 55, 89, .55), rgba(19, 22, 44, .95));
+}
+
+.service-icon {
+  width: 46px;
+  height: 46px;
+  display: grid;
+  place-items: center;
+  border-radius: 13px;
+  margin-bottom: 14px;
+  color: var(--cyan);
+  background: rgba(54, 229, 255, .12);
+  font-size: 18px;
+}
+
+.service-card h3 {
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.service-card > p {
+  color: var(--muted);
+  font-size: 11px;
+  margin-bottom: 12px;
+  min-height: 48px;
+}
+
+.service-card ul {
+  list-style: none;
+  margin: 0 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.service-card li {
+  font-size: 10px;
+  color: #c0c6da;
+}
+
+.service-card li::before {
+  content: "✓ ";
+  color: var(--green);
+}
+
+.hire-cta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.hire-cta h2 {
+  font-family: "Orbitron", sans-serif;
+  font-size: 18px;
+  margin: 6px 0 8px;
+}
+
+.hire-cta p {
+  color: var(--muted);
+  font-size: 11px;
+  max-width: 480px;
+}
+
+.hire-cta-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.project-progress-bar {
+  height: 6px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.08);
+  margin-top: 10px;
+  overflow: hidden;
+}
+
+.project-progress-bar > span {
+  display: block;
+  height: 100%;
+  background: var(--gradient);
+  border-radius: 10px;
+}
+
+.project-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+  font-size: 9px;
+  color: var(--muted);
+}
+
+.project-meta-row .tag {
+  padding: 2px 8px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: rgba(255,255,255,.03);
+}
+
+.snake-board {
+  display: grid;
+  gap: 2px;
+  background: #0a0d1a;
+  padding: 6px;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  margin: 12px auto;
+  width: fit-content;
+}
+
+.snake-cell {
+  width: 14px;
+  height: 14px;
+  border-radius: 3px;
+  background: rgba(255,255,255,.04);
+}
+
+.snake-cell.snake { background: #36e5ff; box-shadow: 0 0 6px rgba(54, 229, 255, .5); }
+.snake-cell.head { background: #b794ff; }
+.snake-cell.food { background: #f5cc75; box-shadow: 0 0 8px rgba(245, 204, 117, .5); border-radius: 50%; }
+
+@keyframes logoFloat3d {
+  0%, 100% { transform: translateY(0) rotateY(-8deg) rotateX(4deg); }
+  50% { transform: translateY(-12px) rotateY(8deg) rotateX(-2deg); }
+}
+
+@keyframes planetFloat3d {
+  from { transform: translate3d(0, 0, 20px); }
+  to { transform: translate3d(12px, -16px, 40px); }
+}
+
+@keyframes shapeSpin3d {
+  from { transform: rotateX(20deg) rotateY(0deg); }
+  to { transform: rotateX(20deg) rotateY(360deg); }
+}
+
+@keyframes galaxySpin3d {
+  from { transform: rotateX(65deg) rotateZ(0deg); }
+  to { transform: rotateX(65deg) rotateZ(360deg); }
+}
+
+@keyframes heroPulse {
+  0%, 100% { opacity: .6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.08); }
+}
+
+@media (max-width: 1000px) {
+  .services-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+  .services-grid { grid-template-columns: 1fr; }
+  .hire-cta { flex-direction: column; align-items: flex-start; }
+}
