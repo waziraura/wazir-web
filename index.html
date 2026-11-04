@@ -4,8 +4,13 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#080914">
-  <meta name="description" content="Wazir Aura — A futuristic digital universe for creativity, AI, coding, tools and projects.">
-  <title>Wazir Aura — Your Digital Workspace</title>
+  <meta name="description" content="Wazir Aura — Premium digital workspace by Murad Wazir. Free tools, Code Lab, Typing Master, projects, AI assistant and professional web services.">
+  <meta property="og:title" content="Wazir Aura — Your Digital Universe">
+  <meta property="og:description" content="Build, practice and ship with free browser tools, Code Lab, projects and freelance services under the MW brand.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://waziraura.github.io/wazir-web/">
+  <meta name="twitter:card" content="summary_large_image">
+  <title>Wazir Aura — Your Digital Universe</title>
 
   <!-- Custom MW favicon -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop stop-color='%2300eaff'/%3E%3Cstop offset='.5' stop-color='%239b5cff'/%3E%3Cstop offset='1' stop-color='%23ffd76a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='25' fill='%23090b19'/%3E%3Cpath d='M13 70V29h13l13 22 13-22h13v41H51V49L39 68 27 49v21z' fill='url(%23g)'/%3E%3Ccircle cx='78' cy='25' r='7' fill='%23ffd76a'/%3E%3C/svg%3E">
@@ -154,16 +159,18 @@
       <section class="page-section active" id="page-overview">
         <div class="welcome-hero">
           <div class="hero-copy">
-            <span class="eyebrow"><i class="fa-solid fa-satellite"></i> WAZIR AURA · YOUR CREATIVE COMMAND CENTER</span>
-            <h1>Build. Launch.<br><span>Own Your Orbit.</span></h1>
-            <p>A calm, focused digital workspace — free tools, Code Lab, Typing Master, projects, and professional services. Open only what you need, when you need it.</p>
+            <span class="eyebrow"><i class="fa-solid fa-satellite"></i> WAZIR AURA · YOUR DIGITAL UNIVERSE</span>
+            <h1>Explore. Imagine.<br><span>Create.</span></h1>
+            <p>A premium cosmic workspace for creators and clients — free tools, multi-language Code Lab, Typing Master, projects, AI assistant and real freelance services by Murad Wazir.</p>
             <div class="hero-buttons">
-              <button class="primary-btn" data-page-link="tools"><i class="fa-solid fa-wand-magic-sparkles"></i> Open Free Tools</button>
-              <button class="secondary-btn" data-page-link="about"><i class="fa-solid fa-circle-info"></i> About Wazir Aura</button>
+              <button class="primary-btn" data-page-link="tools"><i class="fa-solid fa-wand-magic-sparkles"></i> Explore Tools</button>
+              <button class="secondary-btn" data-page-link="ai"><i class="fa-solid fa-robot"></i> Open AI Assistant</button>
+              <button class="secondary-btn" data-page-link="projects"><i class="fa-solid fa-folder-open"></i> View Projects</button>
+              <button class="secondary-btn" data-page-link="services"><i class="fa-solid fa-briefcase"></i> Hire Me</button>
             </div>
             <div class="hero-trust">
               <span><i class="fa-solid fa-screwdriver-wrench"></i> Practical free tools</span>
-              <span><i class="fa-solid fa-code"></i> Live Code Lab</span>
+              <span><i class="fa-solid fa-code"></i> Multi-language Code Lab</span>
               <span><i class="fa-solid fa-briefcase"></i> Real freelance services</span>
             </div>
           </div>
@@ -200,6 +207,74 @@
           <article class="stat-card"><div class="stat-icon purple"><i class="fa-solid fa-folder-open"></i></div><div><span>My Projects</span><strong id="totalProjects">0</strong><small>Saved on this device</small></div></article>
           <article class="stat-card"><div class="stat-icon gold"><i class="fa-solid fa-wand-magic-sparkles"></i></div><div><span>Tool Activities</span><strong id="totalEvents">0</strong><small>Local interactions</small></div></article>
           <article class="stat-card"><div class="stat-icon pink"><i class="fa-solid fa-note-sticky"></i></div><div><span>Notes</span><strong id="totalNotes">0</strong><small>Saved on this device</small></div></article>
+        </div>
+
+        <div class="section-heading compact">
+          <div><span class="eyebrow">FEATURED UNIVERSE</span><h2>Highlights</h2></div>
+          <div class="slider-controls">
+            <button type="button" class="icon-button" id="featurePrev" aria-label="Previous"><i class="fa-solid fa-chevron-left"></i></button>
+            <button type="button" class="icon-button" id="featureNext" aria-label="Next"><i class="fa-solid fa-chevron-right"></i></button>
+          </div>
+        </div>
+        <div class="feature-slider" id="featureSlider">
+          <div class="feature-slider-track" id="featureSliderTrack">
+            <article class="slide-card" data-page-link="tools">
+              <div class="slide-icon"><i class="fa-solid fa-screwdriver-wrench"></i></div>
+              <h3>Free Tools</h3>
+              <p>Formatters, converters, generators and calculators — all in your browser.</p>
+              <span class="text-link">Open tools <i class="fa-solid fa-arrow-right"></i></span>
+            </article>
+            <article class="slide-card" data-page-link="codelab">
+              <div class="slide-icon"><i class="fa-solid fa-code"></i></div>
+              <h3>Code Lab</h3>
+              <p>Web live preview plus Python, C++, PHP and WordPress templates.</p>
+              <span class="text-link">Open Code Lab <i class="fa-solid fa-arrow-right"></i></span>
+            </article>
+            <article class="slide-card" data-page-link="ai">
+              <div class="slide-icon"><i class="fa-solid fa-robot"></i></div>
+              <h3>AI Assistant</h3>
+              <p>Brainstorm, write and learn with mode-based local assistant guidance.</p>
+              <span class="text-link">Chat now <i class="fa-solid fa-arrow-right"></i></span>
+            </article>
+            <article class="slide-card" data-page-link="typingmaster">
+              <div class="slide-icon"><i class="fa-solid fa-keyboard"></i></div>
+              <h3>Typing Master</h3>
+              <p>Lessons, timed tests and analytics to improve speed and accuracy.</p>
+              <span class="text-link">Start practice <i class="fa-solid fa-arrow-right"></i></span>
+            </article>
+            <article class="slide-card" data-page-link="services">
+              <div class="slide-icon"><i class="fa-solid fa-briefcase"></i></div>
+              <h3>Hire Murad Wazir</h3>
+              <p>Websites, UI, tools, data entry and social banners — real delivery.</p>
+              <span class="text-link">View services <i class="fa-solid fa-arrow-right"></i></span>
+            </article>
+            <article class="slide-card" data-page-link="projects">
+              <div class="slide-icon"><i class="fa-solid fa-layer-group"></i></div>
+              <h3>My Projects</h3>
+              <p>Organize ideas with status, priority, progress and local backups.</p>
+              <span class="text-link">Open projects <i class="fa-solid fa-arrow-right"></i></span>
+            </article>
+          </div>
+        </div>
+
+        <div class="dash-mini-grid">
+          <div class="panel-card">
+            <div class="panel-title"><h3>Recent Tools</h3><i class="fa-solid fa-clock"></i></div>
+            <div id="recentToolsList" class="activity-list"><p class="empty-state">Open a tool to see it here.</p></div>
+          </div>
+          <div class="panel-card">
+            <div class="panel-title"><h3>Recent Projects</h3><i class="fa-solid fa-folder"></i></div>
+            <div id="recentProjectsList" class="activity-list"><p class="empty-state">Create a project to see it here.</p></div>
+          </div>
+          <div class="panel-card">
+            <div class="panel-title"><h3>Workspace Shortcuts</h3><i class="fa-solid fa-bolt"></i></div>
+            <div class="shortcut-row">
+              <button type="button" class="secondary-btn" data-page-link="notepad"><i class="fa-solid fa-note-sticky"></i> Notepad</button>
+              <button type="button" class="secondary-btn" data-page-link="media"><i class="fa-solid fa-envelope-open-text"></i> Aura Mail</button>
+              <button type="button" class="secondary-btn" data-page-link="analytics"><i class="fa-solid fa-chart-line"></i> Analytics</button>
+              <button type="button" class="secondary-btn" data-page-link="settings"><i class="fa-solid fa-gear"></i> Settings</button>
+            </div>
+          </div>
         </div>
 
         <div class="dashboard-grid">
