@@ -5952,3 +5952,100 @@ body.light-theme .aura-mail-grid textarea {
 .workspace-actions .secondary-btn {
   min-height: 38px;
 }
+
+/* ==========================================================
+   v2.6 — PREMIUM DASHBOARD SLIDER & GLASS
+   ========================================================== */
+.panel-card,
+.stat-card,
+.side-panel,
+.feature-card,
+.tool-card,
+.service-card,
+.pricing-card {
+  background: rgba(16, 20, 44, 0.72);
+  border: 1px solid rgba(150, 160, 255, 0.18);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+}
+
+.feature-slider {
+  overflow: hidden;
+  margin-bottom: 20px;
+  border-radius: 18px;
+}
+.feature-slider-track {
+  display: flex;
+  gap: 14px;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform;
+}
+.slide-card {
+  flex: 0 0 min(280px, 82vw);
+  padding: 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(140, 130, 255, 0.28);
+  background: linear-gradient(160deg, rgba(40, 36, 90, 0.55), rgba(14, 18, 40, 0.9));
+  cursor: pointer;
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+.slide-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(54, 229, 255, 0.45);
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.28);
+}
+.slide-icon {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  margin-bottom: 12px;
+  color: var(--cyan);
+  background: rgba(54, 229, 255, 0.12);
+  font-size: 17px;
+}
+.slide-card h3 { font-size: 15px; margin-bottom: 6px; }
+.slide-card p { color: var(--muted); font-size: 12px; line-height: 1.6; margin-bottom: 10px; min-height: 40px; }
+.slider-controls { display: flex; gap: 8px; }
+
+.dash-mini-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-bottom: 18px;
+}
+.shortcut-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.shortcut-row .secondary-btn {
+  min-height: 34px;
+  font-size: 11px;
+  padding: 0 12px;
+}
+
+.chat-message {
+  position: relative;
+}
+.chat-message .chat-time {
+  display: block;
+  font-size: 9px;
+  color: var(--subtle);
+  margin-top: 6px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  .feature-slider-track { transition: none; }
+}
+
+@media (max-width: 1000px) {
+  .dash-mini-grid { grid-template-columns: 1fr; }
+}
