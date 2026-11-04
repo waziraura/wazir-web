@@ -21,7 +21,8 @@
     gamesPlayed: "wa_v2_games_played",
     typingProgress: "wa_v2_typing",
     likes: "wa_v2_likes",
-    mediaPosts: "wa_v2_media_posts"
+    mediaPosts: "wa_v2_media_posts",
+    recentTools: "wa_v2_recent_tools"
   };
 
   const PAGE_TITLES = {
@@ -1014,6 +1015,78 @@ button {
   ];
 
   let activeToolId = null;
+  let recentTools = read(STORAGE.recentTools, []);
+  let featureSlideIndex = 0;
+
+  function trackRecentTool(id) {
+    const tool = TOOLS.find((t) => t.id === id);
+    if (!tool) return;
+    recentTools = [{ id: tool.id, name: tool.name, at: new Date().toISOString() }, ...recentTools.filter((t) => t.id !== id)].slice(0, 8);
+    write(STORAGE.recentTools, recentTools);
+    renderRecentTools();
+  }
+
+  function renderRecentTools() {
+    const el = $("#recentToolsList");
+    if (!el) return;
+    if (!recentTools.length) {
+      el.innerHTML = `<p class="empty-state">Open a tool to see it here.</p>`;
+      return;
+    }
+    el.innerHTML = recentTools
+      .slice(0, 5)
+      .map(
+        (t) => `
+      <div class="activity-item">
+        <span class="activity-dot"></span>
+        <div>
+          <strong><button type="button" class="text-link" data-action="open-tool" data-id="${escapeHTML(t.id)}">${escapeHTML(t.name)}</button></strong>
+          <small>${escapeHTML(formatDate(t.at))}</small>
+        </div>
+      </div>`
+      )
+      .join("");
+  }
+
+  function renderRecentProjectsDash() {
+    const el = $("#recentProjectsList");
+    if (!el) return;
+    const list = (typeof projectsData !== "undefined" ? projectsData : []).slice().sort((a, b) => new Date(b.updatedAt || b.createdAt) - new Date(a.updatedAt || a.createdAt)).slice(0, 5);
+    if (!list.length) {
+      el.innerHTML = `<p class="empty-state">Create a project to see it here.</p>`;
+      return;
+    }
+    el.innerHTML = list
+      .map(
+        (p) => `
+      <div class="activity-item">
+        <span class="activity-dot"></span>
+        <div>
+          <strong>${escapeHTML(p.name)}</strong>
+          <small>${escapeHTML(p.status || "Planning")} · ${escapeHTML(formatDate(p.updatedAt || p.createdAt))}</small>
+        </div>
+      </div>`
+      )
+      .join("");
+  }
+
+  function initFeatureSlider() {
+    const track = $("#featureSliderTrack");
+    if (!track) return;
+    const cards = [...track.children];
+    if (!cards.length) return;
+    const gap = 14;
+    const step = () => (cards[0]?.offsetWidth || 280) + gap;
+    const maxIndex = () => Math.max(0, cards.length - Math.max(1, Math.floor((track.parentElement?.clientWidth || 300) / step())));
+    const apply = () => {
+      featureSlideIndex = Math.max(0, Math.min(featureSlideIndex, maxIndex()));
+      track.style.transform = `translateX(-${featureSlideIndex * step()}px)`;
+    };
+    $("#featurePrev")?.addEventListener("click", () => { featureSlideIndex -= 1; apply(); });
+    $("#featureNext")?.addEventListener("click", () => { featureSlideIndex += 1; apply(); });
+    window.addEventListener("resize", apply);
+    apply();
+  }
 
   function renderTools() {
     const grid = $("#toolsGrid");
@@ -1097,6 +1170,7 @@ button {
     const grid = $("#toolsGrid");
     if (grid) grid.style.display = "none";
     workspace.scrollIntoView({ behavior: "smooth", block: "start" });
+    trackRecentTool(id);
     // Focus first input for ease of use
     setTimeout(() => {
       const first = $("#toolFields textarea, #toolFields input:not([type=file]), #toolFields select");
@@ -1690,6 +1764,7 @@ button {
   function saveProjects() {
     write(STORAGE.projects, projectsData);
     renderProjects();
+    renderRecentProjectsDash();
     updateAnalyticsUI();
   }
 
@@ -1864,14 +1939,15 @@ button {
 
     const row = document.createElement("div");
     row.className = `chat-message ${role}`;
+    const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
     row.innerHTML = `
-      <div class="chat-message-content">${escapeHTML(text)}</div>
+      <div class="chat-message-content">${escapeHTML(text)}<span class="chat-time">${escapeHTML(time)}</span></div>
       <button type="button" class="icon-button chat-copy" data-action="copy-chat" aria-label="Copy message">
         <i class="fa-regular fa-copy"></i>
       </button>`;
     container.appendChild(row);
     container.scrollTop = container.scrollHeight;
-    chatHistory.push({ role, text });
+    chatHistory.push({ role, text, at: new Date().toISOString() });
   }
 
   function showTyping() {
@@ -4872,6 +4948,9 @@ ${code.js}
     // typing master lazy-inits on page open
     renderNotesList();
     renderRecentActivity();
+    renderRecentTools();
+    renderRecentProjectsDash();
+    initFeatureSlider();
     updateAnalyticsUI();
     setRandomQuote();
     updateClock();
