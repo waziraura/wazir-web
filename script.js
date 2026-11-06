@@ -26,7 +26,7 @@
   };
 
   const PAGE_TITLES = {
-    overview: "Overview",
+    overview: "Home",
     ai: "AI Assistant",
     tools: "Free Tools",
     projects: "My Projects",
@@ -35,10 +35,10 @@
     media: "Aura Mail",
     notepad: "Notepad",
     analytics: "Analytics",
-    services: "Services & Hire",
-    pricing: "Plans & Pricing",
+    services: "Services",
+    pricing: "Plans",
     reviews: "Reviews",
-    about: "About Us",
+    about: "About",
     contact: "Contact",
     settings: "Settings"
   };
@@ -1989,7 +1989,7 @@ button {
       return "My Projects uses local browser storage. Create, edit, track progress, and export/import backups — all available here.";
     }
     if (/fiverr|hire|price|pricing|freelance/.test(text)) {
-      return "For real paid work, visit Murad Wazir on Fiverr: https://www.fiverr.com/s/611l6KP — websites, UI, data entry, banners. Pricing page shows demo plans; production work is via Fiverr or email.";
+      return "For real paid work, visit Murad Wazir on Fiverr: https://www.fiverr.com/s/yeWw86Z — websites, UI, data entry, banners. Pricing page shows demo plans; production work is via Fiverr or email.";
     }
     if (text.includes("plan a website") || text.includes("creative website") || text.includes("website")) {
       return "Website plan: 1) goal + audience 2) sections (hero, features, proof, CTA) 3) mobile-first layout 4) prototype in Code Lab 5) deploy. Order a professional build from the Services page.";
@@ -4698,7 +4698,7 @@ ${code.js}
           // soft CTA
           setTimeout(() => {
             if (confirm(`Open Fiverr to discuss a real ${plan}-level project with Murad Wazir?`)) {
-              window.open("https://www.fiverr.com/s/611l6KP", "_blank", "noopener,noreferrer");
+              window.open("https://www.fiverr.com/s/yeWw86Z", "_blank", "noopener,noreferrer");
             }
           }, 400);
         }
